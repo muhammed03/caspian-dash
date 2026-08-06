@@ -1,10 +1,11 @@
 "use client";
 
-import { GeoJsonLayer, ScatterplotLayer, TextLayer, LineLayer, PathLayer } from "@deck.gl/layers";
+import { GeoJsonLayer, ScatterplotLayer, TextLayer, LineLayer, PolygonLayer } from "@deck.gl/layers";
 import { HeatmapLayer } from "@deck.gl/aggregation-layers";
 import type { Layer, PickingInfo } from "@deck.gl/core";
 import type { Locale } from "@/shared/lib/i18n";
 import type { AirReading, WindPoint } from "./use-map-data";
+import type { PlumeFacility, PlumeFrame } from "@/entities/plume/use-plume";
 
 type RGB = [number, number, number];
 const CYAN: RGB = [29, 111, 208];   // accent blue
@@ -56,6 +57,8 @@ type BuildArgs = {
     fields: { id: string; name_kk: string; name_ru: string; coords: [number, number]; kind: string; reserves_bbl: number }[];
   };
   availability?: { countries: { iso3: string; name_kk: string; name_ru: string; score: number }[] };
+  /** Dispersion cones for the hour currently being shown. */
+  plume?: { facility: PlumeFacility; frame: PlumeFrame; detected: boolean }[];
   onHover: (info: PickingInfo, kind: string) => void;
   onClick: (kind: string, payload: Record<string, unknown>) => void;
 };
@@ -317,6 +320,54 @@ export function buildLayers(args: BuildArgs): Layer[] {
         getLineColor: [...RED, 255] as [number, number, number, number],
         onHover: (info) => onHover(info, "koshkar"),
         onClick: (info) => info.object && onClick("koshkar", info.object as Record<string, unknown>),
+      })
+    );
+  }
+
+  /* --- pollution: modelled dispersion cone, one per facility ---
+     Colour carries meaning and is not decorative: a solid red cone is only
+     drawn where the air-quality reading actually shows elevated pollution.
+     Otherwise it is a dashed blue "this is simply where the wind would carry
+     it" sector — drawing a red plume out of a named company on a clean day
+     would be both wrong and unfair. */
+  if (active.has("plume") && args.plume?.length) {
+    layers.push(
+      new PolygonLayer({
+        id: "plume-fill",
+        data: args.plume,
+        pickable: true,
+        getPolygon: (d) => d.frame.cone,
+        filled: true,
+        stroked: false,
+        getFillColor: (d) =>
+          d.detected
+            ? ([239, 68, 68, 60] as [number, number, number, number])
+            : ([56, 165, 235, 46] as [number, number, number, number]),
+        parameters: { depthTest: false },
+        transitions: { getPolygon: 380 },
+        updateTriggers: { getPolygon: args.plume.map((p) => p.frame.time).join(), getFillColor: args.plume.map((p) => p.detected).join() },
+        onHover: (info) => onHover(info, "plume"),
+        onClick: (info) => info.object && onClick("plume", info.object as Record<string, unknown>),
+      })
+    );
+    // A narrow F-class cone reads better as an outline than as a fill, so the
+    // outline stays fully opaque even when the sector is only a few degrees.
+    layers.push(
+      new PolygonLayer({
+        id: "plume-edge",
+        data: args.plume,
+        getPolygon: (d) => d.frame.cone,
+        filled: false,
+        stroked: true,
+        getLineColor: (d) =>
+          d.detected
+            ? ([225, 29, 72, 255] as [number, number, number, number])
+            : ([14, 116, 190, 235] as [number, number, number, number]),
+        getLineWidth: 2.2,
+        lineWidthUnits: "pixels",
+        parameters: { depthTest: false },
+        transitions: { getPolygon: 380 },
+        updateTriggers: { getPolygon: args.plume.map((p) => p.frame.time).join(), getLineColor: args.plume.map((p) => p.detected).join() },
       })
     );
   }

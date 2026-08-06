@@ -21,6 +21,7 @@ import { MetricCard } from "@/shared/ui/metric-card";
 import { Panel } from "@/shared/ui/primitives";
 import { SourceBadge } from "@/shared/ui/source-badge";
 import { AiInsightCard } from "@/widgets/ai-insight/ai-insight-card";
+import { PlumePanel } from "@/widgets/plume/plume-panel";
 import { useAirQuality } from "@/widgets/map/use-map-data";
 import { aqiColor } from "@/widgets/map/build-layers";
 import { PanelShell, PanelItem } from "./panel-shell";
@@ -98,6 +99,10 @@ export function PollutionPanel() {
 
       <PanelItem>
         <AiInsightCard module="pollution" />
+      </PanelItem>
+
+      <PanelItem>
+        <PlumePanel />
       </PanelItem>
 
       {/* live AQI table — the one genuinely real-time part of the platform */}

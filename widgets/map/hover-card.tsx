@@ -30,7 +30,11 @@ export function HoverCard() {
           style={{ left: hover.x + 16, top: hover.y + 16 }}
           className="border-rule bg-paper pointer-events-none absolute z-30 max-w-[260px] rounded-md border px-3 py-2 shadow-sm"
         >
-          <div className="text-ink text-sm font-medium">{name(hover.payload)}</div>
+          <div className="text-ink text-sm font-medium">
+            {hover.kind === "plume"
+              ? name((hover.payload.facility as Record<string, unknown>) ?? {})
+              : name(hover.payload)}
+          </div>
 
           {hover.kind === "factory" && (
             <div className="text-ink-2 mt-1 text-xs">
@@ -76,6 +80,33 @@ export function HoverCard() {
               {locale === "ru" ? "млн т отходов" : "млн т қалдық"}
             </div>
           )}
+
+          {hover.kind === "plume" && (() => {
+            const frame = hover.payload.frame as Record<string, unknown> | undefined;
+            const facility = hover.payload.facility as Record<string, unknown> | undefined;
+            return (
+              <div className="text-ink-2 mt-1 space-y-0.5 text-xs">
+                <div>
+                  {String(frame?.hour ?? "")} ·{" "}
+                  {String(locale === "ru" ? frame?.fromLabel_ru : frame?.fromLabel_kk)}{" "}
+                  <span className="tabular text-ink">{fmt(frame?.speedMs, 1)}</span> м/с
+                </div>
+                <div>
+                  {locale === "ru" ? "Класс" : "Класс"}{" "}
+                  <span className="tabular text-ink">{String(frame?.stability ?? "")}</span> ·{" "}
+                  <span className="tabular text-ink">{fmt(frame?.lengthKm, 1)}</span> км
+                </div>
+                {Boolean(facility?.approx) && (
+                  <div className="text-warn">
+                    {locale === "ru" ? "координата приблизительная" : "координата болжамды"}
+                  </div>
+                )}
+                <div className="text-ink-3">
+                  {locale === "ru" ? "вероятная зона переноса" : "ықтимал таралу аймағы"}
+                </div>
+              </div>
+            );
+          })()}
 
           {hover.kind === "availability" && (
             <div className="text-ink-2 mt-1 text-xs">

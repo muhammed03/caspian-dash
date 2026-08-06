@@ -42,6 +42,15 @@ type MapState = {
 
   satellite: boolean;
   toggleSatellite: () => void;
+
+  /** Hour being shown by the plume animation, and whether it is running. */
+  plumeFrame: number;
+  setPlumeFrame: (i: number) => void;
+  plumePlaying: boolean;
+  setPlumePlaying: (p: boolean) => void;
+  /** "past" walks measured wind, "forecast" walks predicted wind. */
+  plumeMode: "past" | "forecast";
+  setPlumeMode: (m: "past" | "forecast") => void;
 };
 
 export const COASTLINE_YEARS = [
@@ -81,4 +90,11 @@ export const useMapStore = create<MapState>((set) => ({
 
   satellite: false,
   toggleSatellite: () => set((s) => ({ satellite: !s.satellite })),
+
+  plumeFrame: 0,
+  setPlumeFrame: (plumeFrame) => set({ plumeFrame }),
+  plumePlaying: false,
+  setPlumePlaying: (plumePlaying) => set({ plumePlaying }),
+  plumeMode: "past",
+  setPlumeMode: (plumeMode) => set({ plumeMode, plumeFrame: 0 }),
 }));

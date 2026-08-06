@@ -8,6 +8,7 @@ import { useMapStore, type ModuleId } from "@/shared/store/map-store";
 import { useLocale } from "@/shared/lib/i18n/client";
 import { buildLayers } from "./build-layers";
 import { useAirQuality, useCoastline, useDataset, useWind } from "./use-map-data";
+import { usePlume, isAvailable } from "@/entities/plume/use-plume";
 
 // Basemap geometry is bundled, not fetched: the map draws with no network.
 import countries from "@/data/geo/countries.json";
@@ -30,7 +31,7 @@ const FRAMES: Record<ModuleId, { longitude: number; latitude: number; zoom: numb
 
 export function MapCanvas({ module }: { module: ModuleId }) {
   const locale = useLocale();
-  const { view, setView, year, activeLayers, setHover, select } = useMapStore();
+  const { view, setView, year, activeLayers, setHover, select, plumeFrame, plumeMode } = useMapStore();
   const firstFrame = useRef(true);
 
   const [viewState, setViewState] = useState<MapViewState>({
@@ -56,8 +57,39 @@ export function MapCanvas({ module }: { module: ModuleId }) {
     "data-availability",
     needs("data-availability")
   );
-  const air = useAirQuality(needs("air-quality"));
+  const air = useAirQuality(needs("air-quality") || needs("plume"));
   const wind = useWind(needs("wind"));
+  const plume = usePlume(needs("plume"));
+
+  /**
+   * Pairs each facility with the hour the animation is on, and decides whether
+   * the cone is drawn as "detected" — which needs an actual elevated reading
+   * at the nearest monitored city, not just the presence of a factory.
+   */
+  const plumeFrames = useMemo(() => {
+    if (!plume.data?.available) return undefined;
+    const readings = air.data?.readings ?? [];
+
+    return plume.data.facilities.filter(isAvailable).flatMap((facility) => {
+      const list = plumeMode === "forecast" ? facility.forecastFrames : facility.frames;
+      if (!list.length) return [];
+      const frame = list[Math.min(plumeFrame, list.length - 1)];
+
+      // nearest monitored city, and whether its air is actually elevated
+      let nearest: (typeof readings)[number] | undefined;
+      let best = Infinity;
+      for (const r of readings) {
+        const d = Math.hypot(r.lat - facility.lat, r.lon - facility.lng);
+        if (d < best) {
+          best = d;
+          nearest = r;
+        }
+      }
+      const detected = best < 1.2 && (nearest?.eaqi ?? 0) > 40;
+
+      return [{ facility, frame, detected }];
+    });
+  }, [plume.data, air.data, plumeFrame, plumeMode]);
 
   const handleHover = useCallback(
     (info: PickingInfo, kind: string) => {
@@ -98,6 +130,7 @@ export function MapCanvas({ module }: { module: ModuleId }) {
         availability: availability.data,
         air: air.data?.readings,
         wind: wind.data?.points,
+        plume: plumeFrames,
         onHover: handleHover,
         onClick: handleClick,
       }),
@@ -115,6 +148,7 @@ export function MapCanvas({ module }: { module: ModuleId }) {
       availability.data,
       air.data,
       wind.data,
+      plumeFrames,
       handleHover,
       handleClick,
     ]

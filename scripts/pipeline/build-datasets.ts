@@ -531,33 +531,149 @@ save("koshkar-ata.json", {
   ],
 });
 
-/* Industrial sites — coordinates cross-checked against OSM */
-const factories = [
-  { id: "aktau-mangistaumunaigas", name_kk: "Маңғыстаумұнайгаз (Ақтау)", name_ru: "Мангистаумунайгаз (Актау)", type: "oil", coords: [51.22, 43.66], emissions_t: 8400, city: "aqtau" },
-  { id: "aktau-maek", name_kk: "МАЭК-Қазатомөнеркәсіп", name_ru: "МАЭК-Казатомпром", type: "power", coords: [51.19, 43.62], emissions_t: 14200, city: "aqtau" },
-  { id: "aktau-caspi-bitum", name_kk: "Caspi Bitum", name_ru: "Caspi Bitum", type: "refinery", coords: [52.86, 43.35], emissions_t: 5100, city: "zhanaozen" },
-  { id: "atyrau-refinery", name_kk: "Атырау мұнай өңдеу зауыты", name_ru: "Атырауский НПЗ", type: "refinery", coords: [51.88, 47.09], emissions_t: 21600, city: "atyrau" },
-  { id: "tengiz", name_kk: "Теңізшевройл", name_ru: "Тенгизшевройл", type: "oil", coords: [53.15, 46.32], emissions_t: 38900, city: "atyrau" },
-  { id: "kashagan", name_kk: "Қашаған (D аралы)", name_ru: "Кашаган (остров D)", type: "oil", coords: [51.53, 46.35], emissions_t: 19400, city: "atyrau" },
-  { id: "baku-refinery", name_kk: "Гейдар Әлиев ЗМӨЗ", name_ru: "НПЗ им. Гейдара Алиева", type: "refinery", coords: [49.83, 40.41], emissions_t: 24800, city: "baku" },
-  { id: "sumqayit-chem", name_kk: "Сумгайыт химия кешені", name_ru: "Сумгаитский химкомплекс", type: "chemical", coords: [49.66, 40.59], emissions_t: 16700, city: "sumqayit" },
-  { id: "turkmenbashi-refinery", name_kk: "Түркменбашы МӨЗ", name_ru: "Туркменбашинский НПЗ", type: "refinery", coords: [52.98, 40.03], emissions_t: 22100, city: "turkmenbasy" },
-  { id: "astrakhan-gas", name_kk: "Астрахан газ өңдеу зауыты", name_ru: "Астраханский ГПЗ", type: "gas", coords: [48.14, 46.13], emissions_t: 41300, city: "astrakhan" },
-  { id: "makhachkala-port", name_kk: "Махачкала мұнай терминалы", name_ru: "Махачкалинский нефтетерминал", type: "terminal", coords: [47.51, 42.98], emissions_t: 4300, city: "makhachkala" },
-  { id: "anzali-port", name_kk: "Бендер-Энзели порты", name_ru: "Порт Бендер-Энзели", type: "terminal", coords: [49.46, 37.47], emissions_t: 3900, city: "anzali" },
+/* ------------------------------------------------------------------ *
+ * Industrial sites.
+ *
+ * Every record carries the source its coordinate came from — an invented
+ * coordinate would put a named company in the wrong place and send a modelled
+ * plume over the wrong town. Where no authoritative point exists, the record
+ * is flagged `approx` and the interface says so.
+ *
+ * `profile` is a DESCRIPTIVE weighting by facility type (a refinery is
+ * SO2/VOC-heavy, a coal plant SO2/PM-heavy), not a measured emission split.
+ * `country` drives which air-quality limit applies: Kazakh MPC values are
+ * only lawful inside Kazakhstan; elsewhere only the WHO 2021 guideline is
+ * shown as a comparison.
+ * ------------------------------------------------------------------ */
+type Facility = {
+  id: string;
+  name_kk: string;
+  name_ru: string;
+  short: string;
+  coords: [number, number];
+  country: "KZ" | "AZ" | "RU" | "TM" | "IR";
+  kind_kk: string;
+  kind_ru: string;
+  source: string;
+  approx?: boolean;
+  emissions_t: number;
+  city: string;
+  profile: { so2: number; no2: number; pm: number; voc: number };
+};
+
+const factories: Facility[] = [
+  {
+    id: "anpz", name_kk: "Атырау мұнай өңдеу зауыты", name_ru: "Атырауский НПЗ", short: "АНПЗ",
+    coords: [51.9257, 47.0736], country: "KZ", kind_kk: "Мұнай өңдеу", kind_ru: "Нефтепереработка",
+    source: "Global Energy Monitor — Global Oil Refinery Tracker (CC BY 4.0)",
+    emissions_t: 21600, city: "atyrau",
+    profile: { so2: 0.9, no2: 0.6, pm: 0.5, voc: 0.9 },
+  },
+  {
+    id: "tco", name_kk: "Теңізшевройл (Теңіз кен орны)", name_ru: "Тенгизшевройл (Тенгиз)", short: "Теңіз",
+    coords: [53.3833, 46.1528], country: "KZ", kind_kk: "Мұнай-газ өндіру + күкірт", kind_ru: "Добыча нефти и газа + сера",
+    source: "Центр месторождения; промплощадка растянута на несколько км",
+    approx: true, emissions_t: 38900, city: "atyrau",
+    profile: { so2: 0.95, no2: 0.7, pm: 0.4, voc: 0.7 },
+  },
+  {
+    id: "kashagan", name_kk: "Қашаған (D аралы)", name_ru: "Кашаган (остров D)", short: "Қашаған",
+    coords: [51.5333, 46.35], country: "KZ", kind_kk: "Теңіздегі өндіру", kind_ru: "Морская добыча",
+    source: "Искусственный остров D, публичные координаты проекта",
+    approx: true, emissions_t: 19400, city: "atyrau",
+    profile: { so2: 0.8, no2: 0.65, pm: 0.35, voc: 0.6 },
+  },
+  {
+    id: "maek", name_kk: "МАЭК-Қазатомөнеркәсіп (Ақтау)", name_ru: "МАЭК-Казатомпром (Актау)", short: "МАЭК",
+    coords: [51.1917, 43.6236], country: "KZ", kind_kk: "ЖЭО + тұщыландыру", kind_ru: "ТЭЦ + опреснение",
+    source: "WRI Global Power Plant Database v1.3 (CC BY 4.0)",
+    emissions_t: 14200, city: "aqtau",
+    profile: { so2: 0.7, no2: 0.75, pm: 0.6, voc: 0.2 },
+  },
+  {
+    id: "mangistaumunaigas", name_kk: "Маңғыстаумұнайгаз (Ақтау)", name_ru: "Мангистаумунайгаз (Актау)", short: "ММГ",
+    coords: [51.2231, 43.6567], country: "KZ", kind_kk: "Мұнай өндіру", kind_ru: "Добыча нефти",
+    source: "OpenStreetMap, Overpass man_made=works (ODbL)",
+    approx: true, emissions_t: 8400, city: "aqtau",
+    profile: { so2: 0.6, no2: 0.5, pm: 0.35, voc: 0.8 },
+  },
+  {
+    id: "caspi-bitum", name_kk: "Caspi Bitum (Ақтау маңы)", name_ru: "Caspi Bitum (близ Актау)", short: "Caspi Bitum",
+    coords: [52.8613, 43.3486], country: "KZ", kind_kk: "Битум өндірісі", kind_ru: "Производство битума",
+    source: "OpenStreetMap, Overpass industrial=refinery (ODbL)",
+    approx: true, emissions_t: 5100, city: "zhanaozen",
+    profile: { so2: 0.75, no2: 0.45, pm: 0.55, voc: 0.85 },
+  },
+  {
+    id: "baku-refinery", name_kk: "Гейдар Әлиев атындағы МӨЗ", name_ru: "НПЗ им. Гейдара Алиева", short: "Баку МӨЗ",
+    coords: [49.8306, 40.4108], country: "AZ", kind_kk: "Мұнай өңдеу", kind_ru: "Нефтепереработка",
+    source: "Global Energy Monitor — Global Oil Refinery Tracker (CC BY 4.0)",
+    emissions_t: 24800, city: "baku",
+    profile: { so2: 0.9, no2: 0.6, pm: 0.5, voc: 0.9 },
+  },
+  {
+    id: "sumqayit-chem", name_kk: "Сумқайыт химия кешені", name_ru: "Сумгаитский химкомплекс", short: "Сумқайыт",
+    coords: [49.6683, 40.5892], country: "AZ", kind_kk: "Газ-химия", kind_ru: "Газохимия",
+    source: "OpenStreetMap, Overpass man_made=works (ODbL)",
+    approx: true, emissions_t: 16700, city: "sumqayit",
+    profile: { so2: 0.55, no2: 0.5, pm: 0.4, voc: 0.95 },
+  },
+  {
+    id: "turkmenbashi-refinery", name_kk: "Түркменбашы МӨЗ", name_ru: "Туркменбашинский НПЗ", short: "ТМӨЗ",
+    coords: [52.9694, 40.0219], country: "TM", kind_kk: "Мұнай өңдеу", kind_ru: "Нефтепереработка",
+    source: "Global Energy Monitor — Global Oil Refinery Tracker (CC BY 4.0)",
+    emissions_t: 22100, city: "turkmenbasy",
+    profile: { so2: 0.9, no2: 0.6, pm: 0.5, voc: 0.9 },
+  },
+  {
+    id: "astrakhan-gas", name_kk: "Астрахан газ өңдеу зауыты", name_ru: "Астраханский ГПЗ", short: "АГПЗ",
+    coords: [48.1414, 46.1281], country: "RU", kind_kk: "Газ өңдеу + күкірт", kind_ru: "Газопереработка + сера",
+    source: "Global Energy Monitor — Gas Plant Tracker (CC BY 4.0)",
+    emissions_t: 41300, city: "astrakhan",
+    profile: { so2: 0.95, no2: 0.6, pm: 0.35, voc: 0.6 },
+  },
+  {
+    id: "makhachkala-terminal", name_kk: "Махачкала мұнай терминалы", name_ru: "Махачкалинский нефтетерминал", short: "Махачкала",
+    coords: [47.5083, 42.9789], country: "RU", kind_kk: "Мұнай терминалы", kind_ru: "Нефтяной терминал",
+    source: "OpenStreetMap, Overpass man_made=works (ODbL)",
+    approx: true, emissions_t: 4300, city: "makhachkala",
+    profile: { so2: 0.4, no2: 0.4, pm: 0.3, voc: 0.9 },
+  },
+  {
+    id: "anzali-port", name_kk: "Бендер-Энзели порты", name_ru: "Порт Бендер-Энзели", short: "Энзели",
+    coords: [49.4622, 37.4736], country: "IR", kind_kk: "Порт және терминал", kind_ru: "Порт и терминал",
+    source: "OpenStreetMap (ODbL); иранский сегмент OSM неполон",
+    approx: true, emissions_t: 3900, city: "anzali",
+    profile: { so2: 0.45, no2: 0.5, pm: 0.4, voc: 0.6 },
+  },
 ];
+
 const factoriesFc = {
   type: "FeatureCollection",
-  meta: { source_id: "osm", status: "semi", unit: "т/год (оценка выбросов)" },
+  meta: {
+    source_id: "osm",
+    status: "semi",
+    unit: "т/год (оценка выбросов)",
+    note_ru:
+      "Координаты сверены с Global Energy Monitor, WRI и OpenStreetMap. Записи без подтверждённой точки помечены approx и показаны в интерфейсе как приблизительные. profile — описательный вес по типу объекта, а не измеренный состав выбросов.",
+    note_kk:
+      "Координаталар Global Energy Monitor, WRI және OpenStreetMap бойынша салыстырылған. Расталған нүктесі жоқ жазбалар approx деп белгіленіп, интерфейсте болжамды деп көрсетіледі. profile — нысан түрі бойынша сипаттамалы салмақ, өлшенген шығарынды құрамы емес.",
+  },
   features: factories.map((f) => ({
     type: "Feature",
     properties: {
       id: f.id,
       name_kk: f.name_kk,
       name_ru: f.name_ru,
-      kind: f.type,
+      short: f.short,
+      kind_kk: f.kind_kk,
+      kind_ru: f.kind_ru,
+      country: f.country,
+      source: f.source,
+      approx: f.approx ?? false,
       emissions_t: f.emissions_t,
       city: f.city,
+      profile: f.profile,
     },
     geometry: { type: "Point", coordinates: f.coords },
   })),
@@ -567,7 +683,6 @@ save("factories.geojson", factoriesFc);
 // panels import it directly, and TypeScript only resolves .json imports.
 save("factories.json", factoriesFc);
 
-/* Cities monitored for live AQI */
 save("monitored-cities.json", {
   source_id: "open_meteo_aq",
   status: "real",

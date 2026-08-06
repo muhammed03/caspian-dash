@@ -85,6 +85,17 @@ export const LAYERS: LayerDef[] = [
     legend: [{ color: "#1d6fd0", label_kk: "Ұзындығы ∝ жылдамдық", label_ru: "Длина ∝ скорости" }],
   },
   {
+    id: "plume",
+    module: ["pollution"],
+    label_kk: "Шлейф таралуы (Гаусс моделі)",
+    label_ru: "Шлейф выбросов (модель Гаусса)",
+    sourceId: "open_meteo",
+    legend: [
+      { color: "#be185d", label_kk: "Ластану анықталды", label_ru: "Загрязнение обнаружено" },
+      { color: "#38bdf8", label_kk: "Тек жел бағыты", label_ru: "Только направление ветра" },
+    ],
+  },
+  {
     id: "habitats",
     module: ["life", "index"],
     label_kk: "Мекендеу орындары",

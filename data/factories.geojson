@@ -3,96 +3,66 @@
   "meta": {
     "source_id": "osm",
     "status": "semi",
-    "unit": "т/год (оценка выбросов)"
+    "unit": "т/год (оценка выбросов)",
+    "note_ru": "Координаты сверены с Global Energy Monitor, WRI и OpenStreetMap. Записи без подтверждённой точки помечены approx и показаны в интерфейсе как приблизительные. profile — описательный вес по типу объекта, а не измеренный состав выбросов.",
+    "note_kk": "Координаталар Global Energy Monitor, WRI және OpenStreetMap бойынша салыстырылған. Расталған нүктесі жоқ жазбалар approx деп белгіленіп, интерфейсте болжамды деп көрсетіледі. profile — нысан түрі бойынша сипаттамалы салмақ, өлшенген шығарынды құрамы емес."
   },
   "features": [
     {
       "type": "Feature",
       "properties": {
-        "id": "aktau-mangistaumunaigas",
-        "name_kk": "Маңғыстаумұнайгаз (Ақтау)",
-        "name_ru": "Мангистаумунайгаз (Актау)",
-        "kind": "oil",
-        "emissions_t": 8400,
-        "city": "aqtau"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          51.22,
-          43.66
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "aktau-maek",
-        "name_kk": "МАЭК-Қазатомөнеркәсіп",
-        "name_ru": "МАЭК-Казатомпром",
-        "kind": "power",
-        "emissions_t": 14200,
-        "city": "aqtau"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          51.19,
-          43.62
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "aktau-caspi-bitum",
-        "name_kk": "Caspi Bitum",
-        "name_ru": "Caspi Bitum",
-        "kind": "refinery",
-        "emissions_t": 5100,
-        "city": "zhanaozen"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          52.86,
-          43.35
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "atyrau-refinery",
+        "id": "anpz",
         "name_kk": "Атырау мұнай өңдеу зауыты",
         "name_ru": "Атырауский НПЗ",
-        "kind": "refinery",
+        "short": "АНПЗ",
+        "kind_kk": "Мұнай өңдеу",
+        "kind_ru": "Нефтепереработка",
+        "country": "KZ",
+        "source": "Global Energy Monitor — Global Oil Refinery Tracker (CC BY 4.0)",
+        "approx": false,
         "emissions_t": 21600,
-        "city": "atyrau"
+        "city": "atyrau",
+        "profile": {
+          "so2": 0.9,
+          "no2": 0.6,
+          "pm": 0.5,
+          "voc": 0.9
+        }
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          51.88,
-          47.09
+          51.9257,
+          47.0736
         ]
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "id": "tengiz",
-        "name_kk": "Теңізшевройл",
-        "name_ru": "Тенгизшевройл",
-        "kind": "oil",
+        "id": "tco",
+        "name_kk": "Теңізшевройл (Теңіз кен орны)",
+        "name_ru": "Тенгизшевройл (Тенгиз)",
+        "short": "Теңіз",
+        "kind_kk": "Мұнай-газ өндіру + күкірт",
+        "kind_ru": "Добыча нефти и газа + сера",
+        "country": "KZ",
+        "source": "Центр месторождения; промплощадка растянута на несколько км",
+        "approx": true,
         "emissions_t": 38900,
-        "city": "atyrau"
+        "city": "atyrau",
+        "profile": {
+          "so2": 0.95,
+          "no2": 0.7,
+          "pm": 0.4,
+          "voc": 0.7
+        }
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          53.15,
-          46.32
+          53.3833,
+          46.1528
         ]
       }
     },
@@ -102,14 +72,25 @@
         "id": "kashagan",
         "name_kk": "Қашаған (D аралы)",
         "name_ru": "Кашаган (остров D)",
-        "kind": "oil",
+        "short": "Қашаған",
+        "kind_kk": "Теңіздегі өндіру",
+        "kind_ru": "Морская добыча",
+        "country": "KZ",
+        "source": "Искусственный остров D, публичные координаты проекта",
+        "approx": true,
         "emissions_t": 19400,
-        "city": "atyrau"
+        "city": "atyrau",
+        "profile": {
+          "so2": 0.8,
+          "no2": 0.65,
+          "pm": 0.35,
+          "voc": 0.6
+        }
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          51.53,
+          51.5333,
           46.35
         ]
       }
@@ -117,18 +98,116 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "baku-refinery",
-        "name_kk": "Гейдар Әлиев ЗМӨЗ",
-        "name_ru": "НПЗ им. Гейдара Алиева",
-        "kind": "refinery",
-        "emissions_t": 24800,
-        "city": "baku"
+        "id": "maek",
+        "name_kk": "МАЭК-Қазатомөнеркәсіп (Ақтау)",
+        "name_ru": "МАЭК-Казатомпром (Актау)",
+        "short": "МАЭК",
+        "kind_kk": "ЖЭО + тұщыландыру",
+        "kind_ru": "ТЭЦ + опреснение",
+        "country": "KZ",
+        "source": "WRI Global Power Plant Database v1.3 (CC BY 4.0)",
+        "approx": false,
+        "emissions_t": 14200,
+        "city": "aqtau",
+        "profile": {
+          "so2": 0.7,
+          "no2": 0.75,
+          "pm": 0.6,
+          "voc": 0.2
+        }
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          49.83,
-          40.41
+          51.1917,
+          43.6236
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "mangistaumunaigas",
+        "name_kk": "Маңғыстаумұнайгаз (Ақтау)",
+        "name_ru": "Мангистаумунайгаз (Актау)",
+        "short": "ММГ",
+        "kind_kk": "Мұнай өндіру",
+        "kind_ru": "Добыча нефти",
+        "country": "KZ",
+        "source": "OpenStreetMap, Overpass man_made=works (ODbL)",
+        "approx": true,
+        "emissions_t": 8400,
+        "city": "aqtau",
+        "profile": {
+          "so2": 0.6,
+          "no2": 0.5,
+          "pm": 0.35,
+          "voc": 0.8
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.2231,
+          43.6567
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "caspi-bitum",
+        "name_kk": "Caspi Bitum (Ақтау маңы)",
+        "name_ru": "Caspi Bitum (близ Актау)",
+        "short": "Caspi Bitum",
+        "kind_kk": "Битум өндірісі",
+        "kind_ru": "Производство битума",
+        "country": "KZ",
+        "source": "OpenStreetMap, Overpass industrial=refinery (ODbL)",
+        "approx": true,
+        "emissions_t": 5100,
+        "city": "zhanaozen",
+        "profile": {
+          "so2": 0.75,
+          "no2": 0.45,
+          "pm": 0.55,
+          "voc": 0.85
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          52.8613,
+          43.3486
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "baku-refinery",
+        "name_kk": "Гейдар Әлиев атындағы МӨЗ",
+        "name_ru": "НПЗ им. Гейдара Алиева",
+        "short": "Баку МӨЗ",
+        "kind_kk": "Мұнай өңдеу",
+        "kind_ru": "Нефтепереработка",
+        "country": "AZ",
+        "source": "Global Energy Monitor — Global Oil Refinery Tracker (CC BY 4.0)",
+        "approx": false,
+        "emissions_t": 24800,
+        "city": "baku",
+        "profile": {
+          "so2": 0.9,
+          "no2": 0.6,
+          "pm": 0.5,
+          "voc": 0.9
+        }
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.8306,
+          40.4108
         ]
       }
     },
@@ -136,17 +215,28 @@
       "type": "Feature",
       "properties": {
         "id": "sumqayit-chem",
-        "name_kk": "Сумгайыт химия кешені",
+        "name_kk": "Сумқайыт химия кешені",
         "name_ru": "Сумгаитский химкомплекс",
-        "kind": "chemical",
+        "short": "Сумқайыт",
+        "kind_kk": "Газ-химия",
+        "kind_ru": "Газохимия",
+        "country": "AZ",
+        "source": "OpenStreetMap, Overpass man_made=works (ODbL)",
+        "approx": true,
         "emissions_t": 16700,
-        "city": "sumqayit"
+        "city": "sumqayit",
+        "profile": {
+          "so2": 0.55,
+          "no2": 0.5,
+          "pm": 0.4,
+          "voc": 0.95
+        }
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          49.66,
-          40.59
+          49.6683,
+          40.5892
         ]
       }
     },
@@ -156,15 +246,26 @@
         "id": "turkmenbashi-refinery",
         "name_kk": "Түркменбашы МӨЗ",
         "name_ru": "Туркменбашинский НПЗ",
-        "kind": "refinery",
+        "short": "ТМӨЗ",
+        "kind_kk": "Мұнай өңдеу",
+        "kind_ru": "Нефтепереработка",
+        "country": "TM",
+        "source": "Global Energy Monitor — Global Oil Refinery Tracker (CC BY 4.0)",
+        "approx": false,
         "emissions_t": 22100,
-        "city": "turkmenbasy"
+        "city": "turkmenbasy",
+        "profile": {
+          "so2": 0.9,
+          "no2": 0.6,
+          "pm": 0.5,
+          "voc": 0.9
+        }
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          52.98,
-          40.03
+          52.9694,
+          40.0219
         ]
       }
     },
@@ -174,33 +275,55 @@
         "id": "astrakhan-gas",
         "name_kk": "Астрахан газ өңдеу зауыты",
         "name_ru": "Астраханский ГПЗ",
-        "kind": "gas",
+        "short": "АГПЗ",
+        "kind_kk": "Газ өңдеу + күкірт",
+        "kind_ru": "Газопереработка + сера",
+        "country": "RU",
+        "source": "Global Energy Monitor — Gas Plant Tracker (CC BY 4.0)",
+        "approx": false,
         "emissions_t": 41300,
-        "city": "astrakhan"
+        "city": "astrakhan",
+        "profile": {
+          "so2": 0.95,
+          "no2": 0.6,
+          "pm": 0.35,
+          "voc": 0.6
+        }
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          48.14,
-          46.13
+          48.1414,
+          46.1281
         ]
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "id": "makhachkala-port",
+        "id": "makhachkala-terminal",
         "name_kk": "Махачкала мұнай терминалы",
         "name_ru": "Махачкалинский нефтетерминал",
-        "kind": "terminal",
+        "short": "Махачкала",
+        "kind_kk": "Мұнай терминалы",
+        "kind_ru": "Нефтяной терминал",
+        "country": "RU",
+        "source": "OpenStreetMap, Overpass man_made=works (ODbL)",
+        "approx": true,
         "emissions_t": 4300,
-        "city": "makhachkala"
+        "city": "makhachkala",
+        "profile": {
+          "so2": 0.4,
+          "no2": 0.4,
+          "pm": 0.3,
+          "voc": 0.9
+        }
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          47.51,
-          42.98
+          47.5083,
+          42.9789
         ]
       }
     },
@@ -210,15 +333,26 @@
         "id": "anzali-port",
         "name_kk": "Бендер-Энзели порты",
         "name_ru": "Порт Бендер-Энзели",
-        "kind": "terminal",
+        "short": "Энзели",
+        "kind_kk": "Порт және терминал",
+        "kind_ru": "Порт и терминал",
+        "country": "IR",
+        "source": "OpenStreetMap (ODbL); иранский сегмент OSM неполон",
+        "approx": true,
         "emissions_t": 3900,
-        "city": "anzali"
+        "city": "anzali",
+        "profile": {
+          "so2": 0.45,
+          "no2": 0.5,
+          "pm": 0.4,
+          "voc": 0.6
+        }
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          49.46,
-          37.47
+          49.4622,
+          37.4736
         ]
       }
     }
