@@ -9,6 +9,7 @@ import pollution from "@/data/pollution.json";
 import wildlife from "@/data/wildlife.json";
 import resources from "@/data/resources.json";
 import availability from "@/data/data-availability.json";
+import landIndices from "@/data/land-indices.json";
 
 type LevelRow = { year: number; level_m: number; area_km2: number; volume_km3: number };
 const LEVELS = seaLevel.series as LevelRow[];
@@ -168,9 +169,13 @@ export function computeAnalysis(module: InsightModule): Analysis {
       const meanAvailability =
         availability.countries.reduce((s, c) => s + c.score, 0) / availability.countries.length;
 
+      const land = landIndices.summary;
       const anomalies = [
         anomaly("Площадь акватории, км²", LEVELS.at(-1)!.area_km2, LEVELS[0].area_km2),
         anomaly("Индекс чистоты воды, %", meanPurity, 70),
+        // 70 is the platform's "acceptable" mark on its own 0-100 scale
+        anomaly("Влажность верхнего слоя почвы, балл", land.soil, 70),
+        anomaly("Пожарная опасность (Нестеров), балл", land.fire, 70),
         anomaly("Открытость экологических данных, %", meanAvailability, 70),
       ];
       const risk = anomalies.reduce(
@@ -195,9 +200,17 @@ export function computeAnalysis(module: InsightModule): Analysis {
 }
 
 /**
- * Composite ecological index, 0–100. Equal weights across five components,
- * each normalised to its own reference — the formula is printed on
- * /methodology so any number here can be recomputed by hand.
+ * Composite ecological index, 0–100, over eight weighted components.
+ *
+ * Five describe the sea itself and its data; three describe the coastal land —
+ * topsoil moisture, dryness and fire danger — because a drying shoreline is
+ * part of what the receding sea produces, not a separate subject.
+ *
+ * The land three come from the committed snapshot rather than a live call, so
+ * the index still scores with the network down. The dashboard shows the live
+ * reading alongside it when there is one.
+ *
+ * Weights are stated on /methodology and every score can be recomputed by hand.
  */
 export function ecoIndexComponents() {
   const levels = LEVELS;
@@ -208,13 +221,17 @@ export function ecoIndexComponents() {
   const sturgeonLoss = ((sturgeon[0].tonnes - sturgeon.at(-1)!.tonnes) / sturgeon[0].tonnes) * 100;
   const meanAvailability =
     availability.countries.reduce((s, c) => s + c.score, 0) / availability.countries.length;
+  const land = landIndices.summary;
 
   return [
-    { id: "water", score: Math.max(0, Math.round(100 - areaLoss * 6)), weight: 0.25 },
-    { id: "purity", score: Math.round(meanPurity), weight: 0.2 },
-    { id: "biodiversity", score: Math.max(0, Math.round(100 - sturgeonLoss)), weight: 0.25 },
-    { id: "seal", score: Math.max(0, Math.round(100 - wildlife.seal.decline_percent)), weight: 0.2 },
-    { id: "transparency", score: Math.round(meanAvailability), weight: 0.1 },
+    { id: "water", score: Math.max(0, Math.round(100 - areaLoss * 6)), weight: 0.2 },
+    { id: "purity", score: Math.round(meanPurity), weight: 0.15 },
+    { id: "biodiversity", score: Math.max(0, Math.round(100 - sturgeonLoss)), weight: 0.2 },
+    { id: "seal", score: Math.max(0, Math.round(100 - wildlife.seal.decline_percent)), weight: 0.15 },
+    { id: "soil", score: land.soil, weight: 0.09 },
+    { id: "drought", score: land.drought, weight: 0.08 },
+    { id: "fire", score: land.fire, weight: 0.08 },
+    { id: "transparency", score: Math.round(meanAvailability), weight: 0.05 },
   ];
 }
 

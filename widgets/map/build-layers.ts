@@ -1,6 +1,19 @@
 "use client";
 
-import { GeoJsonLayer, ScatterplotLayer, TextLayer, LineLayer, PolygonLayer } from "@deck.gl/layers";
+import {
+  GeoJsonLayer,
+  IconLayer,
+  ScatterplotLayer,
+  TextLayer,
+  LineLayer,
+  PolygonLayer,
+} from "@deck.gl/layers";
+import {
+  FACILITY_ICON,
+  FACILITY_ICON_APPROX,
+  HAZARD_ICON,
+  PIN,
+} from "@/shared/config/map-icons";
 import { HeatmapLayer } from "@deck.gl/aggregation-layers";
 import type { Layer, PickingInfo } from "@deck.gl/core";
 import type { Locale } from "@/shared/lib/i18n";
@@ -57,8 +70,13 @@ type BuildArgs = {
     fields: { id: string; name_kk: string; name_ru: string; coords: [number, number]; kind: string; reserves_bbl: number }[];
   };
   availability?: { countries: { iso3: string; name_kk: string; name_ru: string; score: number }[] };
+  rivers?: {
+    rivers: { id: string; name_kk: string; name_ru: string; current: number; historic_1930: number; share_percent: number }[];
+  };
   /** Dispersion cones for the hour currently being shown. */
   plume?: { facility: PlumeFacility; frame: PlumeFrame; detected: boolean }[];
+  /** Loops 0→1; drives the wind streak phase. */
+  time?: number;
   onHover: (info: PickingInfo, kind: string) => void;
   onClick: (kind: string, payload: Record<string, unknown>) => void;
 };
@@ -147,9 +165,10 @@ export function buildLayers(args: BuildArgs): Layer[] {
         data: args.basemapRivers,
         filled: false,
         stroked: true,
-        getLineColor: [120, 150, 175, 190],
-        getLineWidth: 1,
+        getLineColor: [96, 138, 176, 235],
+        getLineWidth: 1.4,
         lineWidthUnits: "pixels",
+        lineWidthMinPixels: 1.2,
         parameters: { depthTest: false },
       })
     );
@@ -213,9 +232,97 @@ export function buildLayers(args: BuildArgs): Layer[] {
     }
   }
 
-  /* --- water: rivers sized by annual flow --- */
-  if (active.has("rivers-flow") && args.wildlife === undefined) {
-    // handled by the basemap style; nothing extra needed here
+  /* --- water: inflowing rivers, drawn at a width proportional to their flow ---
+     The Volga carries about 80% of everything reaching the sea, so a linear
+     width would leave the others invisible; sqrt keeps the contrast readable
+     while still showing that one river dominates. */
+  if (active.has("rivers-flow") && args.basemapRivers && args.rivers) {
+    const flowByName = new Map(
+      args.rivers.rivers.map((r) => [r.id, r])
+    );
+    // Natural Earth names → the ids used in the flow dataset
+    const NE_TO_ID: Record<string, string> = {
+      Volga: "volga",
+      Ural: "ural",
+      Kura: "kura",
+      Terek: "terek",
+      Emba: "emba",
+    };
+
+    const named = args.basemapRivers.features.filter(
+      (f) => NE_TO_ID[String(f.properties?.name ?? "")]
+    );
+
+    layers.push(
+      new GeoJsonLayer({
+        id: "rivers-flow",
+        data: { type: "FeatureCollection", features: named } as GeoJSON.FeatureCollection,
+        pickable: true,
+        filled: false,
+        stroked: true,
+        getLineColor: [...CYAN, 235] as [number, number, number, number],
+        getLineWidth: (f: GeoJSON.Feature) => {
+          const river = flowByName.get(NE_TO_ID[String(f.properties?.name ?? "")]);
+          return river ? 1.5 + Math.sqrt(river.current) * 0.85 : 1.5;
+        },
+        lineWidthUnits: "pixels",
+        lineWidthMinPixels: 1.5,
+        lineWidthMaxPixels: 16,
+        parameters: { depthTest: false },
+        onHover: (info) => {
+          const f = info.object as GeoJSON.Feature | undefined;
+          const river = f && flowByName.get(NE_TO_ID[String(f.properties?.name ?? "")]);
+          onHover(
+            river ? ({ ...info, object: river } as PickingInfo) : info,
+            "river"
+          );
+        },
+      })
+    );
+
+    // one label per river, placed at the mouth so it sits by the sea
+    const labels = named
+      .map((f) => {
+        const river = flowByName.get(NE_TO_ID[String(f.properties?.name ?? "")]);
+        if (!river) return null;
+        const geom = f.geometry as Exclude<GeoJSON.Geometry, GeoJSON.GeometryCollection>;
+        const coords =
+          geom.type === "MultiLineString"
+            ? (geom.coordinates as [number, number][][]).flat()
+            : (geom.coordinates as [number, number][]);
+        // the vertex closest to the sea centre reads as the mouth
+        let mouth = coords[0];
+        let best = Infinity;
+        for (const c of coords) {
+          const d = Math.hypot(c[0] - 50.9, c[1] - 42.2);
+          if (d < best) {
+            best = d;
+            mouth = c;
+          }
+        }
+        return { river, position: mouth };
+      })
+      .filter((x): x is { river: NonNullable<ReturnType<typeof flowByName.get>>; position: [number, number] } => x !== null);
+
+    layers.push(
+      new TextLayer({
+        id: "river-labels",
+        data: labels,
+        getPosition: (d) => d.position,
+        getText: (d) =>
+          `${locale === "ru" ? d.river.name_ru : d.river.name_kk}  ${d.river.current} км³/год`,
+        getSize: 11,
+        sizeUnits: "pixels",
+        getColor: [...CYAN, 255] as [number, number, number, number],
+        getPixelOffset: [0, 14],
+        fontFamily: "Inter, system-ui, sans-serif",
+        fontWeight: 600,
+        outlineColor: [255, 255, 255, 255],
+        outlineWidth: 3,
+        fontSettings: { sdf: true, buffer: 8 },
+        characterSet: "auto",
+      })
+    );
   }
 
   /* --- pollution: live AQI heat + station dots --- */
@@ -258,43 +365,94 @@ export function buildLayers(args: BuildArgs): Layer[] {
     );
   }
 
-  /* --- pollution: live wind arrows --- */
+  /* --- pollution: live wind, drawn as streaks that flow along the wind ---
+     Three staggered copies of the same field, each at a different phase of the
+     loop, read as continuous movement: a streak fades in at the tail of the
+     vector, travels its length, and fades out as the next one appears. */
   if (active.has("wind") && args.wind?.length) {
-    layers.push(
-      new LineLayer<WindPoint>({
-        id: "wind-arrows",
-        data: args.wind,
-        getSourcePosition: (d) => [d.lon, d.lat],
-        getTargetPosition: (d) => {
-          // direction is where the wind comes FROM, so add 180°
-          const rad = ((d.direction + 180) * Math.PI) / 180;
-          const len = Math.min(d.speed / 18, 1.2);
-          return [d.lon + Math.sin(rad) * len, d.lat + Math.cos(rad) * len];
-        },
-        getColor: [...CYAN, 170] as [number, number, number, number],
-        getWidth: 1.6,
-        widthUnits: "pixels",
-      })
-    );
+    const phase = args.time ?? 0;
+    const TRAILS = 3;
+    const STREAK = 0.55; // length of one streak, in degrees of travel
+    const SPAN = 3.4; // how far a streak travels before looping
+
+    for (let k = 0; k < TRAILS; k++) {
+      const t = (phase + k / TRAILS) % 1;
+      layers.push(
+        new LineLayer<WindPoint>({
+          id: `wind-streak-${k}`,
+          data: args.wind,
+          getSourcePosition: (d) => {
+            // direction is where the wind comes FROM, so the streak runs the opposite way
+            const rad = ((d.direction + 180) * Math.PI) / 180;
+            const reach = Math.min(d.speed / 22, 1) * SPAN;
+            const travelled = t * reach;
+            return [d.lon + Math.sin(rad) * travelled, d.lat + Math.cos(rad) * travelled];
+          },
+          getTargetPosition: (d) => {
+            const rad = ((d.direction + 180) * Math.PI) / 180;
+            const reach = Math.min(d.speed / 22, 1) * SPAN;
+            const travelled = t * reach;
+            const tail = Math.min(travelled + STREAK, reach);
+            return [d.lon + Math.sin(rad) * tail, d.lat + Math.cos(rad) * tail];
+          },
+          // fades in at the start of the loop and out at the end
+          getColor: [
+            ...CYAN,
+            Math.round(210 * Math.sin(Math.PI * t)),
+          ] as [number, number, number, number],
+          getWidth: 2.2,
+          widthUnits: "pixels",
+          updateTriggers: {
+            getSourcePosition: t,
+            getTargetPosition: t,
+            getColor: t,
+          },
+        })
+      );
+    }
   }
 
-  /* --- pollution: industry, radius by reported emissions --- */
+  /* --- pollution: industry ---
+     Two marks per site: a translucent disc whose area carries the reported
+     emissions, and a pin on top so the point is identifiable as a plant
+     rather than a generic dot. A dashed hollow pin means the coordinate is
+     not confirmed. */
   if (active.has("factories") && args.factories) {
     const feats = args.factories.features;
     layers.push(
       new ScatterplotLayer<GeoJSON.Feature>({
-        id: "factories",
+        id: "factories-magnitude",
         data: feats,
         pickable: true,
         getPosition: (f) => (f.geometry as GeoJSON.Point).coordinates as [number, number],
         getRadius: (f) => Math.sqrt(Number(f.properties?.emissions_t ?? 1000)) * 55,
         radiusMinPixels: 5,
         radiusMaxPixels: 34,
-        getFillColor: [...ROSE, 110] as [number, number, number, number],
+        getFillColor: [...ROSE, 55] as [number, number, number, number],
         stroked: true,
         lineWidthUnits: "pixels",
-        getLineWidth: 1.2,
-        getLineColor: [...ROSE, 220] as [number, number, number, number],
+        getLineWidth: 1,
+        getLineColor: [...ROSE, 130] as [number, number, number, number],
+        onHover: (info) => onHover(info, "factory"),
+        onClick: (info) =>
+          info.object && onClick("factory", (info.object as GeoJSON.Feature).properties ?? {}),
+      })
+    );
+    layers.push(
+      new IconLayer<GeoJSON.Feature>({
+        id: "factories-icons",
+        data: feats,
+        pickable: true,
+        getPosition: (f) => (f.geometry as GeoJSON.Point).coordinates as [number, number],
+        getIcon: (f) => ({
+          ...PIN,
+          url: f.properties?.approx ? FACILITY_ICON_APPROX : FACILITY_ICON,
+          id: f.properties?.approx ? "approx" : "exact",
+        }),
+        getSize: 30,
+        sizeUnits: "pixels",
+        sizeMinPixels: 22,
+        sizeMaxPixels: 40,
         onHover: (info) => onHover(info, "factory"),
         onClick: (info) =>
           info.object && onClick("factory", (info.object as GeoJSON.Feature).properties ?? {}),
@@ -313,11 +471,26 @@ export function buildLayers(args: BuildArgs): Layer[] {
         getRadius: 9000,
         radiusMinPixels: 10,
         radiusMaxPixels: 40,
-        getFillColor: [...RED, 90] as [number, number, number, number],
+        getFillColor: [...RED, 80] as [number, number, number, number],
         stroked: true,
         lineWidthUnits: "pixels",
         getLineWidth: 2,
         getLineColor: [...RED, 255] as [number, number, number, number],
+        onHover: (info) => onHover(info, "koshkar"),
+        onClick: (info) => info.object && onClick("koshkar", info.object as Record<string, unknown>),
+      })
+    );
+    layers.push(
+      new IconLayer({
+        id: "koshkar-ata-icon",
+        data: [args.koshkar],
+        pickable: true,
+        getPosition: (d: typeof args.koshkar) => d!.coordinates,
+        getIcon: () => ({ ...PIN, url: HAZARD_ICON, id: "hazard" }),
+        getSize: 30,
+        sizeUnits: "pixels",
+        sizeMinPixels: 22,
+        sizeMaxPixels: 40,
         onHover: (info) => onHover(info, "koshkar"),
         onClick: (info) => info.object && onClick("koshkar", info.object as Record<string, unknown>),
       })

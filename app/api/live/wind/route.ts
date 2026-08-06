@@ -7,8 +7,8 @@ import { NextResponse } from "next/server";
  * direction on the pollution map. Falls back to the committed snapshot offline.
  */
 const GRID: [number, number][] = [];
-for (let lat = 37; lat <= 47; lat += 2.5) {
-  for (let lon = 47; lon <= 54; lon += 2.33) {
+for (let lat = 36.5; lat <= 47.5; lat += 1.2) {
+  for (let lon = 46.5; lon <= 54.5; lon += 1.15) {
     GRID.push([Number(lat.toFixed(2)), Number(lon.toFixed(2))]);
   }
 }

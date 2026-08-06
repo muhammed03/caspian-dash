@@ -81,6 +81,23 @@ export function HoverCard() {
             </div>
           )}
 
+          {hover.kind === "river" && (
+            <div className="text-ink-2 mt-1 space-y-0.5 text-xs">
+              <div>
+                {locale === "ru" ? "Сток сейчас" : "Қазіргі ағын"}:{" "}
+                <span className="tabular text-ink">{fmt(hover.payload.current, 1)}</span> км³/год
+              </div>
+              <div>
+                {locale === "ru" ? "Было в 1930-х" : "1930 жылдары"}:{" "}
+                <span className="tabular text-ink-2">{fmt(hover.payload.historic_1930, 1)}</span> км³/год
+              </div>
+              <div className="text-warn">
+                {locale === "ru" ? "Доля притока" : "Құйылым үлесі"}:{" "}
+                <span className="tabular">{fmt(hover.payload.share_percent)}%</span>
+              </div>
+            </div>
+          )}
+
           {hover.kind === "plume" && (() => {
             const frame = hover.payload.frame as Record<string, unknown> | undefined;
             const facility = hover.payload.facility as Record<string, unknown> | undefined;

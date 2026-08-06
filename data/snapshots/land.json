@@ -1,0 +1,122 @@
+{
+  "fetched_at": "2026-08-06T22:55:16.578Z",
+  "source_id": "open_meteo",
+  "method": "Nesterov fire index · topsoil moisture · 90-day rainfall",
+  "regions": [
+    {
+      "id": "mangystau",
+      "name_kk": "Маңғыстау",
+      "name_ru": "Мангистау",
+      "lat": 43.65,
+      "lon": 51.16,
+      "soilTemperature": 25.2,
+      "soil": {
+        "moisture": 0.016,
+        "score": 5
+      },
+      "drought": {
+        "precip90mm": 22.3,
+        "dryDays": 29,
+        "score": 34
+      },
+      "fire": {
+        "nesterov": 12427,
+        "class": 5,
+        "score": 0
+      }
+    },
+    {
+      "id": "atyrau",
+      "name_kk": "Атырау",
+      "name_ru": "Атырау",
+      "lat": 47.09,
+      "lon": 51.88,
+      "soilTemperature": 23.1,
+      "soil": {
+        "moisture": 0.056,
+        "score": 19
+      },
+      "drought": {
+        "precip90mm": 47,
+        "dryDays": 28,
+        "score": 53
+      },
+      "fire": {
+        "nesterov": 15406,
+        "class": 5,
+        "score": 0
+      }
+    },
+    {
+      "id": "north-caspian",
+      "name_kk": "Солтүстік Каспий",
+      "name_ru": "Северный Каспий",
+      "lat": 46.35,
+      "lon": 48.04,
+      "soilTemperature": 22,
+      "soil": {
+        "moisture": 0.166,
+        "score": 55
+      },
+      "drought": {
+        "precip90mm": 42.9,
+        "dryDays": 30,
+        "score": 48
+      },
+      "fire": {
+        "nesterov": 13549,
+        "class": 5,
+        "score": 0
+      }
+    },
+    {
+      "id": "dagestan",
+      "name_kk": "Дағыстан",
+      "name_ru": "Дагестан",
+      "lat": 42.98,
+      "lon": 47.5,
+      "soilTemperature": 21.5,
+      "soil": {
+        "moisture": 0.295,
+        "score": 98
+      },
+      "drought": {
+        "precip90mm": 70.6,
+        "dryDays": 0,
+        "score": 86
+      },
+      "fire": {
+        "nesterov": 0,
+        "class": 1,
+        "score": 100
+      }
+    },
+    {
+      "id": "absheron",
+      "name_kk": "Апшерон",
+      "name_ru": "Апшерон",
+      "lat": 40.41,
+      "lon": 49.87,
+      "soilTemperature": 24.9,
+      "soil": {
+        "moisture": 0.077,
+        "score": 26
+      },
+      "drought": {
+        "precip90mm": 21.3,
+        "dryDays": 40,
+        "score": 27
+      },
+      "fire": {
+        "nesterov": 11020,
+        "class": 5,
+        "score": 0
+      }
+    }
+  ],
+  "summary": {
+    "soil": 41,
+    "drought": 50,
+    "fire": 20
+  }
+}

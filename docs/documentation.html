@@ -18,7 +18,7 @@
   .lead { font-size: 12pt; color: #444; margin-bottom: 6mm; }
   .label { font-size: 8pt; letter-spacing: .09em; text-transform: uppercase; color: #6f6f6f; }
   .cover { padding: 30mm 0 8mm; }
-  .meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6mm; margin-top: 8mm;
+  .meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6mm; margin-top: 8mm;
           border-top: 1px solid #e6e6e3; padding-top: 4mm; }
   .meta div span { display: block; margin-top: 1.5mm; font-size: 10pt; }
   table { width: 100%; border-collapse: collapse; margin: 3mm 0 4mm; font-size: 9pt; }
@@ -57,7 +57,8 @@
   <div class="meta">
     <div><span class="label">Репозиторий</span><span class="mono">github.com/muhammed03/caspian-dash</span></div>
     <div><span class="label">Запуск</span><span class="mono">docker compose up</span></div>
-    <div><span class="label">Языки интерфейса</span><span>Қазақша, Русский</span></div>
+    <div><span class="label">Языки</span><span>Қазақша, Русский</span></div>
+    <div><span class="label">Команда</span><span>Jaiyq</span></div>
   </div>
 </div>
 
@@ -242,17 +243,36 @@ C(x,y) ∝ exp(−y²/2σy²) / (π·σy·σz·u)</pre>
   день недопустимо.
 </div>
 
-<h3>7.5. Сводный экоиндекс</h3>
+<h3>7.5. Почва, засуха и пожарная опасность</h3>
+<pre>Нестеров:   G = Σ T·(T − Td)   по дням подряд без осадков ≥ 3 мм
+            классы: I &lt;300 · II &lt;1000 · III &lt;4000 · IV &lt;10000 · V ≥10000
+Почва:      балл = влажность 0–7 см / 0,30 · 100
+Увлажнение: балл = 0,65·(осадки₉₀ / 90 мм) + 0,35·(1 − сушь / 60 дней)</pre>
+<p>Пожарная опасность считается по <strong>индексу Нестерова</strong> — методике, которая
+применяется в Казахстане операционно. Это сильнее обобщённого «балла сухости»: у показателя
+есть официальные классы от I до V, и его можно проверить.</p>
+<div class="note">
+  <strong>Честно:</strong> «увлажнение» — упрощённый показатель, настоящий SPI требует
+  тридцатилетнего ряда. «Почва» — это только влажность верхнего слоя, без засоления и эрозии.
+  Расчёт идёт по пяти точкам побережья.
+</div>
+
+<h3>7.6. Сводный экоиндекс</h3>
 <pre>I = Σ wᵢ · sᵢ ,  Σ wᵢ = 1</pre>
 <table>
   <tr><th>Компонента</th><th style="width:16%">Вес</th><th style="width:22%">Значение</th></tr>
-  <tr><td>Акватория</td><td>25%</td><td>47</td></tr>
-  <tr><td>Чистота воды</td><td>20%</td><td>60</td></tr>
-  <tr><td>Рыбные запасы</td><td>25%</td><td>0</td></tr>
-  <tr><td>Тюлень</td><td>20%</td><td>10</td></tr>
-  <tr><td>Открытость данных</td><td>10%</td><td>33</td></tr>
-  <tr><td><strong>Итого</strong></td><td></td><td><strong>29 / 100</strong></td></tr>
+  <tr><td>Акватория</td><td>20%</td><td>47</td></tr>
+  <tr><td>Чистота воды</td><td>15%</td><td>60</td></tr>
+  <tr><td>Рыбные запасы</td><td>20%</td><td>0</td></tr>
+  <tr><td>Тюлень</td><td>15%</td><td>10</td></tr>
+  <tr><td>Почва</td><td>9%</td><td>41</td></tr>
+  <tr><td>Увлажнение</td><td>8%</td><td>50</td></tr>
+  <tr><td>Пожарная опасность</td><td>8%</td><td>20</td></tr>
+  <tr><td>Открытость данных</td><td>5%</td><td>33</td></tr>
+  <tr><td><strong>Итого</strong></td><td></td><td><strong>31 / 100</strong></td></tr>
 </table>
+<p>Пять компонент описывают само море, три — прибрежную сушу: пересыхающий берег
+не отдельная тема, а прямое следствие отступания воды.</p>
 
 <div class="page-break"></div>
 

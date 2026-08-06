@@ -19,7 +19,7 @@ import { Gauge, Database } from "lucide-react";
 import { useLocale, useT } from "@/shared/lib/i18n/client";
 import { AXIS_PROPS, CHART_INK, SERIES } from "@/shared/config/chart-palette";
 import { ChartFrame, chartTooltipStyle, fmt } from "@/shared/ui/chart-frame";
-import { Panel } from "@/shared/ui/primitives";
+import { Label, Panel } from "@/shared/ui/primitives";
 import { AnimatedNumber } from "@/shared/ui/animated-number";
 import { SourceBadge } from "@/shared/ui/source-badge";
 import { AiInsightCard } from "@/widgets/ai-insight/ai-insight-card";
@@ -27,12 +27,17 @@ import { ecoIndexComponents, ecoIndexScore } from "@/entities/ai-insight/compute
 import { PanelShell, PanelItem } from "./panel-shell";
 
 import availability from "@/data/data-availability.json";
+import { useLandIndices } from "@/entities/land/use-land";
+import { FIRE_CLASS_TEXT } from "@/shared/lib/land-indices";
 
 const COMPONENT_LABELS: Record<string, { kk: string; ru: string }> = {
   water: { kk: "Су айдыны", ru: "Акватория" },
   purity: { kk: "Су тазалығы", ru: "Чистота воды" },
   biodiversity: { kk: "Балық қоры", ru: "Рыбные запасы" },
   seal: { kk: "Итбалық", ru: "Тюлень" },
+  soil: { kk: "Топырақ", ru: "Почва" },
+  drought: { kk: "Ылғалдылық", ru: "Увлажнение" },
+  fire: { kk: "Өрт қаупі", ru: "Пожарная опасность" },
   transparency: { kk: "Дерек ашықтығы", ru: "Открытость данных" },
 };
 
@@ -136,6 +141,10 @@ export function IndexPanel() {
       </PanelItem>
 
       <PanelItem>
+        <LandBlock />
+      </PanelItem>
+
+      <PanelItem>
         <ChartFrame
           title={t.index.dataAvailability}
           subtitle={availability.scale}
@@ -168,5 +177,89 @@ export function IndexPanel() {
         </Panel>
       </PanelItem>
     </PanelShell>
+  );
+}
+
+/**
+ * The three land indices, shown live. The eco index above scores from the
+ * committed snapshot so it works offline; this block says which reading the
+ * viewer is actually looking at.
+ */
+function LandBlock() {
+  const t = useT();
+  const locale = useLocale();
+  const L = locale === "ru" ? "ru" : "kk";
+  const land = useLandIndices(true);
+
+  if (land.isLoading) {
+    return (
+      <section className="rule-t pt-4">
+        <Label>{locale === "ru" ? "Земля побережья" : "Жағалау жері"}</Label>
+        <div className="bg-tint mt-3 h-24 animate-pulse rounded" />
+      </section>
+    );
+  }
+
+  const regions = land.data?.regions ?? [];
+  if (!regions.length) return null;
+
+  const worstFire = regions.reduce((a, b) => (a.fire.nesterov > b.fire.nesterov ? a : b));
+
+  return (
+    <ChartFrame
+      title={locale === "ru" ? "Почва, засуха и пожарная опасность" : "Топырақ, құрғақшылық және өрт қаупі"}
+      subtitle={
+        land.data?.live
+          ? locale === "ru"
+            ? "live — Open-Meteo"
+            : "live — Open-Meteo"
+          : t.common.offline
+      }
+      howToRead={
+        locale === "ru"
+          ? "Три показателя состояния суши у берега. Пожарная опасность считается по индексу Нестерова — методике, принятой в Казахстане. Шкала везде 0–100, где 100 — благополучное состояние."
+          : "Жағалаудағы құрлықтың үш көрсеткіші. Өрт қаупі Қазақстанда қабылданған Нестеров индексі бойынша есептеледі. Барлық шкала 0–100, мұнда 100 — қолайлы жағдай."
+      }
+      note={
+        locale === "ru"
+          ? `Наибольшая пожарная опасность сейчас: ${worstFire.name_ru}, индекс Нестерова ${worstFire.fire.nesterov} — ${FIRE_CLASS_TEXT[worstFire.fire.class].ru}. Показатель «увлажнение» — упрощённый: полноценный SPI требует тридцатилетнего ряда наблюдений.`
+          : `Қазіргі ең жоғары өрт қаупі: ${worstFire.name_kk}, Нестеров индексі ${worstFire.fire.nesterov} — ${FIRE_CLASS_TEXT[worstFire.fire.class].kk}. «Ылғалдылық» көрсеткіші жеңілдетілген: толыққанды SPI отыз жылдық бақылау қатарын талап етеді.`
+      }
+      sourceId="open_meteo"
+      status="real"
+    >
+      <table className="w-full text-[12px]">
+        <thead>
+          <tr className="text-ink-3 rule-b text-left">
+            <th className="pb-1.5 font-normal">{locale === "ru" ? "Участок" : "Учаске"}</th>
+            <th className="pb-1.5 text-right font-normal">{locale === "ru" ? "Почва" : "Топырақ"}</th>
+            <th className="pb-1.5 text-right font-normal">{locale === "ru" ? "Увлажн." : "Ылғал"}</th>
+            <th className="pb-1.5 text-right font-normal">{locale === "ru" ? "Пожар" : "Өрт"}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {regions.map((r) => (
+            <tr key={r.id} className="border-rule border-b last:border-0">
+              <td className="text-ink-2 py-2 pr-2">{L === "ru" ? r.name_ru : r.name_kk}</td>
+              <td className="tabular text-ink py-2 text-right">{r.soil.score}</td>
+              <td className="tabular text-ink py-2 text-right">{r.drought.score}</td>
+              <td className="py-2 text-right">
+                <span
+                  className={
+                    r.fire.class >= 4 ? "text-bad font-medium" : r.fire.class === 3 ? "text-warn" : "text-ink"
+                  }
+                >
+                  {r.fire.score}
+                </span>
+                <span className="text-ink-3 ml-1">
+                  {locale === "ru" ? "кл." : "кл."}
+                  {r.fire.class}
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </ChartFrame>
   );
 }

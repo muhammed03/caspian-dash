@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-08-06T20:13:27.392Z",
+  "fetched_at": "2026-08-06T22:55:16.602Z",
   "source_id": "open_meteo",
   "unit": {
     "speed": "km/h",
@@ -7,144 +7,494 @@
   },
   "points": [
     {
-      "lat": 37,
-      "lon": 47,
-      "speed": 8.7,
-      "direction": 30,
-      "temp": 17.3
+      "lat": 36.5,
+      "lon": 46.5,
+      "speed": 2.1,
+      "direction": 301,
+      "temp": 22.2
     },
     {
-      "lat": 37,
-      "lon": 49.33,
-      "speed": 5.6,
-      "direction": 207,
-      "temp": 21.5
-    },
-    {
-      "lat": 37,
-      "lon": 51.66,
-      "speed": 19.5,
-      "direction": 298,
-      "temp": 28.9
-    },
-    {
-      "lat": 37,
-      "lon": 53.99,
-      "speed": 20,
-      "direction": 252,
-      "temp": 28.1
-    },
-    {
-      "lat": 39.5,
-      "lon": 47,
-      "speed": 6.5,
+      "lat": 36.5,
+      "lon": 47.65,
+      "speed": 9.9,
       "direction": 19,
+      "temp": 20.7
+    },
+    {
+      "lat": 36.5,
+      "lon": 48.8,
+      "speed": 10.7,
+      "direction": 45,
+      "temp": 18
+    },
+    {
+      "lat": 36.5,
+      "lon": 49.95,
+      "speed": 7.6,
+      "direction": 335,
       "temp": 17.7
     },
     {
-      "lat": 39.5,
-      "lon": 49.33,
-      "speed": 28.8,
-      "direction": 43,
+      "lat": 36.5,
+      "lon": 51.1,
+      "speed": 5.4,
+      "direction": 8,
+      "temp": 13.7
+    },
+    {
+      "lat": 36.5,
+      "lon": 52.25,
+      "speed": 4.3,
+      "direction": 228,
+      "temp": 25.7
+    },
+    {
+      "lat": 36.5,
+      "lon": 53.4,
+      "speed": 4.7,
+      "direction": 184,
+      "temp": 20.3
+    },
+    {
+      "lat": 37.7,
+      "lon": 46.5,
+      "speed": 5.6,
+      "direction": 63,
+      "temp": 10.1
+    },
+    {
+      "lat": 37.7,
+      "lon": 47.65,
+      "speed": 6.4,
+      "direction": 16,
+      "temp": 13.9
+    },
+    {
+      "lat": 37.7,
+      "lon": 48.8,
+      "speed": 4.7,
+      "direction": 270,
+      "temp": 19.5
+    },
+    {
+      "lat": 37.7,
+      "lon": 49.95,
+      "speed": 15.2,
+      "direction": 353,
+      "temp": 28.5
+    },
+    {
+      "lat": 37.7,
+      "lon": 51.1,
+      "speed": 13.5,
+      "direction": 299,
+      "temp": 28.5
+    },
+    {
+      "lat": 37.7,
+      "lon": 52.25,
+      "speed": 15.6,
+      "direction": 263,
+      "temp": 28.3
+    },
+    {
+      "lat": 37.7,
+      "lon": 53.4,
+      "speed": 26.3,
+      "direction": 270,
+      "temp": 29.4
+    },
+    {
+      "lat": 38.9,
+      "lon": 46.5,
+      "speed": 8.4,
+      "direction": 155,
+      "temp": 19.4
+    },
+    {
+      "lat": 38.9,
+      "lon": 47.65,
+      "speed": 3.4,
+      "direction": 58,
+      "temp": 18.3
+    },
+    {
+      "lat": 38.9,
+      "lon": 48.8,
+      "speed": 4.8,
+      "direction": 257,
+      "temp": 24.8
+    },
+    {
+      "lat": 38.9,
+      "lon": 49.95,
+      "speed": 27.6,
+      "direction": 31,
+      "temp": 27.4
+    },
+    {
+      "lat": 38.9,
+      "lon": 51.1,
+      "speed": 25.5,
+      "direction": 22,
       "temp": 27.6
     },
     {
-      "lat": 39.5,
-      "lon": 51.66,
-      "speed": 31.2,
-      "direction": 31,
-      "temp": 27.3
+      "lat": 38.9,
+      "lon": 52.25,
+      "speed": 16.6,
+      "direction": 39,
+      "temp": 28.7
     },
     {
-      "lat": 39.5,
-      "lon": 53.99,
-      "speed": 18.7,
+      "lat": 38.9,
+      "lon": 53.4,
+      "speed": 21.8,
+      "direction": 39,
+      "temp": 30.5
+    },
+    {
+      "lat": 40.1,
+      "lon": 46.5,
+      "speed": 4.2,
+      "direction": 211,
+      "temp": 16.4
+    },
+    {
+      "lat": 40.1,
+      "lon": 47.65,
+      "speed": 6.9,
+      "direction": 223,
+      "temp": 25.4
+    },
+    {
+      "lat": 40.1,
+      "lon": 48.8,
+      "speed": 9.9,
+      "direction": 314,
+      "temp": 26.7
+    },
+    {
+      "lat": 40.1,
+      "lon": 49.95,
+      "speed": 44.8,
+      "direction": 6,
+      "temp": 27.2
+    },
+    {
+      "lat": 40.1,
+      "lon": 51.1,
+      "speed": 29.9,
+      "direction": 357,
+      "temp": 27.6
+    },
+    {
+      "lat": 40.1,
+      "lon": 52.25,
+      "speed": 25.6,
+      "direction": 20,
+      "temp": 26.9
+    },
+    {
+      "lat": 40.1,
+      "lon": 53.4,
+      "speed": 20.2,
+      "direction": 11,
+      "temp": 29.5
+    },
+    {
+      "lat": 41.3,
+      "lon": 46.5,
+      "speed": 10.1,
+      "direction": 117,
+      "temp": 22.7
+    },
+    {
+      "lat": 41.3,
+      "lon": 47.65,
+      "speed": 4.4,
+      "direction": 235,
+      "temp": 11.2
+    },
+    {
+      "lat": 41.3,
+      "lon": 48.8,
+      "speed": 7.6,
+      "direction": 265,
+      "temp": 23
+    },
+    {
+      "lat": 41.3,
+      "lon": 49.95,
+      "speed": 35.1,
+      "direction": 322,
+      "temp": 27.1
+    },
+    {
+      "lat": 41.3,
+      "lon": 51.1,
+      "speed": 22,
+      "direction": 325,
+      "temp": 27.5
+    },
+    {
+      "lat": 41.3,
+      "lon": 52.25,
+      "speed": 31.3,
+      "direction": 12,
+      "temp": 25.5
+    },
+    {
+      "lat": 41.3,
+      "lon": 53.4,
+      "speed": 37.4,
+      "direction": 1,
+      "temp": 31.9
+    },
+    {
+      "lat": 42.5,
+      "lon": 46.5,
+      "speed": 2.6,
+      "direction": 196,
+      "temp": 13
+    },
+    {
+      "lat": 42.5,
+      "lon": 47.65,
+      "speed": 11.2,
+      "direction": 249,
+      "temp": 17.7
+    },
+    {
+      "lat": 42.5,
+      "lon": 48.8,
+      "speed": 20.9,
+      "direction": 331,
+      "temp": 26.5
+    },
+    {
+      "lat": 42.5,
+      "lon": 49.95,
+      "speed": 11.5,
+      "direction": 340,
+      "temp": 27.6
+    },
+    {
+      "lat": 42.5,
+      "lon": 51.1,
+      "speed": 7.2,
+      "direction": 63,
+      "temp": 26.4
+    },
+    {
+      "lat": 42.5,
+      "lon": 52.25,
+      "speed": 13.1,
+      "direction": 9,
+      "temp": 25.8
+    },
+    {
+      "lat": 42.5,
+      "lon": 53.4,
+      "speed": 15.2,
+      "direction": 355,
+      "temp": 28.9
+    },
+    {
+      "lat": 43.7,
+      "lon": 46.5,
+      "speed": 4.7,
+      "direction": 90,
+      "temp": 21
+    },
+    {
+      "lat": 43.7,
+      "lon": 47.65,
+      "speed": 4.5,
+      "direction": 331,
+      "temp": 24.4
+    },
+    {
+      "lat": 43.7,
+      "lon": 48.8,
+      "speed": 12.3,
+      "direction": 357,
+      "temp": 27.4
+    },
+    {
+      "lat": 43.7,
+      "lon": 49.95,
+      "speed": 19.2,
+      "direction": 40,
+      "temp": 27.7
+    },
+    {
+      "lat": 43.7,
+      "lon": 51.1,
+      "speed": 9.4,
       "direction": 23,
-      "temp": 32.4
+      "temp": 24.9
     },
     {
-      "lat": 42,
-      "lon": 47,
-      "speed": 4.3,
-      "direction": 228,
-      "temp": 6.4
-    },
-    {
-      "lat": 42,
-      "lon": 49.33,
-      "speed": 29.6,
-      "direction": 296,
-      "temp": 26.3
-    },
-    {
-      "lat": 42,
-      "lon": 51.66,
-      "speed": 19.4,
-      "direction": 312,
+      "lat": 43.7,
+      "lon": 52.25,
+      "speed": 12.8,
+      "direction": 22,
       "temp": 26.2
     },
     {
-      "lat": 42,
-      "lon": 53.99,
-      "speed": 23.5,
-      "direction": 32,
-      "temp": 31
+      "lat": 43.7,
+      "lon": 53.4,
+      "speed": 11.3,
+      "direction": 338,
+      "temp": 26.2
     },
     {
-      "lat": 44.5,
-      "lon": 47,
-      "speed": 7,
-      "direction": 235,
-      "temp": 26.6
+      "lat": 44.9,
+      "lon": 46.5,
+      "speed": 3.9,
+      "direction": 304,
+      "temp": 21.8
     },
     {
-      "lat": 44.5,
-      "lon": 49.33,
-      "speed": 7.4,
-      "direction": 29,
+      "lat": 44.9,
+      "lon": 47.65,
+      "speed": 15.7,
+      "direction": 328,
+      "temp": 26.8
+    },
+    {
+      "lat": 44.9,
+      "lon": 48.8,
+      "speed": 15,
+      "direction": 330,
+      "temp": 28.7
+    },
+    {
+      "lat": 44.9,
+      "lon": 49.95,
+      "speed": 10,
+      "direction": 339,
       "temp": 27.3
     },
     {
-      "lat": 44.5,
-      "lon": 51.66,
-      "speed": 4.1,
-      "direction": 345,
-      "temp": 25.4
+      "lat": 44.9,
+      "lon": 51.1,
+      "speed": 7.2,
+      "direction": 360,
+      "temp": 26.7
     },
     {
-      "lat": 44.5,
-      "lon": 53.99,
-      "speed": 10.2,
-      "direction": 321,
-      "temp": 25.3
+      "lat": 44.9,
+      "lon": 52.25,
+      "speed": 5.3,
+      "direction": 298,
+      "temp": 24.5
     },
     {
-      "lat": 47,
-      "lon": 47,
-      "speed": 5.7,
-      "direction": 55,
-      "temp": 26
+      "lat": 44.9,
+      "lon": 53.4,
+      "speed": 6.1,
+      "direction": 310,
+      "temp": 24.5
     },
     {
-      "lat": 47,
-      "lon": 49.33,
-      "speed": 10.5,
+      "lat": 46.1,
+      "lon": 46.5,
+      "speed": 3.1,
+      "direction": 315,
+      "temp": 23.1
+    },
+    {
+      "lat": 46.1,
+      "lon": 47.65,
+      "speed": 3.9,
+      "direction": 56,
+      "temp": 21.5
+    },
+    {
+      "lat": 46.1,
+      "lon": 48.8,
+      "speed": 8.9,
       "direction": 27,
-      "temp": 23.9
+      "temp": 20
     },
     {
-      "lat": 47,
-      "lon": 51.66,
-      "speed": 9.5,
+      "lat": 46.1,
+      "lon": 49.95,
+      "speed": 24.6,
       "direction": 25,
-      "temp": 24.6
+      "temp": 27.7
     },
     {
-      "lat": 47,
-      "lon": 53.99,
-      "speed": 10.6,
-      "direction": 332,
-      "temp": 25.4
+      "lat": 46.1,
+      "lon": 51.1,
+      "speed": 21.3,
+      "direction": 28,
+      "temp": 28.1
+    },
+    {
+      "lat": 46.1,
+      "lon": 52.25,
+      "speed": 22.2,
+      "direction": 27,
+      "temp": 28.1
+    },
+    {
+      "lat": 46.1,
+      "lon": 53.4,
+      "speed": 10.5,
+      "direction": 4,
+      "temp": 23.6
+    },
+    {
+      "lat": 47.3,
+      "lon": 46.5,
+      "speed": 7.2,
+      "direction": 96,
+      "temp": 24.4
+    },
+    {
+      "lat": 47.3,
+      "lon": 47.65,
+      "speed": 7.2,
+      "direction": 93,
+      "temp": 22.9
+    },
+    {
+      "lat": 47.3,
+      "lon": 48.8,
+      "speed": 8.5,
+      "direction": 36,
+      "temp": 21.6
+    },
+    {
+      "lat": 47.3,
+      "lon": 49.95,
+      "speed": 8.3,
+      "direction": 18,
+      "temp": 22.3
+    },
+    {
+      "lat": 47.3,
+      "lon": 51.1,
+      "speed": 10.8,
+      "direction": 2,
+      "temp": 22.8
+    },
+    {
+      "lat": 47.3,
+      "lon": 52.25,
+      "speed": 12.4,
+      "direction": 343,
+      "temp": 22.1
+    },
+    {
+      "lat": 47.3,
+      "lon": 53.4,
+      "speed": 9.7,
+      "direction": 345,
+      "temp": 25.6
     }
   ]
 }

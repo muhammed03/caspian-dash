@@ -42,6 +42,7 @@ export const LAYERS: LayerDef[] = [
     module: ["water"],
     label_kk: "Құятын өзендер",
     label_ru: "Впадающие реки",
+    defaultOn: true,
     sourceId: "grid_arendal",
     legend: [{ color: "#0f8f66", label_kk: "Ағын көлеміне пропорционал", label_ru: "Толщина ∝ стоку" }],
   },

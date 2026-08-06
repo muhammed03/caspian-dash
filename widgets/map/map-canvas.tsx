@@ -57,6 +57,10 @@ export function MapCanvas({ module }: { module: ModuleId }) {
     "data-availability",
     needs("data-availability")
   );
+  const rivers = useDataset<Parameters<typeof buildLayers>[0]["rivers"]>(
+    "rivers",
+    needs("rivers-flow")
+  );
   const air = useAirQuality(needs("air-quality") || needs("plume"));
   const wind = useWind(needs("wind"));
   const plume = usePlume(needs("plume"));
@@ -90,6 +94,23 @@ export function MapCanvas({ module }: { module: ModuleId }) {
       return [{ facility, frame, detected }];
     });
   }, [plume.data, air.data, plumeFrame, plumeMode]);
+
+  /* Clock for the wind streaks. Runs only while that layer is on, and pauses
+     for anyone who asked the system to reduce motion. */
+  const [windPhase, setWindPhase] = useState(0);
+  const windOn = activeLayers.has("wind");
+  useEffect(() => {
+    if (!windOn) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf = 0;
+    const start = performance.now();
+    const tick = (now: number) => {
+      setWindPhase((((now - start) / 5200) % 1 + 1) % 1);
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [windOn]);
 
   const handleHover = useCallback(
     (info: PickingInfo, kind: string) => {
@@ -128,6 +149,8 @@ export function MapCanvas({ module }: { module: ModuleId }) {
         wildlife: wildlife.data,
         resources: resources.data,
         availability: availability.data,
+        rivers: rivers.data,
+        time: windPhase,
         air: air.data?.readings,
         wind: wind.data?.points,
         plume: plumeFrames,
@@ -146,6 +169,8 @@ export function MapCanvas({ module }: { module: ModuleId }) {
       wildlife.data,
       resources.data,
       availability.data,
+      rivers.data,
+      windPhase,
       air.data,
       wind.data,
       plumeFrames,

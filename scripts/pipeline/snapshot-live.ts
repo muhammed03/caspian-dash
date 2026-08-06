@@ -6,6 +6,7 @@
  * Usage: npx tsx scripts/pipeline/snapshot-live.ts
  */
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { dryStreak, nesterovIndex, scoreLand } from "../../shared/lib/land-indices";
 import { join } from "node:path";
 
 const DATA = join(process.cwd(), "data");
@@ -55,8 +56,8 @@ async function snapshotAir() {
 
 async function snapshotWind() {
   const grid: [number, number][] = [];
-  for (let la = 37; la <= 47; la += 2.5) {
-    for (let lo = 47; lo <= 54; lo += 2.33) grid.push([Number(la.toFixed(2)), Number(lo.toFixed(2))]);
+  for (let la = 36.5; la <= 47.5; la += 1.2) {
+    for (let lo = 46.5; lo <= 54.5; lo += 1.15) grid.push([Number(la.toFixed(2)), Number(lo.toFixed(2))]);
   }
   const res = await fetch(
     `https://api.open-meteo.com/v1/forecast?latitude=${grid.map((g) => g[0]).join(",")}&longitude=${grid
@@ -90,7 +91,73 @@ async function snapshotWind() {
   console.log(`wind.json ✓ (${points.length} points)`);
 }
 
-Promise.all([snapshotAir(), snapshotWind()]).catch((err) => {
+async function snapshotLand() {
+  const regions = [
+    { id: "mangystau", name_kk: "Маңғыстау", name_ru: "Мангистау", lat: 43.65, lon: 51.16 },
+    { id: "atyrau", name_kk: "Атырау", name_ru: "Атырау", lat: 47.09, lon: 51.88 },
+    { id: "north-caspian", name_kk: "Солтүстік Каспий", name_ru: "Северный Каспий", lat: 46.35, lon: 48.04 },
+    { id: "dagestan", name_kk: "Дағыстан", name_ru: "Дагестан", lat: 42.98, lon: 47.5 },
+    { id: "absheron", name_kk: "Апшерон", name_ru: "Апшерон", lat: 40.41, lon: 49.87 },
+  ];
+  const res = await fetch(
+    `https://api.open-meteo.com/v1/forecast?latitude=${regions.map((r) => r.lat).join(",")}` +
+      `&longitude=${regions.map((r) => r.lon).join(",")}` +
+      `&current=soil_moisture_0_to_7cm,soil_temperature_0cm` +
+      `&daily=temperature_2m_max,relative_humidity_2m_mean,precipitation_sum` +
+      `&past_days=92&forecast_days=1&timezone=UTC`
+  );
+  if (!res.ok) throw new Error(`land ${res.status}`);
+  const payload = await res.json();
+  const list = Array.isArray(payload) ? payload : [payload];
+
+  const out = regions.map((region, i) => {
+    const cur = list[i]?.current ?? {};
+    const daily = list[i]?.daily ?? {};
+    const precip: (number | null)[] = daily.precipitation_sum ?? [];
+    const tmax: (number | null)[] = daily.temperature_2m_max ?? [];
+    const rh: (number | null)[] = daily.relative_humidity_2m_mean ?? [];
+    const days = tmax
+      .map((t, k) => ({ tempMax: t ?? 0, rhMean: rh[k] ?? 50, precip: precip[k] ?? 0 }))
+      .filter((d) => d.tempMax !== 0);
+
+    return {
+      id: region.id,
+      name_kk: region.name_kk,
+      name_ru: region.name_ru,
+      lat: region.lat,
+      lon: region.lon,
+      soilTemperature: cur.soil_temperature_0cm ?? null,
+      ...scoreLand({
+        soilMoisture: cur.soil_moisture_0_to_7cm ?? 0,
+        precip90mm: precip.reduce<number>((s, v) => s + (v ?? 0), 0),
+        dryDays: dryStreak(precip),
+        nesterov: nesterovIndex(days),
+      }),
+    };
+  });
+
+  const mean = (pick: (r: (typeof out)[number]) => number) =>
+    Math.round(out.reduce((s, r) => s + pick(r), 0) / out.length);
+  const summary = {
+    soil: mean((r) => r.soil.score),
+    drought: mean((r) => r.drought.score),
+    fire: mean((r) => r.fire.score),
+  };
+
+  const body = {
+    fetched_at: new Date().toISOString(),
+    source_id: "open_meteo",
+    method: "Nesterov fire index · topsoil moisture · 90-day rainfall",
+    regions: out,
+    summary,
+  };
+  writeFileSync(join(OUT, "land.json"), JSON.stringify(body, null, 2));
+  // The eco index reads this copy so it still scores with the network down.
+  writeFileSync(join(DATA, "land-indices.json"), JSON.stringify(body, null, 2));
+  console.log(`land.json ✓ (${out.length} regions, summary ${JSON.stringify(summary)})`);
+}
+
+Promise.all([snapshotAir(), snapshotWind(), snapshotLand()]).catch((err) => {
   console.error(err);
   process.exit(1);
 });
