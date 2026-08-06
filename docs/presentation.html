@@ -53,7 +53,7 @@
   table { width: 100%; border-collapse: collapse; }
   th { text-align: left; font-size: 13pt; letter-spacing: .1em; text-transform: uppercase;
        color: #6f6f6f; font-weight: 600; border-bottom: 2px solid #0a0a0a; padding: 0 8mm 3mm 0; }
-  td { font-size: 18pt; border-bottom: 1px solid #e6e6e3; padding: 3mm 8mm 3mm 0; vertical-align: top; line-height: 1.3; }
+  td { font-size: 17pt; border-bottom: 1px solid #e6e6e3; padding: 2.6mm 8mm 2.6mm 0; vertical-align: top; line-height: 1.3; }
   td:first-child { font-weight: 600; }
 
   pre { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 13.5pt; line-height: 1.55;
@@ -84,13 +84,18 @@
 <!-- 01 · обложка -->
 <section class="slide dark">
   <div class="num">01</div>
-  <div class="kicker">Caspian Hackathon · 2026</div>
+  <div class="kicker">Caspian Hackathon · 2026 · команда Jaiyq</div>
   <div class="rule"></div>
   <h1>Caspian<br>Watch</h1>
-  <p class="lead" style="margin-top:12mm">
+  <p class="lead" style="margin-top:8mm">
     Где именно Каспий отступает,<br>с какой скоростью и что будет дальше
   </p>
-  <div class="foot"><span>Команда Jaiyq</span><span class="mono">docker compose up</span></div>
+  <div class="stats" style="grid-template-columns:repeat(3,1fr); margin-top:auto">
+    <div class="stat"><div class="lbl">Команда</div><div class="val" style="font-size:30pt">Jaiyq</div></div>
+    <div class="stat"><div class="lbl">Запуск</div><div class="val mono" style="font-size:16pt; margin-top:5mm">docker compose up</div></div>
+    <div class="stat"><div class="lbl">Работает офлайн</div><div class="val" style="font-size:30pt">да</div></div>
+  </div>
+  <div class="foot"><span>github.com/muhammed03/caspian-dash</span><span>Обложка</span></div>
 </section>
 
 <!-- 02 · проблема, одно число -->
@@ -195,10 +200,10 @@
   <table style="margin-top:2mm">
     <tr><th style="width:34%">Раздел</th><th>Что показывает</th></tr>
     <tr><td>Вода и отступание</td><td>Берег по годам 1992 → 2035, прогноз уровня, сток рек</td></tr>
-    <tr><td>Загрязнение и воздух</td><td><strong>Живой</strong> AQI по 9 городам, заводы, Кошкар-Ата</td></tr>
+    <tr><td>Загрязнение и воздух</td><td><strong>Живой</strong> AQI, шлейф, снос облака, бриз</td></tr>
     <tr><td>Флора и фауна</td><td>Тюлень, осетровые, миграция птиц, места обитания</td></tr>
     <tr><td>Ресурсы</td><td>Запасы, добыча, срок исчерпания, месторождения</td></tr>
-    <tr><td>Экоиндекс</td><td>Оценка 0–100 и открытость данных по странам</td></tr>
+    <tr><td>Экоиндекс</td><td>Оценка 0–100 из 8 компонент, включая сушу</td></tr>
     <tr><td>Методика</td><td>Формула и ограничения каждого расчёта</td></tr>
   </table>
   <div class="foot"><span>Caspian Watch</span><span>Функции</span></div>
@@ -230,7 +235,7 @@
   <p class="lead" style="font-size:22pt; max-width:44ch">
     Конус рассеивания по измеренному ветру — сутки назад и сутки вперёд, по часам.
   </p>
-  <div class="stats" style="grid-template-columns:repeat(3,1fr)">
+  <div class="stats" style="grid-template-columns:repeat(4,1fr)">
     <div class="stat">
       <div class="lbl">Ночь · класс F</div>
       <div class="val">43</div>
@@ -242,12 +247,17 @@
       <div class="sub">км, широкий — быстро разбавляется</div>
     </div>
     <div class="stat">
-      <div class="lbl">Полуугол</div>
-      <div class="val">9,1°</div>
-      <div class="sub">= 3,0° рассеивание + 6,1° разброс ветра</div>
+      <div class="lbl">Снос за 3 часа</div>
+      <div class="val">35</div>
+      <div class="sub">км; трек изгибается вслед за ветром</div>
+    </div>
+    <div class="stat">
+      <div class="lbl">Фумигация</div>
+      <div class="val">1–10</div>
+      <div class="sub">км от берега при бризе — оценка</div>
     </div>
   </div>
-  <div class="foot"><span>Pasquill–Turner · Briggs 1973 · ветер Open-Meteo</span><span>Шлейф</span></div>
+  <div class="foot"><span>Pasquill–Turner · Briggs 1973 · Simpson 1994 · ветер Open-Meteo</span><span>Шлейф</span></div>
 </section>
 
 <!-- 09 · архитектура -->
