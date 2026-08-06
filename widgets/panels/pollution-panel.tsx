@@ -18,7 +18,7 @@ import { useLocale, useT } from "@/shared/lib/i18n/client";
 import { AXIS_PROPS, CHART_INK, SERIES } from "@/shared/config/chart-palette";
 import { ChartFrame, chartTooltipStyle, fmt } from "@/shared/ui/chart-frame";
 import { MetricCard } from "@/shared/ui/metric-card";
-import { GlassCard } from "@/shared/ui/glass-card";
+import { Panel } from "@/shared/ui/primitives";
 import { SourceBadge } from "@/shared/ui/source-badge";
 import { AiInsightCard } from "@/widgets/ai-insight/ai-insight-card";
 import { useAirQuality } from "@/widgets/map/use-map-data";
@@ -64,7 +64,6 @@ export function PollutionPanel() {
           label={t.pollution.aqi}
           value={worst?.eaqi ?? 0}
           tone={(worst?.eaqi ?? 0) > 60 ? "bad" : (worst?.eaqi ?? 0) > 40 ? "warn" : "good"}
-          icon={Wind}
           delta={
             worst
               ? `${locale === "ru" ? worst.name_ru : worst.name_kk} · ${
@@ -78,7 +77,6 @@ export function PollutionPanel() {
           value={Math.round(purity.reduce((s, p) => s + p.value, 0) / purity.length)}
           unit="%"
           tone="warn"
-          icon={Factory}
           delta={locale === "ru" ? "среднее по секторам" : "секторлар бойынша орташа"}
         />
         <MetricCard
@@ -86,14 +84,12 @@ export function PollutionPanel() {
           value={koshkar.waste_mt}
           unit={locale === "ru" ? "млн т" : "млн т"}
           tone="bad"
-          icon={Radiation}
           delta={`${koshkar.radioactive_mt} ${locale === "ru" ? "млн т радиоактивны" : "млн т радиоактивті"}`}
         />
         <MetricCard
           label={t.pollution.health}
           value={pollution.health.annual_estimate}
           tone="warn"
-          icon={HeartPulse}
           delta={`${pollution.health.range[0].toLocaleString("ru-RU")}–${pollution.health.range[1].toLocaleString(
             "ru-RU"
           )} ${locale === "ru" ? "в год" : "жылына"}`}
@@ -121,7 +117,7 @@ export function PollutionPanel() {
           {air.isLoading ? (
             <div className="space-y-1.5">
               {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="h-7 animate-pulse rounded bg-white/[0.04]" />
+                <div key={i} className="h-7 animate-pulse rounded bg-tint" />
               ))}
             </div>
           ) : (
@@ -131,19 +127,19 @@ export function PollutionPanel() {
                 return (
                   <li
                     key={r.city_id}
-                    className="flex items-center gap-3 rounded-lg px-2 py-1.5 text-xs transition-colors hover:bg-white/[0.04]"
+                    className="flex items-center gap-3 rounded-lg px-2 py-1.5 text-xs transition-colors hover:bg-tint"
                   >
                     <span
                       className="size-2 shrink-0 rounded-full"
                       style={{ background: `rgb(${cr},${cg},${cb})`, boxShadow: `0 0 8px rgba(${cr},${cg},${cb},0.6)` }}
                     />
-                    <span className="text-foam/85 flex-1 truncate">
+                    <span className="text-ink flex-1 truncate">
                       {locale === "ru" ? r.name_ru : r.name_kk}
                     </span>
-                    <span className="text-mist/50 tabular w-14 text-right">
+                    <span className="text-ink-2 tabular w-14 text-right">
                       PM2.5 {r.pm2_5?.toFixed(0) ?? "—"}
                     </span>
-                    <span className="text-foam tabular w-8 text-right font-medium">{r.eaqi ?? "—"}</span>
+                    <span className="text-ink tabular w-8 text-right font-medium">{r.eaqi ?? "—"}</span>
                   </li>
                 );
               })}
@@ -177,8 +173,8 @@ export function PollutionPanel() {
               {structure.map((s) => (
                 <li key={s.name} className="flex items-center gap-2 text-[11px]">
                   <span className="size-2 shrink-0 rounded-sm" style={{ background: s.fill }} />
-                  <span className="text-mist/70 flex-1 truncate">{s.name}</span>
-                  <span className="text-foam tabular font-medium">{s.value}%</span>
+                  <span className="text-ink-2 flex-1 truncate">{s.name}</span>
+                  <span className="text-ink tabular font-medium">{s.value}%</span>
                 </li>
               ))}
             </ul>
@@ -224,40 +220,40 @@ export function PollutionPanel() {
       </PanelItem>
 
       <PanelItem>
-        <GlassCard className="p-4">
+        <Panel className="p-4">
           <div className="mb-2 flex items-center gap-2">
-            <Radiation className="text-danger size-4" strokeWidth={1.5} />
-            <h3 className="text-foam text-sm font-medium">
+            <Radiation className="text-bad size-4" strokeWidth={1.5} />
+            <h3 className="text-ink text-sm font-medium">
               {locale === "ru" ? koshkar.name_ru : koshkar.name_kk}
             </h3>
           </div>
           <ul className="space-y-1.5">
             {(locale === "ru" ? koshkar.facts_ru : koshkar.facts_kk).map((fact) => (
-              <li key={fact} className="text-mist/70 flex gap-2 text-[11px] leading-snug">
-                <span className="bg-danger/70 mt-1.5 size-1 shrink-0 rounded-full" />
+              <li key={fact} className="text-ink-2 flex gap-2 text-[11px] leading-snug">
+                <span className="bg-bad/10 mt-1.5 size-1 shrink-0 rounded-full" />
                 {fact}
               </li>
             ))}
           </ul>
-          <div className="mt-3 border-t border-white/[0.06] pt-2.5">
+          <div className="mt-3 border-t border-rule pt-2.5">
             <SourceBadge sourceId="koshkar_pub" />
           </div>
-        </GlassCard>
+        </Panel>
       </PanelItem>
 
       <PanelItem>
-        <GlassCard className="p-4">
+        <Panel className="p-4">
           <div className="mb-1.5 flex items-center gap-2">
             <HeartPulse className="text-warn size-4" strokeWidth={1.5} />
-            <h3 className="text-foam text-sm font-medium">{t.pollution.health}</h3>
+            <h3 className="text-ink text-sm font-medium">{t.pollution.health}</h3>
           </div>
-          <p className="text-mist/60 text-[11px] leading-snug">
+          <p className="text-ink-2 text-[11px] leading-snug">
             {locale === "ru" ? pollution.health.method_ru : pollution.health.method_kk}
           </p>
-          <div className="mt-3 border-t border-white/[0.06] pt-2.5">
+          <div className="mt-3 border-t border-rule pt-2.5">
             <SourceBadge sourceId="model" />
           </div>
-        </GlassCard>
+        </Panel>
       </PanelItem>
     </PanelShell>
   );

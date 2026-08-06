@@ -24,8 +24,8 @@ export const LAYERS: LayerDef[] = [
     defaultOn: true,
     sourceId: "model",
     legend: [
-      { color: "#22d3ee", label_kk: "Таңдалған жыл", label_ru: "Выбранный год" },
-      { color: "#64748b", label_kk: "1992 (тірек)", label_ru: "1992 (опорная)" },
+      { color: "#1d6fd0", label_kk: "Таңдалған жыл", label_ru: "Выбранный год" },
+      { color: "#969691", label_kk: "1992 (тірек)", label_ru: "1992 (опорная)" },
     ],
   },
   {
@@ -35,7 +35,7 @@ export const LAYERS: LayerDef[] = [
     label_ru: "Обнажённое дно",
     defaultOn: true,
     sourceId: "model",
-    legend: [{ color: "#f59e0b", label_kk: "Судан босаған алаң", label_ru: "Освободившаяся площадь" }],
+    legend: [{ color: "#e0c4a8", label_kk: "Судан босаған алаң", label_ru: "Освободившаяся площадь" }],
   },
   {
     id: "rivers-flow",
@@ -43,7 +43,7 @@ export const LAYERS: LayerDef[] = [
     label_kk: "Құятын өзендер",
     label_ru: "Впадающие реки",
     sourceId: "grid_arendal",
-    legend: [{ color: "#2dd4bf", label_kk: "Ағын көлеміне пропорционал", label_ru: "Толщина ∝ стоку" }],
+    legend: [{ color: "#0f8f66", label_kk: "Ағын көлеміне пропорционал", label_ru: "Толщина ∝ стоку" }],
   },
   {
     id: "factories",
@@ -52,7 +52,7 @@ export const LAYERS: LayerDef[] = [
     label_ru: "Промышленные объекты",
     defaultOn: true,
     sourceId: "osm",
-    legend: [{ color: "#fb7185", label_kk: "Радиус ∝ шығарынды", label_ru: "Радиус ∝ выбросам" }],
+    legend: [{ color: "#be185d", label_kk: "Радиус ∝ шығарынды", label_ru: "Радиус ∝ выбросам" }],
   },
   {
     id: "koshkar-ata",
@@ -61,7 +61,7 @@ export const LAYERS: LayerDef[] = [
     label_ru: "Кошкар-Ата",
     defaultOn: true,
     sourceId: "koshkar_pub",
-    legend: [{ color: "#ef4444", label_kk: "105 млн т қалдық", label_ru: "105 млн т отходов" }],
+    legend: [{ color: "#9f1239", label_kk: "105 млн т қалдық", label_ru: "105 млн т отходов" }],
   },
   {
     id: "air-quality",
@@ -71,9 +71,9 @@ export const LAYERS: LayerDef[] = [
     defaultOn: true,
     sourceId: "open_meteo_aq",
     legend: [
-      { color: "#34d399", label_kk: "Жақсы", label_ru: "Хорошо" },
-      { color: "#fbbf24", label_kk: "Орташа", label_ru: "Умеренно" },
-      { color: "#fb7185", label_kk: "Нашар", label_ru: "Плохо" },
+      { color: "#0f8f66", label_kk: "Жақсы", label_ru: "Хорошо" },
+      { color: "#a16207", label_kk: "Орташа", label_ru: "Умеренно" },
+      { color: "#be185d", label_kk: "Нашар", label_ru: "Плохо" },
     ],
   },
   {
@@ -82,7 +82,7 @@ export const LAYERS: LayerDef[] = [
     label_kk: "Жел бағыты (live)",
     label_ru: "Ветер (live)",
     sourceId: "open_meteo",
-    legend: [{ color: "#22d3ee", label_kk: "Ұзындығы ∝ жылдамдық", label_ru: "Длина ∝ скорости" }],
+    legend: [{ color: "#1d6fd0", label_kk: "Ұзындығы ∝ жылдамдық", label_ru: "Длина ∝ скорости" }],
   },
   {
     id: "habitats",
@@ -92,9 +92,9 @@ export const LAYERS: LayerDef[] = [
     defaultOn: true,
     sourceId: "iucn_seal",
     legend: [
-      { color: "#38bdf8", label_kk: "Итбалық", label_ru: "Тюлень" },
-      { color: "#a78bfa", label_kk: "Бекіре", label_ru: "Осетровые" },
-      { color: "#34d399", label_kk: "Құстар", label_ru: "Птицы" },
+      { color: "#1d6fd0", label_kk: "Итбалық", label_ru: "Тюлень" },
+      { color: "#5b21b6", label_kk: "Бекіре", label_ru: "Осетровые" },
+      { color: "#0f8f66", label_kk: "Құстар", label_ru: "Птицы" },
     ],
   },
   {
@@ -105,8 +105,8 @@ export const LAYERS: LayerDef[] = [
     defaultOn: true,
     sourceId: "industry_reports",
     legend: [
-      { color: "#f59e0b", label_kk: "Мұнай", label_ru: "Нефть" },
-      { color: "#60a5fa", label_kk: "Газ", label_ru: "Газ" },
+      { color: "#a16207", label_kk: "Мұнай", label_ru: "Нефть" },
+      { color: "#1d6fd0", label_kk: "Газ", label_ru: "Газ" },
     ],
   },
   {
@@ -117,9 +117,9 @@ export const LAYERS: LayerDef[] = [
     defaultOn: true,
     sourceId: "model",
     legend: [
-      { color: "#34d399", label_kk: "Ашық", label_ru: "Открыто" },
-      { color: "#fbbf24", label_kk: "Ішінара", label_ru: "Частично" },
-      { color: "#fb7185", label_kk: "Жабық", label_ru: "Закрыто" },
+      { color: "#0f8f66", label_kk: "Ашық", label_ru: "Открыто" },
+      { color: "#a16207", label_kk: "Ішінара", label_ru: "Частично" },
+      { color: "#be185d", label_kk: "Жабық", label_ru: "Закрыто" },
     ],
   },
   {

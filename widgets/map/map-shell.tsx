@@ -1,10 +1,10 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { Droplets, Factory, Bird, Fuel, Gauge } from "lucide-react";
+import { Droplets, Factory, Bird, Fuel, Gauge, PanelRightClose, PanelRightOpen } from "lucide-react";
 import { cn } from "@/shared/lib/cn";
 import { useT } from "@/shared/lib/i18n/client";
 import { defaultLayersFor } from "@/shared/config/layers";
@@ -18,8 +18,8 @@ import { EASE_FLUID } from "@/shared/lib/motion";
 const MapCanvas = dynamic(() => import("./map-canvas").then((m) => m.MapCanvas), {
   ssr: false,
   loading: () => (
-    <div className="bg-abyss absolute inset-0 flex items-center justify-center">
-      <div className="border-glow/30 border-t-glow size-8 animate-spin rounded-full border-2" />
+    <div className="bg-tint absolute inset-0 flex items-center justify-center">
+      <div className="border-rule border-t-ink size-6 animate-spin rounded-full border-2" />
     </div>
   ),
 });
@@ -32,15 +32,15 @@ const MODULES: { id: ModuleId; icon: typeof Droplets }[] = [
   { id: "index", icon: Gauge },
 ];
 
-export function MapShell({
-  module,
-  panel,
-}: {
-  module: ModuleId;
-  panel: React.ReactNode;
-}) {
+/**
+ * Two real columns — map and reading panel — rather than a panel floating over
+ * the map. Nothing overlaps the module tabs, and the panel can be collapsed to
+ * give the map the full width.
+ */
+export function MapShell({ module, panel }: { module: ModuleId; panel: React.ReactNode }) {
   const t = useT();
   const setLayers = useMapStore((s) => s.setLayers);
+  const [panelOpen, setPanelOpen] = useState(true);
 
   useEffect(() => {
     setLayers(defaultLayersFor(module));
@@ -49,80 +49,82 @@ export function MapShell({
   const showTimeline = module === "water" || module === "index";
 
   return (
-    <div className="relative h-[100svh] w-full overflow-hidden pt-16">
-      <div className="absolute inset-0">
-        <MapCanvas module={module} />
-      </div>
-      <HoverCard />
-
-      {/* module rail */}
-      <div className="pointer-events-none absolute inset-x-0 top-16 z-20 flex justify-center px-4 pt-4">
-        <motion.nav
-          initial={{ opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: EASE_FLUID }}
-          className="glass-strong pointer-events-auto flex gap-1 rounded-full p-1"
-        >
+    <div className="flex h-[100svh] flex-col pt-14">
+      {/* module tabs — their own row, never covered by anything */}
+      <div className="border-rule bg-paper flex items-center justify-between gap-4 border-b px-3 md:px-5">
+        <nav className="scrollbar-none -mb-px flex overflow-x-auto">
           {MODULES.map(({ id, icon: Icon }) => {
             const active = id === module;
             return (
               <Link
                 key={id}
                 href={`/map/${id}`}
+                aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative flex items-center gap-2 rounded-full px-3.5 py-2 text-[13px] transition-colors duration-300 md:px-4",
-                  active ? "text-glow" : "text-mist/60 hover:text-foam"
+                  "relative flex shrink-0 items-center gap-2 px-3 py-3 text-[13px] whitespace-nowrap transition-colors md:px-4",
+                  active ? "text-ink" : "text-ink-2 hover:text-ink"
                 )}
               >
+                <Icon className="size-4" strokeWidth={1.5} />
+                {t.nav[id]}
                 {active && (
                   <motion.span
-                    layoutId="module-pill"
-                    className="bg-glow/15 ring-glow absolute inset-0 rounded-full"
-                    transition={{ type: "spring", stiffness: 380, damping: 34 }}
+                    layoutId="module-underline"
+                    className="bg-ink absolute inset-x-2 -bottom-px h-0.5"
+                    transition={{ type: "spring", stiffness: 420, damping: 36 }}
                   />
                 )}
-                <Icon className="relative size-4" strokeWidth={1.5} />
-                <span className="relative hidden md:inline">{t.nav[id]}</span>
               </Link>
             );
           })}
-        </motion.nav>
-      </div>
+        </nav>
 
-      {/* layers, left */}
-      <div className="pointer-events-none absolute left-4 top-32 z-20 hidden md:block">
-        <LayerManager module={module} />
-      </div>
-
-      {/* data panel, right */}
-      <motion.aside
-        initial={{ opacity: 0, x: 28 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, ease: EASE_FLUID, delay: 0.15 }}
-        className={cn(
-          "absolute right-0 top-16 z-20 h-[calc(100svh-4rem)] w-full overflow-y-auto md:w-[440px]",
-          // top padding clears the floating module rail
-          "glass-strong border-y-0 border-r-0 px-5 pb-6 pt-24"
-        )}
-      >
-        {panel}
-      </motion.aside>
-
-      {/* timeline, bottom */}
-      {showTimeline && (
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: EASE_FLUID, delay: 0.25 }}
-          className="pointer-events-none absolute bottom-5 left-4 z-20 hidden w-[520px] max-w-[calc(100%-500px)] md:block"
+        <button
+          type="button"
+          onClick={() => setPanelOpen((v) => !v)}
+          className="text-ink-2 hover:text-ink hidden shrink-0 items-center gap-1.5 text-[11px] tracking-wide uppercase transition-colors lg:flex"
+          aria-expanded={panelOpen}
         >
-          <TimelineSlider />
-        </motion.div>
-      )}
+          {panelOpen ? <PanelRightClose className="size-4" /> : <PanelRightOpen className="size-4" />}
+          {panelOpen ? t.common.close : t.common.viewData}
+        </button>
+      </div>
 
-      {/* attribution — required by the JRC and OSM licences */}
-      <div className="text-mist/35 pointer-events-none absolute bottom-1.5 left-4 z-10 hidden text-[10px] md:block">
-        Natural Earth · © OpenStreetMap contributors · Open-Meteo · EC JRC/Google
+      <div className="flex min-h-0 flex-1">
+        {/* map column */}
+        <div className="bg-tint relative min-w-0 flex-1">
+          <MapCanvas module={module} />
+          <HoverCard />
+
+          <div className="pointer-events-none absolute top-4 left-4 z-20 hidden md:block">
+            <LayerManager module={module} />
+          </div>
+
+          {showTimeline && (
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: EASE_FLUID, delay: 0.2 }}
+              className="pointer-events-none absolute right-4 bottom-4 left-4 z-20 hidden md:block"
+            >
+              <div className="mx-auto max-w-[560px]">
+                <TimelineSlider />
+              </div>
+            </motion.div>
+          )}
+
+          {/* attribution — required by the JRC and OSM licences */}
+          <div className="bg-paper/80 text-ink-2 pointer-events-none absolute bottom-0 left-0 z-10 hidden rounded-tr px-2 py-1 text-[10px] md:block">
+            Natural Earth · © OpenStreetMap contributors · Open-Meteo · EC JRC/Google
+          </div>
+        </div>
+
+        {/* reading column */}
+        {panelOpen && (
+          <aside className="border-rule bg-paper w-full shrink-0 overflow-y-auto border-l px-5 py-6 md:w-[420px] xl:w-[460px]">
+            {panel}
+          </aside>
+        )}
       </div>
     </div>
   );

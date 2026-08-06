@@ -1,14 +1,19 @@
 "use client";
 
-import { motion, type HTMLMotionProps } from "motion/react";
+import { motion } from "motion/react";
 import { cn } from "@/shared/lib/cn";
 import { fadeUp, viewportOnce } from "@/shared/lib/motion";
 
-type Props = Omit<HTMLMotionProps<"div">, "children"> & {
+/**
+ * Card surface. Kept flat on purpose — a hairline border and white paper,
+ * no blur and no shadow, so the data inside is the only thing with weight.
+ */
+type Props = {
   children?: React.ReactNode;
-  /** Adds the cyan rim-light used for the primary card on a screen. */
+  className?: string;
+  /** Marks the primary card on a screen; renders on tinted paper. */
   accent?: boolean;
-  /** Skips the scroll-triggered entrance (for cards inside already-animated parents). */
+  /** Skips the scroll-triggered entrance. */
   static?: boolean;
 };
 
@@ -17,27 +22,25 @@ export function GlassCard({
   accent = false,
   static: isStatic = false,
   children,
-  ...props
 }: Props) {
   const motionProps = isStatic
     ? {}
-    : { variants: fadeUp, initial: "hidden" as const, whileInView: "show" as const, viewport: viewportOnce };
+    : {
+        variants: fadeUp,
+        initial: "hidden" as const,
+        whileInView: "show" as const,
+        viewport: viewportOnce,
+      };
 
   return (
     <motion.div
       {...motionProps}
-      {...props}
       className={cn(
-        "glass relative overflow-hidden rounded-2xl",
-        accent && "ring-glow",
+        "border-rule rounded-lg border",
+        accent ? "bg-tint" : "bg-paper",
         className
       )}
     >
-      {/* top rim light */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"
-      />
       {children}
     </motion.div>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { ExternalLink, ShieldCheck, FileText, FlaskConical } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/shared/lib/cn";
 import { useLocale, useT } from "@/shared/lib/i18n/client";
 import sourcesFile from "@/data/sources.json";
@@ -26,15 +26,15 @@ export function getSource(id: string): Source | undefined {
   return SOURCES.find((s) => s.id === id);
 }
 
-const STYLES: Record<SourceStatus, { dot: string; text: string; Icon: typeof ShieldCheck }> = {
-  real: { dot: "bg-alive", text: "text-alive/90", Icon: ShieldCheck },
-  semi: { dot: "bg-warn", text: "text-warn/90", Icon: FileText },
-  mock: { dot: "bg-danger", text: "text-danger/90", Icon: FlaskConical },
+const DOT: Record<SourceStatus, string> = {
+  real: "bg-good",
+  semi: "bg-warn",
+  mock: "bg-bad",
 };
 
 /**
- * Required under every chart and layer by the hackathon spec: where the number
- * comes from and how much to trust it.
+ * Required under every chart and layer: where the number comes from and how
+ * much to trust it. Stated in words, not just a colour.
  */
 export function SourceBadge({
   sourceId,
@@ -49,31 +49,32 @@ export function SourceBadge({
   const locale = useLocale();
   const source = getSource(sourceId);
   const resolved = (status ?? (source?.status as SourceStatus) ?? "semi") as SourceStatus;
-  const style = STYLES[resolved] ?? STYLES.semi;
   const label = resolved === "real" ? t.common.real : resolved === "mock" ? t.common.mock : t.common.semi;
   const note = locale === "ru" ? source?.note_ru : source?.note_kk;
 
   return (
-    <div className={cn("flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] leading-tight", className)}>
-      <span className={cn("inline-flex items-center gap-1.5", style.text)}>
-        <span className={cn("size-1.5 rounded-full", style.dot)} />
-        {label}
-      </span>
-      <span className="text-mist/40">·</span>
-      {source ? (
-        <a
-          href={source.url}
-          target="_blank"
-          rel="noreferrer noopener"
-          className="text-mist/70 hover:text-glow inline-flex items-center gap-1 transition-colors"
-        >
-          {source.name}
-          <ExternalLink className="size-3" />
-        </a>
-      ) : (
-        <span className="text-mist/60">{sourceId}</span>
-      )}
-      {note && <span className="text-mist/45 basis-full">{note}</span>}
+    <div className={cn("text-[11px] leading-snug", className)}>
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+        <span className="text-ink-2 inline-flex items-center gap-1.5">
+          <span className={cn("size-1.5 rounded-full", DOT[resolved])} />
+          {label}
+        </span>
+        <span className="text-ink-3">·</span>
+        {source ? (
+          <a
+            href={source.url}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="text-ink-2 hover:text-ink inline-flex items-center gap-0.5 underline decoration-neutral-300 underline-offset-2 transition-colors hover:decoration-current"
+          >
+            {source.name}
+            <ArrowUpRight className="size-3" />
+          </a>
+        ) : (
+          <span className="text-ink-3">{sourceId}</span>
+        )}
+      </div>
+      {note && <p className="text-ink-3 mt-1">{note}</p>}
     </div>
   );
 }
@@ -84,11 +85,11 @@ export function MockBadge({ className }: { className?: string }) {
   return (
     <span
       className={cn(
-        "border-danger/40 bg-danger/10 text-danger inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium",
+        "border-bad/40 text-bad inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium",
         className
       )}
     >
-      <FlaskConical className="size-3" />
+      <span className="bg-bad size-1.5 rounded-full" />
       {t.common.mock}
     </span>
   );

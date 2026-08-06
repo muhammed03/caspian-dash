@@ -1,0 +1,9 @@
+node_modules
+.next
+.git
+.playwright-mcp
+*.jpeg
+*.png
+!public/**/*.png
+npm-debug.log*
+.DS_Store

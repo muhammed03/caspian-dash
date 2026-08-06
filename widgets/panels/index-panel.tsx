@@ -19,7 +19,7 @@ import { Gauge, Database } from "lucide-react";
 import { useLocale, useT } from "@/shared/lib/i18n/client";
 import { AXIS_PROPS, CHART_INK, SERIES } from "@/shared/config/chart-palette";
 import { ChartFrame, chartTooltipStyle, fmt } from "@/shared/ui/chart-frame";
-import { GlassCard } from "@/shared/ui/glass-card";
+import { Panel } from "@/shared/ui/primitives";
 import { AnimatedNumber } from "@/shared/ui/animated-number";
 import { SourceBadge } from "@/shared/ui/source-badge";
 import { AiInsightCard } from "@/widgets/ai-insight/ai-insight-card";
@@ -63,8 +63,8 @@ export function IndexPanel() {
   return (
     <PanelShell title={t.index.title}>
       <PanelItem>
-        <GlassCard accent className="p-5">
-          <div className="flex items-center gap-2 text-xs font-medium tracking-wide text-mist/70 uppercase">
+        <Panel className="p-5">
+          <div className="flex items-center gap-2 text-xs font-medium tracking-wide text-ink-2 uppercase">
             <Gauge className="size-3.5" strokeWidth={1.5} />
             {t.home.ecoIndex}
           </div>
@@ -73,7 +73,7 @@ export function IndexPanel() {
               value={score}
               className="font-display text-6xl font-semibold tracking-tight"
             />
-            <span className="text-mist/50 pb-2 text-lg">/ 100</span>
+            <span className="text-ink-2 pb-2 text-lg">/ 100</span>
             <span
               className="mb-2.5 ml-auto rounded-full border px-3 py-1 text-[11px] font-medium"
               style={{ color: tone.color, borderColor: `${tone.color}55`, background: `${tone.color}18` }}
@@ -81,16 +81,16 @@ export function IndexPanel() {
               {tone.label[locale === "ru" ? "ru" : "kk"]}
             </span>
           </div>
-          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/[0.07]">
+          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-tint">
             <div
               className="h-full rounded-full transition-[width] duration-1000"
               style={{ width: `${score}%`, background: tone.color, boxShadow: `0 0 16px ${tone.color}90` }}
             />
           </div>
-          <div className="mt-3 border-t border-white/[0.06] pt-2.5">
+          <div className="mt-3 border-t border-rule pt-2.5">
             <SourceBadge sourceId="model" />
           </div>
-        </GlassCard>
+        </Panel>
       </PanelItem>
 
       <PanelItem>
@@ -126,9 +126,9 @@ export function IndexPanel() {
           <ul className="mt-1 space-y-1">
             {components.map((c) => (
               <li key={c.id} className="flex items-center gap-2 text-[11px]">
-                <span className="text-mist/65 flex-1">{c.name}</span>
-                <span className="text-mist/40">{locale === "ru" ? "вес" : "салмақ"} {c.weight}%</span>
-                <span className="text-foam tabular w-8 text-right font-medium">{c.score}</span>
+                <span className="text-ink-2 flex-1">{c.name}</span>
+                <span className="text-ink-2">{locale === "ru" ? "вес" : "салмақ"} {c.weight}%</span>
+                <span className="text-ink tabular w-8 text-right font-medium">{c.score}</span>
               </li>
             ))}
           </ul>
@@ -159,13 +159,13 @@ export function IndexPanel() {
       </PanelItem>
 
       <PanelItem>
-        <GlassCard className="p-4">
+        <Panel className="p-4">
           <div className="mb-1.5 flex items-center gap-2">
-            <Database className="text-glow size-4" strokeWidth={1.5} />
-            <h3 className="text-foam text-sm font-medium">{t.index.dataAvailability}</h3>
+            <Database className="text-accent size-4" strokeWidth={1.5} />
+            <h3 className="text-ink text-sm font-medium">{t.index.dataAvailability}</h3>
           </div>
-          <p className="text-mist/65 text-[11px] leading-snug">{t.index.availabilityNote}</p>
-        </GlassCard>
+          <p className="text-ink-2 text-[11px] leading-snug">{t.index.availabilityNote}</p>
+        </Panel>
       </PanelItem>
     </PanelShell>
   );

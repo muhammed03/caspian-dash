@@ -3,11 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Area, AreaChart, ResponsiveContainer, YAxis } from "recharts";
+import { Area, AreaChart, ResponsiveContainer, YAxis, ReferenceLine } from "recharts";
 
 import { useLocale, useT } from "@/shared/lib/i18n/client";
-import { SectionBody, SectionLabel, SectionTitle } from "@/shared/ui/section";
-import { SERIES } from "@/shared/config/chart-palette";
+import { Display, Label, Lede, Plain, SectionMark } from "@/shared/ui/primitives";
+import { SERIES, CHART_INK } from "@/shared/config/chart-palette";
 import { SourceBadge } from "@/shared/ui/source-badge";
 import seaLevel from "@/data/sea-level.json";
 
@@ -17,8 +17,8 @@ type Row = { year: number; level_m: number; area_km2: number };
 const DATA = seaLevel.series as Row[];
 
 /**
- * Pinned scene: scrolling walks the year forward, and the chart, the level and
- * the lost-surface figure move with it. The scroll bar becomes the time axis.
+ * Pinned scene: scrolling walks the year forward and the line falls with it.
+ * The scroll bar becomes the time axis, so the reader does the falling.
  */
 export function SeaLevelScene() {
   const t = useT();
@@ -35,17 +35,13 @@ export function SeaLevelScene() {
     }
 
     const ctx = gsap.context(() => {
-      const state = { progress: 0 };
       ScrollTrigger.create({
         trigger: el,
         start: "top top",
-        end: "+=180%",
+        end: "+=200%",
         pin: true,
-        scrub: 0.8,
-        onUpdate: (self) => {
-          state.progress = self.progress;
-          setIndex(Math.round(self.progress * (DATA.length - 1)));
-        },
+        scrub: 0.7,
+        onUpdate: (self) => setIndex(Math.round(self.progress * (DATA.length - 1))),
       });
     }, el);
 
@@ -57,79 +53,90 @@ export function SeaLevelScene() {
   const areaLost = DATA[0].area_km2 - row.area_km2;
 
   return (
-    <section ref={section} className="relative flex h-[100svh] items-center overflow-hidden">
-      <div className="mx-auto grid w-full max-w-[1800px] gap-10 px-5 md:grid-cols-2 md:items-center md:px-12">
+    <section ref={section} className="relative flex h-[100svh] items-center py-10">
+      <div className="mx-auto grid w-full max-w-[1800px] items-center gap-12 px-5 md:grid-cols-[1fr_1.1fr] md:px-10">
         <div>
-          <SectionLabel>{`1992 — 2025`}</SectionLabel>
-          <SectionTitle className="mt-5">{t.home.sectionSeaTitle}</SectionTitle>
-          <SectionBody className="mt-5">{t.home.sectionSeaBody}</SectionBody>
+          <SectionMark index={1}>{t.nav.water}</SectionMark>
+          <Display className="mt-6 max-w-[12ch]">{t.home.sectionSeaTitle}</Display>
+          <Lede className="mt-5">{t.home.sectionSeaBody}</Lede>
 
-          <div className="mt-9 flex flex-wrap items-end gap-x-10 gap-y-5">
+          <div className="mt-10 grid grid-cols-3 gap-6">
             <div>
-              <div className="text-mist/50 text-[10px] font-medium tracking-[0.16em] uppercase">
-                {t.common.year}
-              </div>
-              <div className="font-display tabular mt-1 text-5xl font-semibold md:text-6xl">
-                {row.year}
-              </div>
+              <Label>{t.common.year}</Label>
+              <div className="display tabular mt-1.5 text-4xl md:text-5xl">{row.year}</div>
             </div>
             <div>
-              <div className="text-mist/50 text-[10px] font-medium tracking-[0.16em] uppercase">
-                {t.home.metricLevel}
-              </div>
-              <div className="font-display tabular text-danger mt-1 text-5xl font-semibold md:text-6xl">
+              <Label>{t.home.metricLevel}</Label>
+              <div className="display tabular text-bad mt-1.5 text-4xl md:text-5xl">
                 {row.level_m.toFixed(2)}
-                <span className="text-mist/40 ml-1.5 text-xl font-normal">м</span>
+                <span className="text-ink-3 ml-1 text-base font-normal">м</span>
               </div>
             </div>
             <div>
-              <div className="text-mist/50 text-[10px] font-medium tracking-[0.16em] uppercase">
-                {locale === "ru" ? "Потеряно акватории" : "Жоғалған айдын"}
-              </div>
-              <div className="font-display tabular text-warn mt-1 text-3xl font-semibold md:text-4xl">
+              <Label>{locale === "ru" ? "Потеряно акватории" : "Жоғалған айдын"}</Label>
+              <div className="display tabular text-warn mt-1.5 text-3xl md:text-4xl">
                 {areaLost > 0 ? `−${areaLost.toLocaleString("ru-RU")}` : "0"}
-                <span className="text-mist/40 ml-1.5 text-base font-normal">км²</span>
+                <span className="text-ink-3 ml-1 text-sm font-normal">км²</span>
               </div>
             </div>
           </div>
 
-          <div className="mt-8">
+          <Plain className="mt-6">{t.plain.levelMeans}</Plain>
+
+          <div className="mt-6">
             <SourceBadge sourceId="grealm" />
           </div>
         </div>
 
-        <div className="glass relative h-[300px] overflow-hidden rounded-2xl p-4 md:h-[420px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={visible} margin={{ top: 12, right: 4, bottom: 4, left: 4 }}>
-              <defs>
-                <linearGradient id="storyFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={SERIES[0]} stopOpacity={0.35} />
-                  <stop offset="100%" stopColor={SERIES[0]} stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              {/* fixed domain so the line falls through the frame instead of rescaling */}
-              <YAxis domain={[-29.8, -26.2]} hide />
-              <Area
-                type="monotone"
-                dataKey="level_m"
-                stroke={SERIES[0]}
-                strokeWidth={2.5}
-                fill="url(#storyFill)"
-                // levels are negative, so the fill has to run down to the floor
-                // of the domain rather than to zero
-                baseValue={-29.8}
-                isAnimationActive={false}
-                dot={false}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
+        <figure className="border-rule relative h-[320px] rounded-lg border p-5 md:h-[440px]">
+          <figcaption className="mb-3 flex items-baseline justify-between">
+            <Label>{t.water.levelChart}</Label>
+            <span className="text-ink-3 tabular text-[11px]">{row.year}</span>
+          </figcaption>
 
-          <div className="text-mist/35 absolute inset-x-4 bottom-3 flex justify-between text-[10px]">
+          <div className="h-[calc(100%-3.5rem)]">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={visible} margin={{ top: 8, right: 4, bottom: 4, left: 4 }}>
+                <defs>
+                  <linearGradient id="storyFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={SERIES[0]} stopOpacity={0.18} />
+                    <stop offset="100%" stopColor={SERIES[0]} stopOpacity={0.02} />
+                  </linearGradient>
+                </defs>
+                {/* fixed domain and fixed x-range so the line falls through a
+                    stable frame instead of the axis rescaling under it */}
+                <YAxis domain={[-29.8, -26.2]} hide />
+                <ReferenceLine
+                  y={-29}
+                  stroke={CHART_INK.muted}
+                  strokeDasharray="3 3"
+                  label={{
+                    value: locale === "ru" ? "исторический минимум" : "тарихи минимум",
+                    fill: CHART_INK.muted,
+                    fontSize: 10,
+                    position: "insideBottomLeft",
+                  }}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="level_m"
+                  stroke={SERIES[0]}
+                  strokeWidth={2}
+                  fill="url(#storyFill)"
+                  baseValue={-29.8}
+                  isAnimationActive={false}
+                  dot={false}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div className="text-ink-3 rule-t mt-3 flex justify-between pt-2 text-[10px]">
             <span>1992</span>
-            <span className="text-glow/70">{row.year}</span>
+            <span className="text-ink">{row.year}</span>
             <span>2025</span>
           </div>
-        </div>
+        </figure>
       </div>
     </section>
   );

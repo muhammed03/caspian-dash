@@ -187,6 +187,8 @@ for (const year of YEARS) {
     ],
   };
   writeFileSync(join(OUT, `${year}.geojson`), JSON.stringify(fc));
+  // .json twin so the hero scene can import a shoreline directly
+  writeFileSync(join(OUT, `${year}.json`), JSON.stringify(fc));
   index.push({
     year,
     level_m: Number(level.toFixed(3)),

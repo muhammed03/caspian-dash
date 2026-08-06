@@ -20,7 +20,7 @@ import { useLocale, useT } from "@/shared/lib/i18n/client";
 import { AXIS_PROPS, CHART_INK, SERIES } from "@/shared/config/chart-palette";
 import { ChartFrame, chartTooltipStyle, fmt, fmtRange } from "@/shared/ui/chart-frame";
 import { MetricCard } from "@/shared/ui/metric-card";
-import { GlassCard } from "@/shared/ui/glass-card";
+import { Panel } from "@/shared/ui/primitives";
 import { SourceBadge } from "@/shared/ui/source-badge";
 import { AiInsightCard } from "@/widgets/ai-insight/ai-insight-card";
 import { PanelShell, PanelItem } from "./panel-shell";
@@ -72,7 +72,6 @@ export function LifePanel() {
           unit="%"
           decimals={0}
           tone="bad"
-          icon={ShieldAlert}
           delta={locale === "ru" ? "спад с начала XX века" : "XX ғасыр басынан азаю"}
         />
         <MetricCard
@@ -80,14 +79,12 @@ export function LifePanel() {
           value={sturgeon.catch_series.at(-1)!.tonnes}
           unit={locale === "ru" ? "т/год" : "т/жыл"}
           tone="bad"
-          icon={Fish}
           delta={`${sturgeon.catch_series[0].tonnes.toLocaleString("ru-RU")} т в ${sturgeon.catch_series[0].year}`}
         />
         <MetricCard
           label={t.life.birds}
           value={wildlife.birds.species.length}
           tone="neutral"
-          icon={Bird}
           delta={locale === "ru" ? "ключевых видов в мониторинге" : "мониторингтегі негізгі түрлер"}
         />
         <MetricCard
@@ -95,7 +92,6 @@ export function LifePanel() {
           value={greening[0].last}
           unit="NDVI×100"
           tone="warn"
-          icon={Sprout}
           delta={`${greening[0].name}: ${greening[0].change > 0 ? "+" : ""}${greening[0].change} ${
             locale === "ru" ? "с 2015" : "2015 жылдан"
           }`}
@@ -144,7 +140,7 @@ export function LifePanel() {
               <Bar dataKey="span" stackId="range" radius={4} fill={SERIES[0]} />
             </BarChart>
           </ResponsiveContainer>
-          <p className="text-mist/50 mt-2 text-[11px]">{t.life.sealStatus}</p>
+          <p className="text-ink-2 mt-2 text-[11px]">{t.life.sealStatus}</p>
         </ChartFrame>
       </PanelItem>
 
@@ -213,7 +209,7 @@ export function LifePanel() {
               />
             </AreaChart>
           </ResponsiveContainer>
-          <ul className="text-mist/60 mt-2 flex flex-wrap gap-x-4 text-[11px]">
+          <ul className="text-ink-2 mt-2 flex flex-wrap gap-x-4 text-[11px]">
             <li className="flex items-center gap-1.5">
               <span className="h-0.5 w-4 rounded" style={{ background: SERIES[1] }} />
               {locale === "ru" ? "Официальный вылов" : "Ресми аулау"}
@@ -227,10 +223,10 @@ export function LifePanel() {
       </PanelItem>
 
       <PanelItem>
-        <GlassCard className="p-4">
+        <Panel className="p-4">
           <div className="mb-2.5 flex items-center gap-2">
-            <Bird className="text-alive size-4" strokeWidth={1.5} />
-            <h3 className="text-foam text-sm font-medium">{t.life.birds}</h3>
+            <Bird className="text-good size-4" strokeWidth={1.5} />
+            <h3 className="text-ink text-sm font-medium">{t.life.birds}</h3>
           </div>
           <ul className="space-y-2.5">
             {wildlife.birds.species.map((sp) => {
@@ -240,7 +236,7 @@ export function LifePanel() {
                 arrive <= depart ? m >= arrive && m <= depart : m >= arrive || m <= depart;
               return (
                 <li key={sp.id}>
-                  <div className="text-mist/75 mb-1 text-[11px]">
+                  <div className="text-ink-2 mb-1 text-[11px]">
                     {locale === "ru" ? sp.name_ru : sp.name_kk}
                   </div>
                   <div className="flex gap-0.5">
@@ -259,15 +255,15 @@ export function LifePanel() {
               );
             })}
           </ul>
-          <div className="text-mist/40 mt-1.5 flex justify-between text-[9px]">
+          <div className="text-ink-2 mt-1.5 flex justify-between text-[9px]">
             {months.map((m) => (
               <span key={m}>{m[0]}</span>
             ))}
           </div>
-          <div className="mt-3 border-t border-white/[0.06] pt-2.5">
+          <div className="mt-3 border-t border-rule pt-2.5">
             <SourceBadge sourceId="gbif" status="real" />
           </div>
-        </GlassCard>
+        </Panel>
       </PanelItem>
 
       <PanelItem>

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Unbounded } from "next/font/google";
+import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 import "./globals.css";
 import { Providers } from "./providers";
@@ -11,20 +11,14 @@ const inter = Inter({
   display: "swap",
 });
 
-const unbounded = Unbounded({
-  variable: "--font-unbounded",
-  subsets: ["latin", "cyrillic", "cyrillic-ext"],
-  display: "swap",
-});
-
 export const metadata: Metadata = {
   title: "Caspian Watch — Каспий теңізінің экологиялық мониторингі",
   description:
-    "AI-платформа экологического мониторинга Каспийского моря: уровень воды, береговая линия, загрязнение, флора и фауна, прогнозы.",
+    "Что происходит с Каспийским морем: уровень воды, береговая линия, загрязнение, животные и прогноз — на понятных картах и графиках.",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#05070b",
+  themeColor: "#ffffff",
 };
 
 export default async function RootLayout({
@@ -35,10 +29,8 @@ export default async function RootLayout({
   const locale: Locale = LOCALES.includes(raw as Locale) ? (raw as Locale) : "kk";
 
   return (
-    <html lang={locale} className="dark">
-      <body
-        className={`${inter.variable} ${unbounded.variable} noise bg-ocean min-h-screen antialiased`}
-      >
+    <html lang={locale}>
+      <body className={`${inter.variable} min-h-screen antialiased`}>
         <Providers locale={locale}>{children}</Providers>
       </body>
     </html>

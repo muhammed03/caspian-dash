@@ -1,40 +1,38 @@
 /**
- * Series colours for every chart on the site.
+ * Series colours for every chart.
  *
- * Validated for the dark chart surface (#09131c) against the six checks —
- * lightness band, chroma floor, CVD separation on adjacent pairs, normal-vision
- * floor, and contrast — so the order below is deliberate: green and rose are
- * never neighbours, which is where deuteranopia fails. Assign slots in order;
- * never cycle past the end, never re-colour on filter.
- *
- * UI chrome keeps the brighter brand cyan; only data marks use these.
+ * Validated against the white chart surface on all six checks — lightness
+ * band, chroma floor, CVD separation on adjacent pairs, normal-vision floor
+ * and contrast. Order is deliberate: warm and green hues are never adjacent,
+ * which is where red-green colour blindness fails. Assign slots in order and
+ * never cycle past the end.
  */
 export const SERIES = [
-  "#0e94ad", // 1 aqua
-  "#c04a72", // 2 rose
-  "#a86f00", // 3 amber
-  "#7a6fd6", // 4 violet
-  "#12855f", // 5 green
-  "#2f74c4", // 6 blue
+  "#1d6fd0", // 1 blue
+  "#c2410c", // 2 orange
+  "#0f8f66", // 3 aqua
+  "#a16207", // 4 amber
+  "#be185d", // 5 magenta
+  "#5b21b6", // 6 violet
 ] as const;
 
 /** Magnitude ramp, single hue, light → dark. */
-export const SEQUENTIAL = ["#8fe3f0", "#4fc4dc", "#0e94ad", "#0a6a7d", "#07444f"] as const;
+export const SEQUENTIAL = ["#cfe2f8", "#8fbdf0", "#4a90dd", "#1d6fd0", "#124a8c"] as const;
 
 /** Reserved state colours — never reused as a series. */
 export const STATUS = {
-  good: "#12855f",
-  warning: "#a86f00",
-  serious: "#c05621",
-  critical: "#c04a72",
+  good: "#0f8f66",
+  warning: "#a16207",
+  serious: "#c2410c",
+  critical: "#be185d",
 } as const;
 
 export const CHART_INK = {
-  primary: "#e2e8f0",
-  secondary: "rgba(226,232,240,0.62)",
-  muted: "rgba(226,232,240,0.38)",
-  grid: "rgba(226,232,240,0.07)",
-  surface: "#09131c",
+  primary: "#0a0a0a",
+  secondary: "#595959",
+  muted: "#6f6f6f",
+  grid: "#eeeeec",
+  surface: "#ffffff",
 } as const;
 
 export const AXIS_PROPS = {

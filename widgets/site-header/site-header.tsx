@@ -2,74 +2,58 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, useScroll, useMotionValueEvent } from "motion/react";
-import { useState } from "react";
-import { Waves } from "lucide-react";
 import { cn } from "@/shared/lib/cn";
 import { useT } from "@/shared/lib/i18n/client";
 import { LocaleSwitch } from "@/features/locale-switch/locale-switch";
-import { EASE_FLUID } from "@/shared/lib/motion";
 
 export function SiteHeader() {
   const t = useT();
   const pathname = usePathname();
-  const [scrolled, setScrolled] = useState(false);
-  const { scrollY } = useScroll();
-  useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 40));
+  const onMap = pathname?.startsWith("/map");
 
   const links = [
-    { href: "/", label: t.common.home },
-    { href: "/map/water", label: t.common.map },
-    { href: "/methodology", label: t.common.methodology },
+    { href: "/", label: t.common.home, match: (p: string) => p === "/" },
+    { href: "/map/water", label: t.common.map, match: (p: string) => p.startsWith("/map") },
+    { href: "/methodology", label: t.common.methodology, match: (p: string) => p.startsWith("/methodology") },
   ];
 
   return (
-    <motion.header
-      initial={{ y: -32, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.9, ease: EASE_FLUID, delay: 0.2 }}
+    <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-500",
-        scrolled && "glass-strong border-x-0 border-t-0"
+        "fixed inset-x-0 top-0 z-50",
+        onMap ? "bg-paper/95 border-rule border-b backdrop-blur" : "bg-paper/85 backdrop-blur"
       )}
     >
-      <nav className="mx-auto flex h-16 max-w-[1800px] items-center justify-between px-5 md:px-8">
-        <Link href="/" className="group flex items-center gap-2.5">
-          <span className="border-glow/30 bg-glow/10 text-glow group-hover:ring-glow flex size-8 items-center justify-center rounded-lg border transition-all duration-500">
-            <Waves className="size-4" strokeWidth={1.75} />
+      <div className="mx-auto flex h-14 max-w-[1800px] items-center justify-between px-5 md:px-10">
+        <Link href="/" className="group flex flex-col leading-none">
+          <span className="label group-hover:text-ink transition-colors">
+            {t.common.tagline}
           </span>
-          <span className="font-display text-sm font-semibold tracking-tight">
-            {t.common.appName}
-          </span>
+          <span className="display mt-1 text-[15px] tracking-tight">Caspian Watch</span>
         </Link>
 
-        <div className="hidden items-center gap-1 md:flex">
-          {links.map((l) => {
-            const active = l.href === "/" ? pathname === "/" : pathname?.startsWith(l.href.split("/").slice(0, 2).join("/"));
-            return (
-              <Link
-                key={l.href}
-                href={l.href}
-                className={cn(
-                  "relative rounded-full px-4 py-2 text-sm transition-colors duration-300",
-                  active ? "text-foam" : "text-mist/60 hover:text-foam"
-                )}
-              >
-                {active && (
-                  <motion.span
-                    layoutId="nav-pill"
-                    className="glass absolute inset-0 rounded-full"
-                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
-                  />
-                )}
-                <span className="relative">{l.label}</span>
-              </Link>
-            );
-          })}
-        </div>
-
-        <LocaleSwitch />
-      </nav>
-    </motion.header>
+        <nav className="flex items-center gap-6">
+          <ul className="hidden items-center gap-5 md:flex">
+            {links.map((l) => {
+              const active = l.match(pathname ?? "");
+              return (
+                <li key={l.href}>
+                  <Link
+                    href={l.href}
+                    className={cn(
+                      "label transition-colors",
+                      active ? "text-ink" : "hover:text-ink"
+                    )}
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+          <LocaleSwitch />
+        </nav>
+      </div>
+    </header>
   );
 }

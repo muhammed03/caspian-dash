@@ -3,8 +3,8 @@
 import { ExternalLink, Sigma, ShieldCheck, FileText, FlaskConical } from "lucide-react";
 import { cn } from "@/shared/lib/cn";
 import { useLocale, useT } from "@/shared/lib/i18n/client";
-import { GlassCard } from "@/shared/ui/glass-card";
-import { SectionBody, SectionLabel, SectionTitle, Reveal, RevealItem } from "@/shared/ui/section";
+
+import { Display, Label, Lede, Plain, Reveal, RevealItem, SectionMark } from "@/shared/ui/primitives";
 import { RISK_THRESHOLDS } from "@/shared/lib/analyze";
 import { ecoIndexComponents } from "@/entities/ai-insight/compute";
 import { SiteFooter } from "@/widgets/site-footer/site-footer";
@@ -31,9 +31,9 @@ const COMPONENT_LABELS: Record<string, { kk: string; ru: string }> = {
 };
 
 const STATUS_META = {
-  real: { Icon: ShieldCheck, cls: "text-alive", dot: "bg-alive" },
+  real: { Icon: ShieldCheck, cls: "text-good", dot: "bg-good" },
   semi: { Icon: FileText, cls: "text-warn", dot: "bg-warn" },
-  mock: { Icon: FlaskConical, cls: "text-danger", dot: "bg-danger" },
+  mock: { Icon: FlaskConical, cls: "text-bad", dot: "bg-bad" },
 } as const;
 
 export function MethodologyView() {
@@ -66,7 +66,7 @@ export function MethodologyView() {
       id: "forecast",
       title: { kk: "Деңгей болжамы", ru: "Прогноз уровня" },
       formula:
-        "h(t) = a + b·t   (МНК бойынша, 2015 жылдан бастап)\nCI₉₅ = h(t) ± 1,96 · SE\nSE = √( Σ(hᵢ − ĥᵢ)² / (n − 2) )",
+        `h(t) = a + b·t   (${L === "ru" ? "МНК, с 2015 года" : "МНК, 2015 жылдан"})\nCI₉₅ = h(t) ± 1,96 · SE\nSE = √( Σ(hᵢ − ĥᵢ)² / (n − 2) )`,
       body: {
         kk: "Екі модель қатар есептеледі: ең кіші квадраттар әдісі бойынша сызықтық регрессия және деңгейдің тірек мәннен ауытқуы бойынша логарифмдік түрде салынған экспоненциалды модель. Қиылысу нүктесі 2015 жыл — дәл сол кезден төмендеу қарқыны күрт өсті. Графикте екеуі де көрсетіледі, өйткені олардың айырмашылығы белгісіздіктің шынайы шамасы.",
         ru: "Считаются две модели параллельно: линейная регрессия методом наименьших квадратов и экспоненциальная, построенная логарифмически по отклонению уровня от опорного значения. Точка отсечения — 2015 год, именно с него скорость падения резко выросла. На графике показаны обе, потому что расхождение между ними и есть честная величина неопределённости.",
@@ -156,40 +156,40 @@ export function MethodologyView() {
       <main className="mx-auto max-w-[1100px] px-5 pt-32 pb-20 md:px-12 md:pt-40">
         <Reveal>
           <RevealItem>
-            <SectionLabel>{t.common.appName}</SectionLabel>
+            <Label>{t.common.appName}</Label>
           </RevealItem>
           <RevealItem>
-            <SectionTitle as="h1" className="mt-5">
+            <Display as="h1" className="mt-5">
               {t.methodology.title}
-            </SectionTitle>
+            </Display>
           </RevealItem>
           <RevealItem>
-            <SectionBody className="mt-6 max-w-2xl">{t.methodology.intro}</SectionBody>
+            <Lede className="mt-6 max-w-2xl">{t.methodology.intro}</Lede>
           </RevealItem>
         </Reveal>
 
         {/* formulas */}
         <div className="mt-16 space-y-4">
           {BLOCKS.map((block) => (
-            <GlassCard key={block.id} className="p-6 md:p-8">
+            <div key={block.id} className="border-rule rounded-lg border p-6 md:p-8">
               <div className="flex items-start gap-3">
-                <Sigma className="text-glow mt-0.5 size-4 shrink-0" strokeWidth={1.5} />
+                <Sigma className="text-accent mt-0.5 size-4 shrink-0" strokeWidth={1.5} />
                 <div className="min-w-0 flex-1">
                   <h2 className="font-display text-lg font-semibold tracking-tight md:text-xl">
                     {block.title[L]}
                   </h2>
 
-                  <pre className="text-glow/90 mt-4 overflow-x-auto rounded-xl border border-white/[0.07] bg-black/30 px-4 py-3 font-mono text-[12px] leading-relaxed whitespace-pre">
+                  <pre className="border-rule bg-tint text-ink mt-4 overflow-x-auto rounded-md border px-4 py-3 font-mono text-[12.5px] leading-relaxed whitespace-pre">
                     {block.formula}
                   </pre>
 
-                  <p className="text-mist/70 mt-4 text-sm leading-relaxed">{block.body[L]}</p>
+                  <p className="text-ink-2 mt-4 text-sm leading-relaxed">{block.body[L]}</p>
 
                   <div className="border-warn/30 bg-warn/[0.05] mt-4 rounded-lg border-l-2 px-3.5 py-2.5">
                     <div className="text-warn/80 mb-1 text-[10px] font-medium tracking-[0.14em] uppercase">
                       {t.methodology.limitations}
                     </div>
-                    <p className="text-mist/65 text-[12px] leading-relaxed">{block.limits[L]}</p>
+                    <p className="text-ink-2 text-[12px] leading-relaxed">{block.limits[L]}</p>
                   </div>
 
                   <div className="mt-4 flex flex-wrap gap-2">
@@ -203,7 +203,7 @@ export function MethodologyView() {
                           href={src.url}
                           target="_blank"
                           rel="noreferrer noopener"
-                          className="text-mist/60 hover:text-foam inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-2.5 py-1 text-[11px] transition-colors"
+                          className="text-ink-2 hover:text-ink inline-flex items-center gap-1.5 rounded-full border border-rule bg-tint px-2.5 py-1 text-[11px] transition-colors"
                         >
                           <span className={cn("size-1.5 rounded-full", meta.dot)} />
                           {src.name}
@@ -214,18 +214,18 @@ export function MethodologyView() {
                   </div>
                 </div>
               </div>
-            </GlassCard>
+            </div>
           ))}
         </div>
 
         {/* eco index weights */}
-        <GlassCard className="mt-4 p-6 md:p-8">
+        <div className="border-rule rounded-lg border mt-4 p-6 md:p-8">
           <h2 className="font-display text-lg font-semibold tracking-tight">
             {t.index.components}
           </h2>
           <table className="mt-5 w-full text-sm">
             <thead>
-              <tr className="text-mist/45 border-b border-white/[0.07] text-left text-[11px] tracking-wide uppercase">
+              <tr className="text-ink-2 border-b border-rule text-left text-[11px] tracking-wide uppercase">
                 <th className="pb-2 font-medium">{L === "ru" ? "Компонента" : "Құраушы"}</th>
                 <th className="pb-2 text-right font-medium">{L === "ru" ? "Вес" : "Салмақ"}</th>
                 <th className="pb-2 text-right font-medium">{L === "ru" ? "Значение" : "Мәні"}</th>
@@ -233,30 +233,30 @@ export function MethodologyView() {
             </thead>
             <tbody>
               {components.map((c) => (
-                <tr key={c.id} className="border-b border-white/[0.04] last:border-0">
-                  <td className="text-mist/75 py-2.5">{COMPONENT_LABELS[c.id][L]}</td>
-                  <td className="text-mist/55 tabular py-2.5 text-right">
+                <tr key={c.id} className="border-b border-rule last:border-0">
+                  <td className="text-ink-2 py-2.5">{COMPONENT_LABELS[c.id][L]}</td>
+                  <td className="text-ink-2 tabular py-2.5 text-right">
                     {Math.round(c.weight * 100)}%
                   </td>
-                  <td className="text-foam tabular py-2.5 text-right font-medium">{c.score}</td>
+                  <td className="text-ink tabular py-2.5 text-right font-medium">{c.score}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </GlassCard>
+        </div>
 
         {/* coastline sector slopes */}
-        <GlassCard className="mt-4 p-6 md:p-8">
+        <div className="border-rule rounded-lg border mt-4 p-6 md:p-8">
           <h2 className="font-display text-lg font-semibold tracking-tight">
             {t.methodology.coastlineModel}
           </h2>
-          <p className="text-mist/60 mt-2 text-[12px] leading-relaxed">
+          <p className="text-ink-2 mt-2 text-[12px] leading-relaxed">
             {L === "ru" ? coastlineIndex.method_ru : coastlineIndex.method_kk}
           </p>
           <div className="mt-5 overflow-x-auto">
             <table className="w-full min-w-[420px] text-sm">
               <thead>
-                <tr className="text-mist/45 border-b border-white/[0.07] text-left text-[11px] tracking-wide uppercase">
+                <tr className="text-ink-2 border-b border-rule text-left text-[11px] tracking-wide uppercase">
                   <th className="pb-2 font-medium">{L === "ru" ? "Сектор" : "Сектор"}</th>
                   <th className="pb-2 text-right font-medium">tan(β)</th>
                   <th className="pb-2 text-right font-medium">
@@ -266,10 +266,10 @@ export function MethodologyView() {
               </thead>
               <tbody>
                 {coastlineIndex.sectors.map((s) => (
-                  <tr key={s.id} className="border-b border-white/[0.04] last:border-0">
-                    <td className="text-mist/75 py-2.5">{L === "ru" ? s.name_ru : s.name_kk}</td>
-                    <td className="text-mist/55 tabular py-2.5 text-right">{s.slope}</td>
-                    <td className="text-foam tabular py-2.5 text-right font-medium">
+                  <tr key={s.id} className="border-b border-rule last:border-0">
+                    <td className="text-ink-2 py-2.5">{L === "ru" ? s.name_ru : s.name_kk}</td>
+                    <td className="text-ink-2 tabular py-2.5 text-right">{s.slope}</td>
+                    <td className="text-ink tabular py-2.5 text-right font-medium">
                       {(0.01 / s.slope).toFixed(1)} м
                     </td>
                   </tr>
@@ -277,12 +277,12 @@ export function MethodologyView() {
               </tbody>
             </table>
           </div>
-        </GlassCard>
+        </div>
 
         {/* source registry */}
         <div className="mt-16">
-          <SectionTitle className="text-2xl md:text-3xl">{t.methodology.dataRegistry}</SectionTitle>
-          <p className="text-mist/55 mt-3 max-w-2xl text-sm leading-relaxed">
+          <Display className="text-2xl md:text-3xl">{t.methodology.dataRegistry}</Display>
+          <p className="text-ink-2 mt-3 max-w-2xl text-sm leading-relaxed">
             {L === "ru"
               ? "Каждый показатель на сайте привязан к записи из этого реестра. Статус отражает, насколько данные машиночитаемы и проверяемы."
               : "Сайттағы әр көрсеткіш осы тізілімдегі жазбаға байланған. Статус деректің машиналық оқылатындығы мен тексерілетіндігін көрсетеді."}
@@ -293,7 +293,7 @@ export function MethodologyView() {
               const meta = STATUS_META[src.status as keyof typeof STATUS_META] ?? STATUS_META.semi;
               const note = L === "ru" ? src.note_ru : src.note_kk;
               return (
-                <GlassCard key={src.id} static className="px-4 py-3">
+                <div key={src.id} className="border-rule rounded-lg border px-4 py-3">
                   <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                     <span className={cn("inline-flex items-center gap-1.5 text-[11px]", meta.cls)}>
                       <span className={cn("size-1.5 rounded-full", meta.dot)} />
@@ -303,17 +303,17 @@ export function MethodologyView() {
                       href={src.url}
                       target="_blank"
                       rel="noreferrer noopener"
-                      className="text-foam/85 hover:text-glow inline-flex items-center gap-1.5 text-sm transition-colors"
+                      className="text-ink hover:text-accent inline-flex items-center gap-1.5 text-sm transition-colors"
                     >
                       {src.name}
                       <ExternalLink className="size-3 opacity-50" />
                     </a>
-                    <span className="text-mist/40 ml-auto text-[11px]">
+                    <span className="text-ink-2 ml-auto text-[11px]">
                       {src.license} · {src.coverage_years}
                     </span>
                   </div>
-                  {note && <p className="text-mist/50 mt-1.5 text-[11px] leading-snug">{note}</p>}
-                </GlassCard>
+                  {note && <p className="text-ink-2 mt-1.5 text-[11px] leading-snug">{note}</p>}
+                </div>
               );
             })}
           </div>

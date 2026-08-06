@@ -7,21 +7,21 @@ import type { Locale } from "@/shared/lib/i18n";
 import type { AirReading, WindPoint } from "./use-map-data";
 
 type RGB = [number, number, number];
-const CYAN: RGB = [34, 211, 238];
-const AMBER: RGB = [245, 158, 11];
-const ROSE: RGB = [251, 113, 133];
-const RED: RGB = [239, 68, 68];
-const TEAL: RGB = [45, 212, 191];
-const FOAM: RGB = [226, 232, 240];
+const CYAN: RGB = [29, 111, 208];   // accent blue
+const AMBER: RGB = [194, 65, 12];   // exposed seabed
+const ROSE: RGB = [190, 24, 93];    // industry
+const RED: RGB = [159, 18, 57];     // Koshkar-Ata
+const TEAL: RGB = [15, 143, 102];
+const FOAM: RGB = [10, 10, 10];
 
 /** European AQI bands → colour, used by both the map and the legend. */
 export function aqiColor(eaqi: number | null): RGB {
   if (eaqi === null) return [100, 116, 139];
-  if (eaqi <= 20) return [52, 211, 153];
-  if (eaqi <= 40) return [163, 230, 53];
-  if (eaqi <= 60) return [251, 191, 36];
-  if (eaqi <= 80) return [251, 146, 60];
-  return [239, 68, 68];
+  if (eaqi <= 20) return [15, 143, 102];
+  if (eaqi <= 40) return [132, 160, 22];
+  if (eaqi <= 60) return [161, 98, 7];
+  if (eaqi <= 80) return [194, 65, 12];
+  return [159, 18, 57];
 }
 
 type BuildArgs = {
@@ -61,9 +61,9 @@ type BuildArgs = {
 };
 
 const HABITAT_COLORS: Record<string, RGB> = {
-  seal: [56, 189, 248],
-  sturgeon: [167, 139, 250],
-  bird: [52, 211, 153],
+  seal: [29, 111, 208],
+  sturgeon: [91, 33, 182],
+  bird: [15, 143, 102],
 };
 
 export function buildLayers(args: BuildArgs): Layer[] {
@@ -80,8 +80,8 @@ export function buildLayers(args: BuildArgs): Layer[] {
         data: args.basemapCountries,
         filled: true,
         stroked: true,
-        getFillColor: [13, 23, 34, 255],
-        getLineColor: [34, 54, 74, 190],
+        getFillColor: [244, 244, 240, 255],
+        getLineColor: [198, 198, 192, 255],
         getLineWidth: 1,
         lineWidthUnits: "pixels",
         parameters: { depthTest: false },
@@ -95,19 +95,19 @@ export function buildLayers(args: BuildArgs): Layer[] {
         data: args.basemapCaspian,
         filled: true,
         stroked: false,
-        getFillColor: [7, 26, 38, 255],
+        getFillColor: [207, 226, 248, 255],
         parameters: { depthTest: false },
       })
     );
-    // wide, soft stroke under a crisp one reads as a glow without a shader
+    // wide soft stroke under a crisp one gives the coast a printed edge
     layers.push(
       new GeoJsonLayer({
         id: "base-sea-halo",
         data: args.basemapCaspian,
         filled: false,
         stroked: true,
-        getLineColor: [...CYAN, 45] as [number, number, number, number],
-        getLineWidth: 6,
+        getLineColor: [29, 111, 208, 45],
+        getLineWidth: 5,
         lineWidthUnits: "pixels",
         parameters: { depthTest: false },
       })
@@ -118,8 +118,8 @@ export function buildLayers(args: BuildArgs): Layer[] {
         data: args.basemapCaspian,
         filled: false,
         stroked: true,
-        getLineColor: [...CYAN, 130] as [number, number, number, number],
-        getLineWidth: 1.2,
+        getLineColor: [29, 111, 208, 220],
+        getLineWidth: 1,
         lineWidthUnits: "pixels",
         parameters: { depthTest: false },
       })
@@ -132,7 +132,7 @@ export function buildLayers(args: BuildArgs): Layer[] {
         data: args.basemapLakes,
         filled: true,
         stroked: false,
-        getFillColor: [10, 26, 36, 220],
+        getFillColor: [223, 235, 248, 255],
         parameters: { depthTest: false },
       })
     );
@@ -144,7 +144,7 @@ export function buildLayers(args: BuildArgs): Layer[] {
         data: args.basemapRivers,
         filled: false,
         stroked: true,
-        getLineColor: [...TEAL, 70] as [number, number, number, number],
+        getLineColor: [120, 150, 175, 190],
         getLineWidth: 1,
         lineWidthUnits: "pixels",
         parameters: { depthTest: false },
@@ -160,7 +160,7 @@ export function buildLayers(args: BuildArgs): Layer[] {
         data: args.baseCoastline,
         filled: true,
         stroked: false,
-        getFillColor: [...AMBER, 55] as [number, number, number, number],
+        getFillColor: [240, 226, 214, 255] as [number, number, number, number],
         parameters: { depthTest: false },
       })
     );
@@ -170,7 +170,7 @@ export function buildLayers(args: BuildArgs): Layer[] {
         data: args.coastline,
         filled: true,
         stroked: false,
-        getFillColor: [7, 26, 38, 255] as [number, number, number, number],
+        getFillColor: [207, 226, 248, 255] as [number, number, number, number],
         parameters: { depthTest: false },
       })
     );
@@ -185,7 +185,7 @@ export function buildLayers(args: BuildArgs): Layer[] {
           data: args.baseCoastline,
           filled: false,
           stroked: true,
-          getLineColor: [100, 116, 139, 150],
+          getLineColor: [150, 150, 145, 210],
           getLineWidth: 1,
           lineWidthUnits: "pixels",
           lineWidthMinPixels: 1,
@@ -199,7 +199,7 @@ export function buildLayers(args: BuildArgs): Layer[] {
           data: args.coastline,
           filled: false,
           stroked: true,
-          getLineColor: [...CYAN, 235] as [number, number, number, number],
+          getLineColor: [29, 111, 208, 255] as [number, number, number, number],
           getLineWidth: 2,
           lineWidthUnits: "pixels",
           lineWidthMinPixels: 1.5,
@@ -227,11 +227,11 @@ export function buildLayers(args: BuildArgs): Layer[] {
         intensity: 1.1,
         threshold: 0.06,
         colorRange: [
-          [52, 211, 153, 40],
-          [163, 230, 53, 80],
-          [251, 191, 36, 120],
-          [251, 146, 60, 160],
-          [239, 68, 68, 200],
+          [15, 143, 102, 35],
+          [132, 160, 22, 70],
+          [161, 98, 7, 110],
+          [194, 65, 12, 150],
+          [159, 18, 57, 190],
         ],
       })
     );
@@ -355,12 +355,12 @@ export function buildLayers(args: BuildArgs): Layer[] {
         radiusMinPixels: 6,
         radiusMaxPixels: 42,
         getFillColor: (d) =>
-          (d.kind === "gas" ? [96, 165, 250, 105] : [245, 158, 11, 105]) as [number, number, number, number],
+          (d.kind === "gas" ? [29, 111, 208, 120] : [161, 98, 7, 120]) as [number, number, number, number],
         stroked: true,
         lineWidthUnits: "pixels",
         getLineWidth: 1.2,
         getLineColor: (d) =>
-          (d.kind === "gas" ? [96, 165, 250, 235] : [245, 158, 11, 235]) as [number, number, number, number],
+          (d.kind === "gas" ? [29, 111, 208, 240] : [161, 98, 7, 240]) as [number, number, number, number],
         onHover: (info) => onHover(info, "field"),
         onClick: (info) => info.object && onClick("field", info.object as Record<string, unknown>),
       })
@@ -411,11 +411,11 @@ export function buildLayers(args: BuildArgs): Layer[] {
         getText: (f) => nameOf(f.properties ?? {}),
         getSize: 11,
         sizeUnits: "pixels",
-        getColor: [...FOAM, 200] as [number, number, number, number],
+        getColor: [10, 10, 10, 235],
         getPixelOffset: [0, -12],
         fontFamily: "Inter, system-ui, sans-serif",
         fontWeight: 500,
-        outlineColor: [5, 7, 11, 255],
+        outlineColor: [255, 255, 255, 255],
         outlineWidth: 3,
         fontSettings: { sdf: true, buffer: 8 },
         characterSet: "auto",

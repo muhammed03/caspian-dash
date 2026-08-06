@@ -1,16 +1,15 @@
 "use client";
 
 import { motion, AnimatePresence } from "motion/react";
-import { Layers, Check } from "lucide-react";
+import { Layers, Check, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/shared/lib/cn";
 import { useLocale, useT } from "@/shared/lib/i18n/client";
 import { layersForModule } from "@/shared/config/layers";
 import { useMapStore, type ModuleId } from "@/shared/store/map-store";
-import { GlassCard } from "@/shared/ui/glass-card";
-import { SourceBadge } from "@/shared/ui/source-badge";
 import { EASE_FLUID } from "@/shared/lib/motion";
 
+/** Layer list floating over the map plate. */
 export function LayerManager({ module }: { module: ModuleId }) {
   const t = useT();
   const locale = useLocale();
@@ -19,18 +18,21 @@ export function LayerManager({ module }: { module: ModuleId }) {
   const layers = layersForModule(module);
 
   return (
-    <div className="pointer-events-auto w-[268px]">
+    <div className="pointer-events-auto w-[250px]">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="glass-strong text-foam hover:border-glow/30 mb-2 flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors"
+        className="flex w-full items-center justify-between rounded-md border-rule bg-paper text-ink hover:border-ink border px-3 py-2.5 text-[13px] transition-colors"
       >
         <span className="flex items-center gap-2">
-          <Layers className="text-glow size-4" strokeWidth={1.5} />
+          <Layers className="size-3.5" strokeWidth={1.5} />
           {t.map.layers}
         </span>
-        <span className="text-mist/50 text-xs">{activeLayers.size}</span>
+        <span className="flex items-center gap-1.5 text-ink-3 text-[11px]">
+          {activeLayers.size}
+          <ChevronDown className={cn("size-3.5 transition-transform", open && "rotate-180")} />
+        </span>
       </button>
 
       <AnimatePresence initial={false}>
@@ -39,14 +41,10 @@ export function LayerManager({ module }: { module: ModuleId }) {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.45, ease: EASE_FLUID }}
+            transition={{ duration: 0.4, ease: EASE_FLUID }}
             className="overflow-hidden"
           >
-            {/* capped so a long layer list never reaches the timeline below */}
-            <GlassCard
-              static
-              className="glass-strong max-h-[calc(100svh-19rem)] space-y-1 overflow-y-auto p-2"
-            >
+            <div className="mt-1.5 max-h-[calc(100svh-17rem)] space-y-0.5 overflow-y-auto rounded-md border-rule bg-paper border p-1.5">
               {layers.map((layer) => {
                 const on = activeLayers.has(layer.id);
                 return (
@@ -56,44 +54,43 @@ export function LayerManager({ module }: { module: ModuleId }) {
                       onClick={() => toggleLayer(layer.id)}
                       aria-pressed={on}
                       className={cn(
-                        "group flex w-full items-start gap-2.5 rounded-lg px-2.5 py-2 text-left text-[13px] transition-colors",
-                        on ? "bg-glow/10 text-foam" : "text-mist/60 hover:bg-white/[0.04] hover:text-foam"
+                        "flex w-full items-start gap-2.5 rounded px-2 py-1.5 text-left text-[12.5px] transition-colors",
+                        on ? "text-ink" : "text-ink-2 hover:bg-tint hover:text-ink"
                       )}
                     >
                       <span
                         className={cn(
-                          "mt-0.5 flex size-4 shrink-0 items-center justify-center rounded border transition-colors",
-                          on ? "border-glow bg-glow/25 text-glow" : "border-white/20"
+                          "mt-0.5 flex size-3.5 shrink-0 items-center justify-center rounded-[3px] border transition-colors",
+                          on ? "border-ink bg-ink text-paper" : "border-neutral-300"
                         )}
                       >
-                        {on && <Check className="size-3" strokeWidth={3} />}
+                        {on && <Check className="size-2.5" strokeWidth={3.5} />}
                       </span>
                       <span className="leading-snug">
                         {locale === "ru" ? layer.label_ru : layer.label_kk}
                       </span>
                     </button>
+
                     {on && layer.legend && (
-                      <ul className="mt-1 mb-1 ml-9 space-y-1">
+                      <ul className="mt-0.5 mb-1.5 ml-8 space-y-0.5">
                         {layer.legend.map((item) => (
-                          <li key={item.label_ru} className="text-mist/55 flex items-center gap-2 text-[11px]">
+                          <li
+                            key={item.label_ru}
+                            className="flex items-center gap-2 text-ink-3 text-[11px]"
+                          >
                             <span
-                              className="size-2 rounded-full"
-                              style={{ background: item.color, boxShadow: `0 0 8px ${item.color}80` }}
+                              className="size-2 shrink-0 rounded-full"
+                              style={{ background: item.color }}
                             />
                             {locale === "ru" ? item.label_ru : item.label_kk}
                           </li>
                         ))}
                       </ul>
                     )}
-                    {on && (
-                      <div className="mb-1 ml-9">
-                        <SourceBadge sourceId={layer.sourceId} />
-                      </div>
-                    )}
                   </div>
                 );
               })}
-            </GlassCard>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

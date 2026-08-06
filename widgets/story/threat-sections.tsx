@@ -1,12 +1,19 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Radiation, Fish, Factory, Droplets, ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 import { useLocale, useT } from "@/shared/lib/i18n/client";
-import { SectionBody, SectionLabel, SectionTitle, Reveal, RevealItem } from "@/shared/ui/section";
-import { GlassCard } from "@/shared/ui/glass-card";
+import {
+  Display,
+  Label,
+  Lede,
+  Plain,
+  Reveal,
+  RevealItem,
+  SectionMark,
+} from "@/shared/ui/primitives";
 import { AnimatedNumber } from "@/shared/ui/animated-number";
 import { SourceBadge } from "@/shared/ui/source-badge";
 import { Button } from "@/shared/ui/button";
@@ -22,80 +29,72 @@ import wildlife from "@/data/wildlife.json";
 export function PollutionSection() {
   const t = useT();
   const locale = useLocale();
-  const structure = pollution.structure;
 
   return (
-    <section className="relative overflow-hidden py-24 md:py-36">
-      <div className="mx-auto max-w-[1800px] px-5 md:px-12">
+    <section className="py-28 md:py-40">
+      <div className="mx-auto max-w-[1800px] px-5 md:px-10">
         <Reveal className="max-w-2xl">
           <RevealItem>
-            <SectionLabel>{t.pollution.title}</SectionLabel>
+            <SectionMark index={3}>{t.pollution.title}</SectionMark>
           </RevealItem>
           <RevealItem>
-            <SectionTitle className="mt-5">{t.home.sectionPollutionTitle}</SectionTitle>
+            <Display className="mt-6 max-w-[13ch]">{t.home.sectionPollutionTitle}</Display>
           </RevealItem>
           <RevealItem>
-            <SectionBody className="mt-5">{t.home.sectionPollutionBody}</SectionBody>
+            <Lede className="mt-5">{t.home.sectionPollutionBody}</Lede>
           </RevealItem>
         </Reveal>
 
-        <div className="mt-14 grid gap-4 md:grid-cols-3">
-          <GlassCard className="p-6 md:col-span-2">
-            <div className="text-mist/60 mb-6 flex items-center gap-2 text-xs tracking-wide uppercase">
-              <Factory className="size-3.5" strokeWidth={1.5} />
-              {t.pollution.structure}
-            </div>
-            <div className="space-y-4">
-              {structure.map((s, i) => (
-                <div key={s.id}>
-                  <div className="mb-1.5 flex items-baseline justify-between text-sm">
-                    <span className="text-foam/85">{locale === "ru" ? s.name_ru : s.name_kk}</span>
-                    <span className="text-foam tabular font-medium">{s.percent}%</span>
+        <div className="mt-16 grid gap-12 lg:grid-cols-[1.3fr_1fr]">
+          {/* what the pollution is made of */}
+          <div>
+            <Label>{t.pollution.structure}</Label>
+            <ul className="mt-5 space-y-5">
+              {pollution.structure.map((s, i) => (
+                <li key={s.id}>
+                  <div className="mb-2 flex items-baseline justify-between gap-4">
+                    <span className="text-ink text-[15px]">
+                      {locale === "ru" ? s.name_ru : s.name_kk}
+                    </span>
+                    <span className="tabular text-ink text-sm font-semibold">{s.percent}%</span>
                   </div>
-                  <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
+                  <div className="bg-tint h-1.5 w-full overflow-hidden rounded-full">
                     <motion.div
                       initial={{ width: 0 }}
                       whileInView={{ width: `${s.percent}%` }}
                       viewport={viewportOnce}
-                      transition={{ duration: 1.1, delay: i * 0.09, ease: [0.22, 1, 0.36, 1] }}
+                      transition={{ duration: 1, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
                       className="h-full rounded-full"
-                      style={{
-                        background: SERIES[i % SERIES.length],
-                        boxShadow: `0 0 12px ${SERIES[i % SERIES.length]}70`,
-                      }}
+                      style={{ background: SERIES[i % SERIES.length] }}
                     />
                   </div>
-                </div>
+                </li>
               ))}
-            </div>
-            <div className="mt-6 border-t border-white/[0.06] pt-3">
+            </ul>
+            <div className="mt-6">
               <SourceBadge sourceId="grid_arendal" />
             </div>
-          </GlassCard>
+          </div>
 
-          <GlassCard className="flex flex-col justify-between p-6">
-            <div>
-              <div className="text-danger mb-4 flex items-center gap-2 text-xs tracking-wide uppercase">
-                <Radiation className="size-3.5" strokeWidth={1.5} />
-                {t.pollution.koshkarAta}
-              </div>
-              <div className="font-display text-danger flex items-baseline gap-2 text-6xl font-semibold tracking-tight">
-                <AnimatedNumber value={koshkar.waste_mt} />
-                <span className="text-mist/50 text-lg font-normal">
-                  {locale === "ru" ? "млн т" : "млн т"}
-                </span>
-              </div>
-              <p className="text-mist/65 mt-4 text-sm leading-relaxed">
-                {locale === "ru" ? koshkar.facts_ru[1] : koshkar.facts_kk[1]}
-              </p>
-              <p className="text-mist/45 mt-2 text-xs">
-                {locale === "ru" ? koshkar.facts_ru[2] : koshkar.facts_kk[2]}
-              </p>
+          {/* the single worst object */}
+          <div className="rule-t pt-6">
+            <Label>{t.pollution.koshkarAta}</Label>
+            <div className="display text-bad mt-3 flex items-baseline gap-2 text-6xl md:text-7xl">
+              <AnimatedNumber value={koshkar.waste_mt} />
+              <span className="text-ink-3 text-lg font-normal">
+                {locale === "ru" ? "млн т" : "млн т"}
+              </span>
             </div>
-            <div className="mt-6 border-t border-white/[0.06] pt-3">
+            <Plain className="mt-4">
+              {locale === "ru" ? koshkar.facts_ru[1] : koshkar.facts_kk[1]}
+            </Plain>
+            <Plain className="mt-2">
+              {locale === "ru" ? koshkar.facts_ru[2] : koshkar.facts_kk[2]}
+            </Plain>
+            <div className="mt-6">
               <SourceBadge sourceId="koshkar_pub" />
             </div>
-          </GlassCard>
+          </div>
         </div>
       </div>
     </section>
@@ -109,67 +108,53 @@ export function LifeSection() {
 
   const stats = [
     {
-      icon: Fish,
       value: wildlife.seal.decline_percent,
       suffix: "%",
-      label: locale === "ru" ? "спад популяции тюленя за век" : "бір ғасырдағы итбалық азаюы",
-      tone: SERIES[1],
+      title: locale === "ru" ? "тюленей потеряно" : "итбалық жоғалды",
+      plain: t.plain.sealMeans,
     },
     {
-      icon: Droplets,
       value: sturgeon.at(-1)!.tonnes,
       suffix: locale === "ru" ? " т" : " т",
-      label:
+      title:
         locale === "ru"
-          ? `вылов осетровых в ${sturgeon.at(-1)!.year} против ${sturgeon[0].tonnes.toLocaleString("ru-RU")} т в ${sturgeon[0].year}`
-          : `${sturgeon.at(-1)!.year} жылғы бекіре аулауы, ${sturgeon[0].year} жылы ${sturgeon[0].tonnes.toLocaleString("ru-RU")} т болған`,
-      tone: SERIES[2],
+          ? `вылов осетровых в ${sturgeon.at(-1)!.year}`
+          : `${sturgeon.at(-1)!.year} жылғы бекіре аулауы`,
+      plain: t.plain.sturgeonMeans,
     },
   ];
 
   return (
-    <section className="relative overflow-hidden py-24 md:py-36">
-      <div className="mx-auto max-w-[1800px] px-5 md:px-12">
+    <section className="py-28 md:py-40">
+      <div className="mx-auto max-w-[1800px] px-5 md:px-10">
         <Reveal className="max-w-2xl">
           <RevealItem>
-            <SectionLabel>{t.life.title}</SectionLabel>
+            <SectionMark index={4}>{t.life.title}</SectionMark>
           </RevealItem>
           <RevealItem>
-            <SectionTitle className="mt-5">{t.home.sectionLifeTitle}</SectionTitle>
+            <Display className="mt-6 max-w-[13ch]">{t.home.sectionLifeTitle}</Display>
           </RevealItem>
           <RevealItem>
-            <SectionBody className="mt-5">{t.home.sectionLifeBody}</SectionBody>
+            <Lede className="mt-5">{t.home.sectionLifeBody}</Lede>
           </RevealItem>
         </Reveal>
 
-        <div className="mt-14 grid gap-4 md:grid-cols-2">
-          {stats.map(({ icon: Icon, value, suffix, label, tone }) => (
-            <GlassCard key={label} className="p-7">
-              <Icon className="mb-5 size-5" strokeWidth={1.25} style={{ color: tone }} />
-              <div
-                className="font-display flex items-baseline text-6xl font-semibold tracking-tight md:text-7xl"
-                style={{ color: tone }}
-              >
-                <AnimatedNumber value={value} />
-                <span className="text-mist/50 text-2xl font-normal">{suffix}</span>
+        <div className="mt-16 grid gap-10 md:grid-cols-2">
+          {stats.map((s) => (
+            <div key={s.title} className="rule-t pt-6">
+              <div className="display text-bad flex items-baseline text-7xl md:text-8xl">
+                <AnimatedNumber value={s.value} />
+                <span className="text-ink-3 text-2xl font-normal">{s.suffix}</span>
               </div>
-              <p className="text-mist/65 mt-4 max-w-sm text-sm leading-relaxed">{label}</p>
-            </GlassCard>
+              <div className="text-ink mt-3 text-lg">{s.title}</div>
+              <Plain className="mt-2">{s.plain}</Plain>
+            </div>
           ))}
         </div>
 
-        <Reveal className="mt-4">
-          <RevealItem>
-            <GlassCard className="p-5">
-              <p className="text-mist/60 text-[13px] leading-relaxed">
-                {locale === "ru" ? wildlife.sturgeon.note_ru : wildlife.sturgeon.note_kk}
-              </p>
-              <div className="mt-4 border-t border-white/[0.06] pt-3">
-                <SourceBadge sourceId="cites_fao" />
-              </div>
-            </GlassCard>
-          </RevealItem>
-        </Reveal>
+        <div className="mt-10">
+          <SourceBadge sourceId="cites_fao" />
+        </div>
       </div>
     </section>
   );
@@ -182,35 +167,32 @@ export function AiSummarySection() {
   const narrative = NARRATIVES.index[locale === "ru" ? "ru" : "kk"];
 
   return (
-    <section className="relative overflow-hidden py-24 md:py-36">
-      <div className="mx-auto max-w-[1800px] px-5 md:px-12">
-        <Reveal className="mx-auto max-w-3xl text-center">
-          <RevealItem className="flex justify-center">
-            <SectionLabel>{t.home.aiSummaryTitle}</SectionLabel>
+    <section className="rule-t py-28 md:py-40">
+      <div className="mx-auto max-w-[1800px] px-5 md:px-10">
+        <Reveal className="mx-auto max-w-3xl">
+          <RevealItem>
+            <SectionMark index={5}>{t.home.aiSummaryTitle}</SectionMark>
           </RevealItem>
           <RevealItem>
-            <p className="font-display mt-8 text-2xl leading-[1.35] font-medium tracking-tight text-balance md:text-4xl">
-              {narrative.summary}
-            </p>
+            <p className="display mt-8 text-2xl leading-[1.25] md:text-4xl">{narrative.summary}</p>
           </RevealItem>
           <RevealItem>
-            <div className="text-mist/50 mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs">
-              <span className="inline-flex items-center gap-1.5">
-                <Sparkles className="text-glow size-3.5" strokeWidth={1.5} />
-                {t.common.aiLabel}
-              </span>
+            <div className="rule-t text-ink-2 mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 pt-5 text-[13px]">
               <span>
                 {locale === "ru" ? "Уровень риска" : "Тәуекел деңгейі"}:{" "}
-                <span className="text-danger font-medium">{t.common.riskLevel[analysis.risk]}</span>
+                <span className="text-bad font-medium">{t.common.riskLevel[analysis.risk]}</span>
               </span>
-              <Link href="/methodology" className="hover:text-foam underline underline-offset-4 transition-colors">
-                {t.common.methodology}
+              <Link
+                href="/methodology"
+                className="hover:text-ink underline decoration-neutral-300 underline-offset-4 transition-colors"
+              >
+                {locale === "ru" ? "Как это посчитано" : "Бұл қалай есептелген"}
               </Link>
             </div>
           </RevealItem>
           <RevealItem>
-            <div className="mt-12 flex justify-center">
-              <Button href="/map/index" magnetic>
+            <div className="mt-10">
+              <Button href="/map/index">
                 {t.home.cta}
                 <ArrowRight className="size-4" />
               </Button>

@@ -85,7 +85,6 @@ export function WaterPanel() {
           decimals={2}
           unit="м"
           tone="bad"
-          icon={Waves}
           delta={`${(current.level_m - first.level_m).toFixed(2)} м с ${first.year}`}
         />
         <MetricCard
@@ -94,7 +93,6 @@ export function WaterPanel() {
           decimals={1}
           unit="см/год"
           tone="bad"
-          icon={TrendingDown}
           delta={`R² = ${forecast.linear.r2.toFixed(2)}`}
         />
         <MetricCard
@@ -102,7 +100,6 @@ export function WaterPanel() {
           value={current.area_km2}
           unit="км²"
           tone="warn"
-          icon={Droplets}
           delta={`−${(first.area_km2 - current.area_km2).toLocaleString("ru-RU")} км²`}
         />
         <MetricCard
@@ -111,7 +108,6 @@ export function WaterPanel() {
           decimals={1}
           unit="км"
           tone="warn"
-          icon={Ruler}
           delta={`${year} · ${locale === "ru" ? "макс. по секторам" : "секторлар бойынша макс."}`}
         />
       </PanelItem>
@@ -195,7 +191,7 @@ export function WaterPanel() {
             </AreaChart>
           </ResponsiveContainer>
 
-          <ul className="text-mist/60 mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px]">
+          <ul className="text-ink-2 mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px]">
             <li className="flex items-center gap-1.5">
               <span className="h-0.5 w-4 rounded" style={{ background: SERIES[0] }} />
               {locale === "ru" ? "Наблюдения" : "Бақылау"}

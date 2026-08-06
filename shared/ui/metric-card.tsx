@@ -1,28 +1,31 @@
 "use client";
 
-import type { LucideIcon } from "lucide-react";
 import { cn } from "@/shared/lib/cn";
 import { AnimatedNumber } from "./animated-number";
-import { GlassCard } from "./glass-card";
+import { Label, Plain } from "./primitives";
 
 type Tone = "neutral" | "good" | "warn" | "bad";
 
-const TONES: Record<Tone, { value: string; glow: string }> = {
-  neutral: { value: "text-foam", glow: "from-glow/20" },
-  good: { value: "text-alive", glow: "from-alive/20" },
-  warn: { value: "text-warn", glow: "from-warn/20" },
-  bad: { value: "text-danger", glow: "from-danger/20" },
+const TONES: Record<Tone, string> = {
+  neutral: "text-ink",
+  good: "text-good",
+  warn: "text-warn",
+  bad: "text-bad",
 };
 
+/**
+ * One number, told properly: what it is, the figure itself, and a sentence in
+ * plain words explaining what it means. The explanation is not optional —
+ * a number without it is just a number.
+ */
 export function MetricCard({
   label,
   value,
   unit,
   decimals = 0,
   delta,
+  plain,
   tone = "neutral",
-  icon: Icon,
-  footer,
   className,
   size = "md",
 }: {
@@ -31,42 +34,29 @@ export function MetricCard({
   unit?: string;
   decimals?: number;
   delta?: string;
+  /** Plain-language sentence: what this number means for a normal person. */
+  plain?: string;
   tone?: Tone;
-  icon?: LucideIcon;
-  footer?: React.ReactNode;
   className?: string;
   size?: "md" | "lg";
 }) {
-  const tones = TONES[tone];
-
   return (
-    <GlassCard className={cn("group p-5", className)}>
-      <span
-        aria-hidden
-        className={cn(
-          "pointer-events-none absolute -right-12 -top-12 size-32 rounded-full bg-gradient-radial to-transparent opacity-0 blur-2xl transition-opacity duration-700 group-hover:opacity-100",
-          tones.glow
-        )}
-        style={{ background: `radial-gradient(circle, currentColor 0%, transparent 70%)` }}
-      />
-      <div className="text-mist/70 flex items-center gap-2 text-xs font-medium tracking-wide uppercase">
-        {Icon && <Icon className="size-3.5" strokeWidth={1.5} />}
-        {label}
-      </div>
-      <div className="mt-3 flex items-baseline gap-2">
+    <div className={cn("rule-t pt-4", className)}>
+      <Label>{label}</Label>
+      <div className="mt-2 flex items-baseline gap-1.5">
         <AnimatedNumber
           value={value}
           decimals={decimals}
           className={cn(
-            "font-display font-semibold tracking-tight",
+            "display",
             size === "lg" ? "text-5xl md:text-6xl" : "text-3xl md:text-4xl",
-            tones.value
+            TONES[tone]
           )}
         />
-        {unit && <span className="text-mist/60 text-sm">{unit}</span>}
+        {unit && <span className="text-ink-3 text-sm">{unit}</span>}
       </div>
-      {delta && <div className="text-mist/60 mt-1.5 text-xs">{delta}</div>}
-      {footer && <div className="mt-3">{footer}</div>}
-    </GlassCard>
+      {delta && <div className="text-ink-2 mt-1.5 text-xs">{delta}</div>}
+      {plain && <Plain className="mt-2">{plain}</Plain>}
+    </div>
   );
 }

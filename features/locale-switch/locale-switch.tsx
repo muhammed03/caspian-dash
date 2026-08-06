@@ -20,11 +20,7 @@ export function LocaleSwitch({ className }: { className?: string }) {
   }
 
   return (
-    <div
-      className={cn("glass flex items-center rounded-full p-0.5 text-[11px] font-medium", className)}
-      role="group"
-      aria-label="Language"
-    >
+    <div className={cn("flex items-center gap-2", className)} role="group" aria-label="Language">
       {LOCALES.map((locale) => (
         <button
           key={locale}
@@ -33,8 +29,8 @@ export function LocaleSwitch({ className }: { className?: string }) {
           aria-pressed={locale === current}
           disabled={pending}
           className={cn(
-            "rounded-full px-2.5 py-1 transition-colors duration-300",
-            locale === current ? "bg-glow/20 text-glow" : "text-mist/60 hover:text-foam"
+            "label transition-colors",
+            locale === current ? "text-ink" : "hover:text-ink"
           )}
         >
           {LABELS[locale]}

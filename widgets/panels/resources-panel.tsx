@@ -60,7 +60,6 @@ export function ResourcesPanel() {
           value={oil.value}
           unit={locale === "ru" ? "млрд барр." : "млрд барр."}
           tone="warn"
-          icon={Fuel}
         />
         <MetricCard
           label={locale === "ru" ? "Запасы газа" : "Газ қоры"}
@@ -68,14 +67,12 @@ export function ResourcesPanel() {
           decimals={1}
           unit={locale === "ru" ? "трлн м³" : "трлн м³"}
           tone="neutral"
-          icon={Flame}
         />
         <MetricCard
           label={`${t.resources.depletion} — ${locale === "ru" ? "нефть" : "мұнай"}`}
           value={Math.round(oilYears)}
           unit={locale === "ru" ? "лет" : "жыл"}
           tone={oilYears < 40 ? "bad" : "warn"}
-          icon={Hourglass}
           delta={locale === "ru" ? "при текущем темпе" : "қазіргі қарқынмен"}
         />
         <MetricCard
@@ -83,7 +80,6 @@ export function ResourcesPanel() {
           value={Math.round(gasYears)}
           unit={locale === "ru" ? "лет" : "жыл"}
           tone={gasYears < 40 ? "bad" : "warn"}
-          icon={Hourglass}
           delta={locale === "ru" ? "при текущем темпе" : "қазіргі қарқынмен"}
         />
       </PanelItem>
@@ -130,7 +126,7 @@ export function ResourcesPanel() {
               </Bar>
             </BarChart>
           </ResponsiveContainer>
-          <ul className="text-mist/60 mt-2 flex gap-4 text-[11px]">
+          <ul className="text-ink-2 mt-2 flex gap-4 text-[11px]">
             <li className="flex items-center gap-1.5">
               <span className="size-2 rounded-sm" style={{ background: SERIES[2] }} />
               {locale === "ru" ? "Нефть" : "Мұнай"}
