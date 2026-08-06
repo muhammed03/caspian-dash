@@ -27,6 +27,9 @@ const COMPONENT_LABELS: Record<string, { kk: string; ru: string }> = {
   purity: { kk: "Су тазалығы", ru: "Чистота воды" },
   biodiversity: { kk: "Балық қоры", ru: "Рыбные запасы" },
   seal: { kk: "Итбалық", ru: "Тюлень" },
+  soil: { kk: "Топырақ", ru: "Почва" },
+  drought: { kk: "Ылғалдылық", ru: "Увлажнение" },
+  fire: { kk: "Өрт қаупі", ru: "Пожарная опасность" },
   transparency: { kk: "Дерек ашықтығы", ru: "Открытость данных" },
 };
 
@@ -270,7 +273,7 @@ export function MethodologyView() {
             <tbody>
               {components.map((c) => (
                 <tr key={c.id} className="border-b border-rule last:border-0">
-                  <td className="text-ink-2 py-2.5">{COMPONENT_LABELS[c.id][L]}</td>
+                  <td className="text-ink-2 py-2.5">{COMPONENT_LABELS[c.id]?.[L] ?? c.id}</td>
                   <td className="text-ink-2 tabular py-2.5 text-right">
                     {Math.round(c.weight * 100)}%
                   </td>
