@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "motion/react";
 import { Layers, Check, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/shared/lib/cn";
 import { useLocale, useT } from "@/shared/lib/i18n/client";
 import { layersForModule } from "@/shared/config/layers";
@@ -13,12 +13,18 @@ import { EASE_FLUID } from "@/shared/lib/motion";
 export function LayerManager({ module }: { module: ModuleId }) {
   const t = useT();
   const locale = useLocale();
-  const [open, setOpen] = useState(true);
+  // Collapsed by default on phones, where the map itself is only ~46svh tall
+  // and an open list would cover most of it.
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setOpen(window.matchMedia("(min-width: 768px)").matches);
+  }, []);
   const { activeLayers, toggleLayer } = useMapStore();
   const layers = layersForModule(module);
 
   return (
-    <div className="pointer-events-auto w-[250px]">
+    <div className="pointer-events-auto w-[210px] md:w-[250px]">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
@@ -44,7 +50,7 @@ export function LayerManager({ module }: { module: ModuleId }) {
             transition={{ duration: 0.4, ease: EASE_FLUID }}
             className="overflow-hidden"
           >
-            <div className="mt-1.5 max-h-[calc(100svh-17rem)] space-y-0.5 overflow-y-auto rounded-md border-rule bg-paper border p-1.5">
+            <div className="mt-1.5 max-h-[26svh] md:max-h-[calc(100svh-17rem)] space-y-0.5 overflow-y-auto rounded-md border-rule bg-paper border p-1.5">
               {layers.map((layer) => {
                 const on = activeLayers.has(layer.id);
                 return (

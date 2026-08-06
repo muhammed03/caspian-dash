@@ -34,7 +34,7 @@ export function Hero() {
   const words = t.home.heroTitle.split(" ");
 
   return (
-    <section ref={ref} className="relative min-h-[100svh] w-full overflow-hidden">
+    <section ref={ref} className="relative w-full overflow-hidden lg:min-h-[100svh]">
       {/* The sea itself, as the one object on the page. Bounded to the upper
           right so it never sits under the headline or the meta strip. */}
       <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] items-center justify-center pb-56 lg:flex">
@@ -45,7 +45,7 @@ export function Hero() {
 
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
-        className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1800px] flex-col justify-between px-5 pt-24 pb-8 md:px-10 md:pt-32"
+        className="relative z-10 mx-auto flex max-w-[1800px] flex-col px-5 pt-24 pb-12 md:px-10 md:pt-32 lg:min-h-[100svh] lg:justify-between lg:pb-8"
       >
         <div>
           <motion.div
@@ -98,7 +98,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: EASE_FLUID, delay: 0.75 }}
-          className="bg-paper relative z-10 mt-16"
+          className="relative z-10 mt-14 lg:mt-16"
         >
           <MetaRow>
             <MetaCell label={t.home.ecoIndex}>

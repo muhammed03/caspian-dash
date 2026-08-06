@@ -90,13 +90,16 @@ export function MapShell({ module, panel }: { module: ModuleId; panel: React.Rea
         </button>
       </div>
 
-      <div className="flex min-h-0 flex-1">
+      {/* Stacked on phones (map on top, reading below), two columns from md up.
+          The map keeps a real height on mobile — a flex child with no basis
+          collapses to nothing next to a full-width panel. */}
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto md:flex-row md:overflow-hidden">
         {/* map column */}
-        <div className="bg-tint relative min-w-0 flex-1">
+        <div className="bg-tint relative h-[46svh] w-full shrink-0 md:h-auto md:min-w-0 md:flex-1">
           <MapCanvas module={module} />
           <HoverCard />
 
-          <div className="pointer-events-none absolute top-4 left-4 z-20 hidden md:block">
+          <div className="pointer-events-none absolute top-3 left-3 z-20 md:top-4 md:left-4">
             <LayerManager module={module} />
           </div>
 
@@ -105,7 +108,7 @@ export function MapShell({ module, panel }: { module: ModuleId; panel: React.Rea
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: EASE_FLUID, delay: 0.2 }}
-              className="pointer-events-none absolute right-4 bottom-4 left-4 z-20 hidden md:block"
+              className="pointer-events-none absolute right-3 bottom-3 left-3 z-20 md:right-4 md:bottom-4 md:left-4"
             >
               <div className="mx-auto max-w-[560px]">
                 <TimelineSlider />
@@ -121,7 +124,7 @@ export function MapShell({ module, panel }: { module: ModuleId; panel: React.Rea
 
         {/* reading column */}
         {panelOpen && (
-          <aside className="border-rule bg-paper w-full shrink-0 overflow-y-auto border-l px-5 py-6 md:w-[420px] xl:w-[460px]">
+          <aside className="border-rule bg-paper w-full border-t px-5 py-6 md:w-[420px] md:shrink-0 md:overflow-y-auto md:border-t-0 md:border-l xl:w-[460px]">
             {panel}
           </aside>
         )}

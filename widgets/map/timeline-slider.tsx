@@ -41,7 +41,7 @@ export function TimelineSlider() {
           type="button"
           onClick={() => setPlaying(!playing)}
           aria-label={playing ? t.common.pause : t.common.play}
-          className="flex size-9 shrink-0 items-center justify-center rounded-full border-rule text-ink hover:bg-ink hover:text-paper border transition-colors"
+          className="border-rule text-ink hover:bg-ink hover:text-paper flex size-8 shrink-0 items-center justify-center rounded-full border transition-colors md:size-9"
         >
           {playing ? <Pause className="size-3.5" /> : <Play className="ml-0.5 size-3.5" />}
         </button>
@@ -64,7 +64,7 @@ export function TimelineSlider() {
               )}
             </div>
             {entry && (
-              <div className="flex items-center gap-4 text-ink-2 text-[11px]">
+              <div className="hidden items-center gap-4 text-ink-2 text-[11px] sm:flex">
                 <span>
                   {locale === "ru" ? "уровень" : "деңгей"}{" "}
                   <span className="tabular text-ink font-medium">{entry.level_m.toFixed(2)} м</span>
