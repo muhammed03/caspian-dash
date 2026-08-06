@@ -77,7 +77,11 @@ export function LayerManager({ module }: { module: ModuleId }) {
                       </span>
                     </button>
 
-                    {on && layer.legend && (
+                    {/* The drift layer has three horizons and shows exactly
+                        one, so these are radios rather than checkboxes. */}
+                    {on && layer.id === "drift" && <DriftHorizonPicker />}
+
+                    {on && layer.id !== "drift" && layer.legend && (
                       <ul className="mt-0.5 mb-1.5 ml-8 space-y-0.5">
                         {layer.legend.map((item) => (
                           <li
@@ -100,6 +104,49 @@ export function LayerManager({ module }: { module: ModuleId }) {
           </motion.div>
         )}
       </AnimatePresence>
+    </div>
+  );
+}
+
+const HORIZONS = [
+  { minutes: 30 as const, kk: "+30 мин", ru: "через 30 мин" },
+  { minutes: 60 as const, kk: "+1 сағат", ru: "через 1 час" },
+  { minutes: 180 as const, kk: "+3 сағат", ru: "через 3 часа" },
+];
+
+/** Single-choice horizon for the forecast spread zone. */
+function DriftHorizonPicker() {
+  const locale = useLocale();
+  const { driftHorizon, setDriftHorizon } = useMapStore();
+
+  return (
+    <div className="mt-1 mb-1.5 ml-8" role="radiogroup">
+      {HORIZONS.map((h) => {
+        const active = driftHorizon === h.minutes;
+        return (
+          <button
+            key={h.minutes}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            onClick={() => setDriftHorizon(h.minutes)}
+            className={cn(
+              "flex w-full items-center gap-2 rounded px-1.5 py-1 text-left text-[11.5px] transition-colors",
+              active ? "text-ink" : "text-ink-2 hover:bg-tint hover:text-ink"
+            )}
+          >
+            <span
+              className={cn(
+                "flex size-3 shrink-0 items-center justify-center rounded-full border transition-colors",
+                active ? "border-ink" : "border-neutral-300"
+              )}
+            >
+              {active && <span className="bg-ink size-1.5 rounded-full" />}
+            </span>
+            {locale === "ru" ? h.ru : h.kk}
+          </button>
+        );
+      })}
     </div>
   );
 }

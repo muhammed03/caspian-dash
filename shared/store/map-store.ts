@@ -40,6 +40,10 @@ type MapState = {
   selected: { kind: string; payload: Record<string, unknown> } | null;
   select: (s: { kind: string; payload: Record<string, unknown> } | null) => void;
 
+  /** Which forecast horizon the drift layer shows; exactly one at a time. */
+  driftHorizon: 30 | 60 | 180;
+  setDriftHorizon: (m: 30 | 60 | 180) => void;
+
   /** Which backdrop the map draws on; "default" is the only offline-safe one. */
   basemap: "default" | "satellite" | "terrain";
   setBasemap: (m: "default" | "satellite" | "terrain") => void;
@@ -88,6 +92,9 @@ export const useMapStore = create<MapState>((set) => ({
 
   selected: null,
   select: (selected) => set({ selected }),
+
+  driftHorizon: 30,
+  setDriftHorizon: (driftHorizon) => set({ driftHorizon }),
 
   basemap: "default",
   setBasemap: (basemap) => set({ basemap }),

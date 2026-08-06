@@ -78,6 +78,8 @@ type BuildArgs = {
   };
   /** Dispersion cones for the hour currently being shown. */
   plume?: { facility: PlumeFacility; frame: PlumeFrame; detected: boolean }[];
+  /** Which horizon to draw — exactly one is shown at a time. */
+  driftHorizon?: 30 | 60 | 180;
   /** Advected cloud positions at +30 min, +1 h and +3 h. */
   drift?: {
     facility: { short: string; lat: number; lng: number };
@@ -643,10 +645,11 @@ export function buildLayers(args: BuildArgs): Layer[] {
      wind; the client only draws them. Recomputing here from "current" wind
      would put these circles kilometres away from the caption beside them on
      any hour the wind turns. */
-  if (active.has("plume") && args.drift?.length) {
+  if (active.has("drift") && args.drift?.length) {
     const pulse = 0.85 + 0.15 * Math.sin((args.time ?? 0) * Math.PI * 2);
+    const horizon = args.driftHorizon ?? 30;
 
-    // the track from the stack to the three-hour mark
+    // the track runs from the stack only as far as the chosen horizon
     layers.push(
       new PathLayer<NonNullable<BuildArgs["drift"]>[number]>({
         id: "drift-track",
@@ -654,16 +657,20 @@ export function buildLayers(args: BuildArgs): Layer[] {
         getPath: (d) =>
           [
             [d.facility.lng, d.facility.lat] as [number, number],
-            ...d.marks.map((m) => [m.lng, m.lat] as [number, number]),
+            ...d.marks
+              .filter((m) => m.minutes <= horizon)
+              .map((m) => [m.lng, m.lat] as [number, number]),
           ] as [number, number][],
-        getColor: [190, 24, 93, 150],
-        getWidth: 1.6,
+        getColor: [190, 24, 93, 170],
+        getWidth: 1.8,
         widthUnits: "pixels",
+        updateTriggers: { getPath: horizon },
       })
     );
 
+    // one cloud, for the horizon the reader picked
     const marks = args.drift.flatMap((d) =>
-      d.marks.map((m) => ({ ...m, short: d.facility.short }))
+      d.marks.filter((m) => m.minutes === horizon).map((m) => ({ ...m, short: d.facility.short }))
     );
 
     // the cloud itself: radius is 2σy at the distance travelled
@@ -679,15 +686,9 @@ export function buildLayers(args: BuildArgs): Layer[] {
         lineWidthUnits: "pixels",
         getLineWidth: 1.4,
         // fades with time ahead, and breathes so it reads as a forecast
-        getFillColor: (d) =>
-          [190, 24, 93, Math.round((d.minutes === 30 ? 70 : d.minutes === 60 ? 50 : 32) * pulse)] as [
-            number, number, number, number,
-          ],
-        getLineColor: (d) =>
-          [190, 24, 93, Math.round((d.minutes === 30 ? 230 : d.minutes === 60 ? 190 : 150) * pulse)] as [
-            number, number, number, number,
-          ],
-        updateTriggers: { getFillColor: pulse, getLineColor: pulse },
+        getFillColor: [190, 24, 93, Math.round(70 * pulse)] as [number, number, number, number],
+        getLineColor: [190, 24, 93, Math.round(235 * pulse)] as [number, number, number, number],
+        updateTriggers: { getFillColor: pulse, getLineColor: pulse, data: horizon },
         onHover: (info) => onHover(info, "drift"),
       })
     );

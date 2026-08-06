@@ -227,36 +227,6 @@ export function PlumePanel() {
         </Plain>
       </dl>
 
-      {/* where the cloud released now will be — positions from the server */}
-      {lead.drift?.length ? (
-        <div className="rule-t mt-4 pt-3">
-          <Label>{locale === "ru" ? "Снос облака от источника" : "Бұлттың көзден сүрілуі"}</Label>
-          <table className="mt-2 w-full text-[12px]">
-            <thead>
-              <tr className="text-ink-3 rule-b text-left">
-                <th className="pb-1.5 font-normal">{locale === "ru" ? "Через" : "Кейін"}</th>
-                <th className="pb-1.5 text-right font-normal">{locale === "ru" ? "Расстояние" : "Қашықтық"}</th>
-                <th className="pb-1.5 text-right font-normal">{locale === "ru" ? "Радиус" : "Радиус"}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {lead.drift.map((m) => (
-                <tr key={m.minutes} className="border-rule border-b last:border-0">
-                  <td className="text-ink-2 py-1.5">{m.label}</td>
-                  <td className="tabular text-ink py-1.5 text-right">{m.distanceKm} км</td>
-                  <td className="tabular text-ink-2 py-1.5 text-right">± {m.radiusKm} км</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <Plain className="mt-2">
-            {locale === "ru"
-              ? "Положение считается по почасовому прогнозу ветра, поэтому при повороте ветра трек изгибается. Радиус — поперечное рассеивание (2σy) на пройденном расстоянии."
-              : "Орны сағаттық жел болжамы бойынша есептеледі, сондықтан жел бұрылғанда трек иіледі. Радиус — өтілген қашықтықтағы көлденең жайылу (2σy)."}
-          </Plain>
-        </div>
-      ) : null}
-
       {/* breeze — the most dangerous regime for a coastal plant */}
       <BreezeBlock />
 
@@ -434,5 +404,138 @@ function BreezeBlock() {
         </Plain>
       )}
     </div>
+  );
+}
+
+/**
+ * Forecast spread zone, on its own switch.
+ *
+ * The positions are computed on the server by stepping through the hourly
+ * forecast wind, so a turning wind bends the track. Nothing is recomputed
+ * here — a client that re-derived these from the "current" wind would draw
+ * circles kilometres away from the numbers printed beside them.
+ */
+export function DriftPanel() {
+  const locale = useLocale();
+  const { activeLayers, toggleLayer, driftHorizon, setDriftHorizon } = useMapStore();
+  const on = activeLayers.has("drift");
+  const plume = usePlume(on);
+
+  const lead = useMemo(() => {
+    const list = (plume.data?.facilities ?? []).filter(isAvailable).filter((f) => f.drift?.length);
+    return list[0];
+  }, [plume.data]);
+
+  if (!on) {
+    return (
+      <section className="rule-t pt-4">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h3 className="text-ink text-[15px] font-semibold tracking-tight">
+              {locale === "ru" ? "Прогноз зоны распространения" : "Болжамды таралу аймағы"}
+            </h3>
+            <Plain className="mt-2">
+              {locale === "ru"
+                ? "Куда ветер унесёт выброс, сделанный сейчас: положение и размер облака через 30 минут, час и три часа."
+                : "Қазір шыққан шығарынды желмен қайда жетеді: 30 минуттан, бір және үш сағаттан кейінгі бұлттың орны мен көлемі."}
+            </Plain>
+          </div>
+          <button
+            type="button"
+            onClick={() => toggleLayer("drift")}
+            className="border-rule text-ink hover:bg-ink hover:text-paper shrink-0 rounded-full border px-3 py-1.5 text-[12px] transition-colors"
+          >
+            {locale === "ru" ? "Показать" : "Көрсету"}
+          </button>
+        </div>
+      </section>
+    );
+  }
+
+  if (plume.isLoading) {
+    return (
+      <section className="rule-t pt-4">
+        <Label>{locale === "ru" ? "Прогноз зоны распространения" : "Болжамды таралу аймағы"}</Label>
+        <div className="bg-tint mt-3 h-20 animate-pulse rounded" />
+      </section>
+    );
+  }
+
+  if (!plume.data?.available || !lead) {
+    return (
+      <section className="rule-t pt-4">
+        <Label>{locale === "ru" ? "Прогноз зоны распространения" : "Болжамды таралу аймағы"}</Label>
+        <div className="border-warn/40 bg-warn/5 mt-3 flex gap-2.5 rounded border-l-2 p-3">
+          <AlertTriangle className="text-warn mt-0.5 size-4 shrink-0" />
+          <p className="text-ink-2 text-[12.5px] leading-relaxed">
+            {locale === "ru"
+              ? "Данные о ветре недоступны — прогноз не строится."
+              : "Жел деректері қолжетімсіз — болжам құрылмайды."}
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="rule-t pt-4">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h3 className="text-ink text-[15px] font-semibold tracking-tight">
+            {locale === "ru" ? "Прогноз зоны распространения" : "Болжамды таралу аймағы"}
+          </h3>
+          <Label className="mt-1">{lead.short}</Label>
+        </div>
+        <button
+          type="button"
+          onClick={() => toggleLayer("drift")}
+          className="text-ink-2 hover:text-ink shrink-0 text-[12px] transition-colors"
+        >
+          {locale === "ru" ? "Скрыть" : "Жасыру"}
+        </button>
+      </div>
+
+      <table className="mt-3 w-full text-[12px]">
+        <thead>
+          <tr className="text-ink-3 rule-b text-left">
+            <th className="pb-1.5 font-normal">{locale === "ru" ? "Через" : "Кейін"}</th>
+            <th className="pb-1.5 text-right font-normal">{locale === "ru" ? "Унесёт на" : "Қашықтық"}</th>
+            <th className="pb-1.5 text-right font-normal">{locale === "ru" ? "Радиус" : "Радиус"}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {lead.drift.map((m) => {
+            const active = m.minutes === driftHorizon;
+            return (
+              <tr
+                key={m.minutes}
+                onClick={() => setDriftHorizon(m.minutes as 30 | 60 | 180)}
+                className={cn(
+                  "border-rule cursor-pointer border-b last:border-0",
+                  active ? "bg-tint" : "hover:bg-tint/60"
+                )}
+              >
+                <td className={cn("py-2", active ? "text-ink font-semibold" : "text-ink-2")}>
+                  {active && <span className="bg-ink mr-1.5 inline-block size-1.5 rounded-full align-middle" />}
+                  {m.label}
+                </td>
+                <td className="tabular text-ink py-2 text-right">{m.distanceKm} км</td>
+                <td className="tabular text-ink-2 py-2 text-right">± {m.radiusKm} км</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+
+      <Plain className="mt-3">
+        {locale === "ru"
+          ? "На карте показан один выбранный горизонт — нажмите строку, чтобы переключить. Положение считается по почасовому прогнозу ветра, поэтому при повороте ветра трек изгибается. Радиус — поперечное рассеивание (2σy) на пройденном расстоянии, а не измеренная граница загрязнения."
+          : "Картада бір таңдалған көкжиек көрсетіледі — ауыстыру үшін жолды басыңыз. Орны сағаттық жел болжамы бойынша есептеледі, сондықтан жел бұрылғанда трек иіледі. Радиус — өтілген қашықтықтағы көлденең жайылу (2σy), өлшенген ластану шекарасы емес."}
+      </Plain>
+
+      <div className="mt-3">
+        <SourceBadge sourceId="open_meteo" status="real" />
+      </div>
+    </section>
   );
 }

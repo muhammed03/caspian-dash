@@ -32,7 +32,7 @@ const FRAMES: Record<ModuleId, { longitude: number; latitude: number; zoom: numb
 
 export function MapCanvas({ module }: { module: ModuleId }) {
   const locale = useLocale();
-  const { view, setView, year, activeLayers, setHover, select, plumeFrame, plumeMode, basemap } =
+  const { view, setView, year, activeLayers, setHover, select, plumeFrame, plumeMode, basemap, driftHorizon } =
     useMapStore();
   const firstFrame = useRef(true);
 
@@ -65,7 +65,7 @@ export function MapCanvas({ module }: { module: ModuleId }) {
   );
   const air = useAirQuality(needs("air-quality") || needs("plume"));
   const wind = useWind(needs("wind"));
-  const plume = usePlume(needs("plume"));
+  const plume = usePlume(needs("plume") || needs("drift"));
   const breeze = useBreeze(needs("breeze"));
 
   /** Drift marks come straight from the server; nothing is recomputed here. */
@@ -134,6 +134,7 @@ export function MapCanvas({ module }: { module: ModuleId }) {
   const windOn =
     activeLayers.has("wind") ||
     activeLayers.has("plume") ||
+    activeLayers.has("drift") ||
     activeLayers.has("breeze") ||
     activeLayers.has("air-quality");
   useEffect(() => {
@@ -192,6 +193,7 @@ export function MapCanvas({ module }: { module: ModuleId }) {
         wind: wind.data?.points,
         plume: plumeFrames,
         drift: driftData,
+        driftHorizon,
         breeze: breezeData,
         basemap,
         onHover: handleHover,
@@ -215,6 +217,7 @@ export function MapCanvas({ module }: { module: ModuleId }) {
       wind.data,
       plumeFrames,
       driftData,
+      driftHorizon,
       breezeData,
       basemap,
       handleHover,

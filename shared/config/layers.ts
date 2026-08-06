@@ -97,6 +97,18 @@ export const LAYERS: LayerDef[] = [
     ],
   },
   {
+    id: "drift",
+    module: ["pollution"],
+    label_kk: "Болжамды таралу аймағы",
+    label_ru: "Прогноз зоны распространения",
+    sourceId: "open_meteo",
+    legend: [
+      { color: "#be185d", label_kk: "+30 мин", label_ru: "через 30 мин" },
+      { color: "#d4467f", label_kk: "+1 сағат", label_ru: "через 1 час" },
+      { color: "#e494b4", label_kk: "+3 сағат", label_ru: "через 3 часа" },
+    ],
+  },
+  {
     id: "breeze",
     module: ["pollution"],
     label_kk: "Теңіз бризі",
