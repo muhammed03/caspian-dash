@@ -55,6 +55,9 @@ function round(coords: unknown, decimals = 4): unknown {
 function save(name: string, features: Feature[]) {
   const fc = { type: "FeatureCollection", features };
   writeFileSync(join(OUT, name), JSON.stringify(fc));
+  // .json twin: the map style imports these directly so the basemap needs no
+  // network at all, and TypeScript only resolves .json imports.
+  writeFileSync(join(OUT, name.replace(/\.geojson$/, ".json")), JSON.stringify(fc));
   console.log(`${name}: ${features.length} features, ${(JSON.stringify(fc).length / 1024).toFixed(0)} KB`);
 }
 

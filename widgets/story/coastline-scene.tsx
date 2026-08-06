@@ -35,7 +35,7 @@ export function CoastlineScene() {
     async function load() {
       const entries = await Promise.all(
         YEARS.map(async (y) => {
-          const res = await fetch(`/api/data/${encodeURIComponent(`coastlines/${y}`)}`);
+          const res = await fetch(`/api/coastline/${y}`);
           const fc = (await res.json()) as GeoJSON.FeatureCollection;
           const ring = (fc.features[0].geometry as GeoJSON.Polygon).coordinates[0] as [number, number][];
           return [y, toPath(ring)] as const;

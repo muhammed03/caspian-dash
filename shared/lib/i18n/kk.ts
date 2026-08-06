@@ -78,7 +78,7 @@ export const kk = {
     factories: "Өнеркәсіп нысандары",
     koshkarAta: "Қошқар-Ата қоймасы",
     aqi: "Ауа сапасы (AQI)",
-    aqiLive: "Live — aqicn.org",
+    aqiLive: "Live — Open-Meteo / CAMS",
     health: "Денсаулыққа әсер",
     healthNote:
       "WHO әдістемесі бойынша есептелген жылдық болжамды баға. Нақты уақыттағы дерек жиналмайды.",

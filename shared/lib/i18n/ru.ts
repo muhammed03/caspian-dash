@@ -78,7 +78,7 @@ export const ru = {
     factories: "Промышленные объекты",
     koshkarAta: "Хвостохранилище Кошкар-Ата",
     aqi: "Качество воздуха (AQI)",
-    aqiLive: "Live — aqicn.org",
+    aqiLive: "Live — Open-Meteo / CAMS",
     health: "Влияние на здоровье",
     healthNote:
       "Годовая модельная оценка по методике WHO. Данные в реальном времени не собираются.",

@@ -9,9 +9,11 @@ async function fetchJson<T>(path: string): Promise<T> {
 }
 
 export function useDataset<T>(name: string, enabled = true) {
+  // geo/* lives behind its own route so MapLibre and the app share one URL shape
+  const path = name.startsWith("geo/") ? `/api/geo/${name.slice(4)}` : `/api/data/${name}`;
   return useQuery<T>({
     queryKey: ["dataset", name],
-    queryFn: () => fetchJson<T>(`/api/data/${encodeURIComponent(name)}`),
+    queryFn: () => fetchJson<T>(path),
     staleTime: Infinity,
     enabled,
   });
@@ -20,7 +22,7 @@ export function useDataset<T>(name: string, enabled = true) {
 export function useCoastline(year: number, enabled = true) {
   return useQuery({
     queryKey: ["coastline", year],
-    queryFn: () => fetchJson<GeoJSON.FeatureCollection>(`/api/data/${encodeURIComponent(`coastlines/${year}`)}`),
+    queryFn: () => fetchJson<GeoJSON.FeatureCollection>(`/api/coastline/${year}`),
     staleTime: Infinity,
     enabled,
   });

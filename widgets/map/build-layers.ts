@@ -28,6 +28,10 @@ type BuildArgs = {
   active: Set<string>;
   locale: Locale;
   year: number;
+  basemapCountries?: GeoJSON.FeatureCollection;
+  basemapCaspian?: GeoJSON.FeatureCollection;
+  basemapLakes?: GeoJSON.FeatureCollection;
+  basemapRivers?: GeoJSON.FeatureCollection;
   coastline?: GeoJSON.FeatureCollection;
   baseCoastline?: GeoJSON.FeatureCollection;
   caspian?: GeoJSON.FeatureCollection;
@@ -67,6 +71,86 @@ export function buildLayers(args: BuildArgs): Layer[] {
   const nameOf = (o: Record<string, unknown>) =>
     String((locale === "ru" ? o.name_ru : o.name_kk) ?? o.name_en ?? "");
   const layers: Layer[] = [];
+
+  /* --- basemap: land, sea and the lit shoreline, all from committed data --- */
+  if (args.basemapCountries) {
+    layers.push(
+      new GeoJsonLayer({
+        id: "base-land",
+        data: args.basemapCountries,
+        filled: true,
+        stroked: true,
+        getFillColor: [13, 23, 34, 255],
+        getLineColor: [34, 54, 74, 190],
+        getLineWidth: 1,
+        lineWidthUnits: "pixels",
+        parameters: { depthTest: false },
+      })
+    );
+  }
+  if (args.basemapCaspian) {
+    layers.push(
+      new GeoJsonLayer({
+        id: "base-sea",
+        data: args.basemapCaspian,
+        filled: true,
+        stroked: false,
+        getFillColor: [7, 26, 38, 255],
+        parameters: { depthTest: false },
+      })
+    );
+    // wide, soft stroke under a crisp one reads as a glow without a shader
+    layers.push(
+      new GeoJsonLayer({
+        id: "base-sea-halo",
+        data: args.basemapCaspian,
+        filled: false,
+        stroked: true,
+        getLineColor: [...CYAN, 45] as [number, number, number, number],
+        getLineWidth: 6,
+        lineWidthUnits: "pixels",
+        parameters: { depthTest: false },
+      })
+    );
+    layers.push(
+      new GeoJsonLayer({
+        id: "base-sea-edge",
+        data: args.basemapCaspian,
+        filled: false,
+        stroked: true,
+        getLineColor: [...CYAN, 130] as [number, number, number, number],
+        getLineWidth: 1.2,
+        lineWidthUnits: "pixels",
+        parameters: { depthTest: false },
+      })
+    );
+  }
+  if (args.basemapLakes) {
+    layers.push(
+      new GeoJsonLayer({
+        id: "base-lakes",
+        data: args.basemapLakes,
+        filled: true,
+        stroked: false,
+        getFillColor: [10, 26, 36, 220],
+        parameters: { depthTest: false },
+      })
+    );
+  }
+  if (args.basemapRivers) {
+    layers.push(
+      new GeoJsonLayer({
+        id: "base-rivers",
+        data: args.basemapRivers,
+        filled: false,
+        stroked: true,
+        getLineColor: [...TEAL, 70] as [number, number, number, number],
+        getLineWidth: 1,
+        lineWidthUnits: "pixels",
+        parameters: { depthTest: false },
+      })
+    );
+  }
 
   /* --- water: exposed seabed between the 1992 shore and the current one --- */
   if (active.has("exposed-bed") && args.baseCoastline && args.coastline) {
