@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Caspian Watch — документация</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #0a0a0a; font-size: 10.5pt; line-height: 1.55; margin: 0;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  h1 { font-size: 30pt; line-height: 1.02; letter-spacing: -0.03em; margin: 0 0 6mm; }
+  h2 { font-size: 15pt; letter-spacing: -0.02em; margin: 10mm 0 3mm; padding-top: 3mm; border-top: 1px solid #e6e6e3; }
+  h3 { font-size: 11.5pt; margin: 6mm 0 2mm; }
+  p { margin: 0 0 3mm; }
+  .lead { font-size: 12pt; color: #444; margin-bottom: 6mm; }
+  .label { font-size: 8pt; letter-spacing: .09em; text-transform: uppercase; color: #6f6f6f; }
+  .cover { padding: 30mm 0 8mm; }
+  .meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6mm; margin-top: 8mm;
+          border-top: 1px solid #e6e6e3; padding-top: 4mm; }
+  .meta div span { display: block; margin-top: 1.5mm; font-size: 10pt; }
+  table { width: 100%; border-collapse: collapse; margin: 3mm 0 4mm; font-size: 9pt; }
+  th { text-align: left; font-size: 8pt; letter-spacing: .07em; text-transform: uppercase;
+       color: #6f6f6f; font-weight: 500; border-bottom: 1px solid #d8d8d4; padding: 0 3mm 1.5mm 0; }
+  td { border-bottom: 1px solid #f0f0ee; padding: 2mm 3mm 2mm 0; vertical-align: top; }
+  td:first-child { font-weight: 500; }
+  code, .mono { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 9pt; }
+  pre { background: #fafaf9; border: 1px solid #e6e6e3; border-radius: 4px;
+        padding: 3mm 4mm; font-family: "SF Mono", Menlo, Consolas, monospace;
+        font-size: 8.5pt; line-height: 1.5; overflow: visible; white-space: pre-wrap; margin: 2mm 0 4mm; }
+  ul, ol { margin: 0 0 3mm; padding-left: 5mm; }
+  li { margin-bottom: 1.5mm; }
+  .note { border-left: 2px solid #a16207; background: #fdfaf4; padding: 2.5mm 4mm; margin: 3mm 0 4mm; font-size: 9.5pt; }
+  .good { color: #0d7a57; } .warn { color: #a16207; } .bad { color: #be185d; }
+  .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 4px; vertical-align: 1px; }
+  .page-break { page-break-before: always; }
+  .avoid-break { page-break-inside: avoid; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 0 8mm; }
+  .q { font-weight: 600; margin-top: 4mm; }
+  .a { color: #444; }
+  footer { margin-top: 10mm; border-top: 1px solid #e6e6e3; padding-top: 3mm;
+           font-size: 8pt; color: #6f6f6f; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="label">Международный хакатон Caspian Hackathon · 5–12 августа 2026</div>
+  <h1>Caspian Watch<br>Документация проекта</h1>
+  <p class="lead">
+    AI-платформа экологического мониторинга Каспийского моря.
+    Этот документ написан простым языком: его достаточно, чтобы пройти техническую
+    проверку, объяснить архитектуру и ответить на вопросы жюри.
+  </p>
+  <div class="meta">
+    <div><span class="label">Репозиторий</span><span class="mono">github.com/muhammed03/caspian-dash</span></div>
+    <div><span class="label">Запуск</span><span class="mono">docker compose up</span></div>
+    <div><span class="label">Языки интерфейса</span><span>Қазақша, Русский</span></div>
+  </div>
+</div>
+
+<h2>1. Что делает платформа — в трёх предложениях</h2>
+<p>
+  Каспийское море мелеет: с 1995 года уровень падает, а в 2025-м опустился ниже
+  исторического минимума. Все об этом знают, но <strong>никто не может показать на карте,
+  где именно, с какой скоростью и что будет дальше</strong>.
+</p>
+<p>
+  Caspian Watch собирает открытые данные в одну интерактивную карту, считает по ним
+  прогноз и объясняет результат простыми словами. Под каждым числом стоит источник,
+  а формула каждого расчёта напечатана на отдельной странице сайта.
+</p>
+
+<h2>2. Как устроен сайт</h2>
+<table>
+  <tr><th style="width:32%">Раздел</th><th>Что там</th></tr>
+  <tr><td>Главная <span class="mono">/</span></td><td>История в пяти блоках: как падает уровень, как отступает берег, чем загрязнено море, что происходит с животными, общий вывод. Каждое число подписано простым объяснением.</td></tr>
+  <tr><td>Вода и отступание <span class="mono">/map/water</span></td><td>Карта с береговой линией по годам (1992 → 2035), слой обнажённого дна, слайдер лет с кнопкой воспроизведения, график уровня с прогнозом, сток рек, водопотребление стран.</td></tr>
+  <tr><td>Загрязнение и воздух <span class="mono">/map/pollution</span></td><td><strong>Живые</strong> данные о качестве воздуха по 9 городам, промышленные объекты (размер точки = объём выбросов), хвостохранилище Кошкар-Ата, структура загрязнения, индекс чистоты воды.</td></tr>
+  <tr><td>Флора и фауна <span class="mono">/map/life</span></td><td>Численность тюленя как <em>диапазон</em> пяти источников, обвал вылова осетровых с поправкой на браконьерство, сезонность миграции птиц, озеленение побережья, места обитания на карте.</td></tr>
+  <tr><td>Ресурсы <span class="mono">/map/resources</span></td><td>Запасы нефти и газа, добыча по годам, срок исчерпания, месторождения на карте.</td></tr>
+  <tr><td>Экоиндекс <span class="mono">/map/index</span></td><td>Сводная оценка 0–100 из пяти компонент и слой «насколько открыты экологические данные каждой страны».</td></tr>
+  <tr><td>Методика <span class="mono">/methodology</span></td><td>Формула, источник и ограничения каждого расчёта. Полный реестр источников.</td></tr>
+</table>
+
+<h2>3. Архитектура — просто</h2>
+<p>Платформа состоит из трёх слоёв. Понять их можно за минуту.</p>
+
+<pre>
+   ┌──────────────────────────────────────────────────────────────┐
+   │  1. ПАЙПЛАЙН ДАННЫХ   (запускается заранее, не в рантайме)   │
+   │     Открытые источники → скрипты → готовые файлы в data/     │
+   │     Результат коммитится в репозиторий                       │
+   └──────────────────────────────┬───────────────────────────────┘
+                                  │ файлы JSON / GeoJSON
+                                  ▼
+   ┌──────────────────────────────────────────────────────────────┐
+   │  2. СЕРВЕР  (Next.js route handlers)                         │
+   │     /api/data/*      отдаёт готовые датасеты с диска         │
+   │     /api/geo/*       базовая география                       │
+   │     /api/coastline/* береговая линия за год                  │
+   │     /api/live/air    ЖИВОЙ запрос к Open-Meteo + фолбэк      │
+   │     /api/live/wind   ЖИВОЙ запрос к Open-Meteo + фолбэк      │
+   └──────────────────────────────┬───────────────────────────────┘
+                                  │ HTTP / прямой импорт
+                                  ▼
+   ┌──────────────────────────────────────────────────────────────┐
+   │  3. ИНТЕРФЕЙС  (React 19)                                    │
+   │     deck.gl — карта и слои       Recharts — графики          │
+   │     Three.js — 3D-объект моря    Motion/GSAP — анимации      │
+   │     Детерминированный анализ считается прямо в браузере      │
+   └──────────────────────────────────────────────────────────────┘
+</pre>
+
+<p><strong>Главное свойство:</strong> все данные лежат в репозитории, а базовая карта
+собрана из файлов, а не из тайл-сервера. Поэтому сайт полностью работает
+<strong>без интернета</strong> — это важно для демонстрации.</p>
+
+<h2>4. Стек технологий и зачем каждое</h2>
+<table>
+  <tr><th style="width:30%">Технология</th><th>Зачем она здесь</th></tr>
+  <tr><td>Next.js 15 + React 19</td><td>Каркас приложения, маршруты и серверные API в одном проекте</td></tr>
+  <tr><td>TypeScript</td><td>Типы — ошибки видны до запуска, а не на защите</td></tr>
+  <tr><td>Tailwind CSS 4</td><td>Стили и дизайн-токены в одном месте</td></tr>
+  <tr><td>deck.gl</td><td>Карта и все слои данных. Подложка своя, без тайл-сервера и ключей</td></tr>
+  <tr><td>Three.js + React Three Fiber</td><td>3D-объект Каспия на главной: море как физическое тело, теряющее объём</td></tr>
+  <tr><td>Recharts</td><td>Графики: уровень, прогноз, вылов, популяции</td></tr>
+  <tr><td>Motion, GSAP, Lenis</td><td>Анимации и сцена с закреплением при прокрутке</td></tr>
+  <tr><td>TanStack Query</td><td>Загрузка и кэширование данных</td></tr>
+  <tr><td>Zustand</td><td>Состояние карты: год, слои, позиция камеры</td></tr>
+  <tr><td>Zod</td><td>Проверка ответа AI по строгой схеме</td></tr>
+  <tr><td>Docker Compose</td><td>Запуск одной командой на любой машине</td></tr>
+</table>
+
+<div class="page-break"></div>
+
+<h2>5. Структура папок</h2>
+<pre>
+app/                  маршруты и серверные API
+  page.tsx              главная страница
+  map/[module]/         пять дашбордов на общей карте
+  methodology/          страница «Методика»
+  api/                  отдача данных и живые запросы
+
+widgets/              крупные блоки экранов
+  hero/                 первый экран и 3D-объект моря
+  story/                блоки главной страницы
+  map/                  карта, слои, таймлайн, карточки
+  panels/               панели пяти дашбордов
+  ai-insight/           карточка анализа
+  methodology/          страница методики
+
+features/             действия пользователя (переключение языка)
+entities/             предметные модели
+  ai-insight/           схема анализа и детерминированный расчёт
+
+shared/               переиспользуемое ядро
+  ui/                   кнопки, карточки, метрики, бейдж источника
+  lib/                  переводы, анимации, регрессии, правила анализа
+  config/               палитра графиков, реестр слоёв
+  store/                состояние карты
+
+data/                 ВСЕ ДАННЫЕ, закоммичены в репозиторий
+  sources.json          реестр источников со статусами
+  coastlines/           береговая линия по годам
+  geo/                  базовая география
+  snapshots/            офлайн-копии живых данных
+
+scripts/pipeline/     генерация данных (в рантайме не участвует)
+</pre>
+<p>Это архитектура <strong>Feature-Sliced Design</strong>: слои идут сверху вниз и никогда
+не обращаются наверх. <span class="mono">app</span> знает про <span class="mono">widgets</span>,
+<span class="mono">widgets</span> — про <span class="mono">features</span> и
+<span class="mono">entities</span>, все — про <span class="mono">shared</span>. Обратно — никогда.</p>
+
+<h2>6. Откуда берутся данные</h2>
+<p>Каждый источник помечен статусом, и этот статус виден в интерфейсе под каждым графиком:</p>
+<table>
+  <tr><th style="width:24%">Статус</th><th>Что значит</th></tr>
+  <tr><td><span class="dot" style="background:#0d7a57"></span><span class="good">REAL</span></td><td>Настоящие машиночитаемые данные, которые можно скачать прямо сейчас</td></tr>
+  <tr><td><span class="dot" style="background:#a16207"></span><span class="warn">SEMI</span></td><td>Введено вручную из публикации или отчёта, со ссылкой на первоисточник</td></tr>
+  <tr><td><span class="dot" style="background:#be185d"></span><span class="bad">MOCK</span></td><td>Демонстрационные данные. В интерфейсе помечены явно</td></tr>
+</table>
+
+<table>
+  <tr><th style="width:34%">Источник</th><th style="width:44%">Что даёт</th><th>Статус</th></tr>
+  <tr><td>Open-Meteo + Copernicus CAMS</td><td>Качество воздуха и ветер в реальном времени, без ключа</td><td class="good">REAL</td></tr>
+  <tr><td>Natural Earth</td><td>Базовая география, береговая линия, города</td><td class="good">REAL</td></tr>
+  <tr><td>GBIF</td><td>Наблюдения за птицами</td><td class="good">REAL</td></tr>
+  <tr><td>G-REALM (USDA/NASA)</td><td>Спутниковая альтиметрия уровня моря</td><td class="warn">SEMI</td></tr>
+  <tr><td>UNEP/GRID-Arendal</td><td>Водный баланс Каспия, сток рек</td><td class="warn">SEMI</td></tr>
+  <tr><td>FAO AQUASTAT</td><td>Водозабор по странам</td><td class="warn">SEMI</td></tr>
+  <tr><td>JRC Global Surface Water</td><td>Поверхностные воды, озеленение</td><td class="warn">SEMI</td></tr>
+  <tr><td>OpenStreetMap</td><td>Промышленные объекты, порты</td><td class="warn">SEMI</td></tr>
+  <tr><td>IUCN Red List, CITES, FAO, NCOC</td><td>Статусы и численность видов</td><td class="warn">SEMI</td></tr>
+  <tr><td>Публикации по Кошкар-Ата</td><td>Объём и состав отходов хвостохранилища</td><td class="warn">SEMI</td></tr>
+</table>
+
+<h2>7. Что считает платформа — четыре формулы</h2>
+
+<h3>7.1. Площадь и объём воды</h3>
+<pre>S(h) = 371 000 + 12 500 · (h + 27)
+V(h) = 78 200 + ½ · (S₀ + S(h)) · (h + 27) · 10⁻³</pre>
+<p>Из уровня получаем площадь и объём. Коэффициент 12 500 км²/м — потому что на севере
+Каспий очень мелкий, и каждый метр уровня открывает огромную площадь.</p>
+
+<h3>7.2. Прогноз уровня</h3>
+<pre>h(t) = a + b·t          линейная регрессия, с 2015 года
+CI₉₅ = h(t) ± 1,96 · SE  доверительный интервал</pre>
+<p>Считаются <strong>две</strong> модели сразу — линейная и экспоненциальная. Разница между
+ними и есть честная величина неопределённости. Обе показаны на графике.</p>
+
+<h3>7.3. Отступание берега</h3>
+<pre>Δx = Δh / tan(β)</pre>
+<p>Насколько ушла вода по горизонтали = падение уровня, делённое на уклон дна.
+Это стандартный приём береговой геоморфологии. Уклон задан по секторам:
+на севере он меньше 0,001 (1 см уровня ≈ 10+ м суши), у Мангистау — в двадцать раз круче.</p>
+<div class="note">
+  <strong>Честно:</strong> это модель, а не спутниковый снимок. Так и написано на сайте.
+  Следующий шаг развития — маска NDWI по снимкам Sentinel-2, которая заменит расчёт измерением.
+</div>
+
+<h3>7.4. Сводный экоиндекс</h3>
+<pre>I = Σ wᵢ · sᵢ ,  Σ wᵢ = 1</pre>
+<table>
+  <tr><th>Компонента</th><th style="width:16%">Вес</th><th style="width:22%">Значение</th></tr>
+  <tr><td>Акватория</td><td>25%</td><td>47</td></tr>
+  <tr><td>Чистота воды</td><td>20%</td><td>60</td></tr>
+  <tr><td>Рыбные запасы</td><td>25%</td><td>0</td></tr>
+  <tr><td>Тюлень</td><td>20%</td><td>10</td></tr>
+  <tr><td>Открытость данных</td><td>10%</td><td>33</td></tr>
+  <tr><td><strong>Итого</strong></td><td></td><td><strong>29 / 100</strong></td></tr>
+</table>
+
+<div class="page-break"></div>
+
+<h2>8. Где здесь искусственный интеллект — честный ответ</h2>
+<p>Это главный вопрос, который задаст комиссия. Ответ короткий:</p>
+<div class="note" style="border-left-color:#1d6fd0; background:#f6f9fe">
+  <strong>AI ничего не измеряет — измеряет формула.</strong> Тренд, отклонения от нормы,
+  уровень риска и прогноз считаются детерминированно, работают без ключа и без сети
+  и дают один и тот же ответ при каждом запуске. Языковая модель только превращает эти
+  числа в человеческий текст через строгую JSON-схему и не может изменить ни одного значения.
+</div>
+
+<p>Как это устроено технически:</p>
+<ol>
+  <li><span class="mono">entities/ai-insight/compute.ts</span> — берёт данные дашборда и считает:
+      тренд (регрессия), таблицу отклонений от нормы, уровень риска по порогам, прогноз.
+      Это чистая математика, её можно проверить вручную.</li>
+  <li><span class="mono">entities/ai-insight/schema.ts</span> — Zod-схема, описывающая, как обязан
+      выглядеть ответ модели: <span class="mono">summary, trend, anomalies, risk_level,
+      forecast, recommendations, data_quality_note</span>.</li>
+  <li><span class="mono">scripts/pipeline/gen-insights.ts</span> — офлайн-скрипт: отдаёт агрегированные
+      числа в Claude API, заставляет модель вызвать инструмент с этой схемой, проверяет ответ и
+      сохраняет в репозиторий. <strong>В рантайме к API обращений нет</strong> — ключ на защите не нужен.</li>
+</ol>
+
+<p>Пороги уровня риска (открыто заявлены на странице «Методика»):</p>
+<table>
+  <tr><th>Уровень</th><th>Отклонение от нормы</th></tr>
+  <tr><td class="good">Низкий</td><td>меньше 25%</td></tr>
+  <tr><td class="warn">Средний</td><td>25–50%</td></tr>
+  <tr><td>Высокий</td><td>50–75%</td></tr>
+  <tr><td class="bad">Критический</td><td>больше 75%</td></tr>
+</table>
+<p>Отдельное правило: вывод модели <strong>никогда не обвиняет</strong> конкретную компанию,
+чиновника или страну — только нейтрально описывает статистическое отклонение.</p>
+
+<h2>9. Как запустить</h2>
+<h3>Способ 1 — Docker (для комиссии)</h3>
+<pre>docker compose up</pre>
+<p>Открыть <span class="mono">http://localhost:3000</span>. Первая сборка 3–5 минут.
+Логин не нужен — платформа публичная. Интернет не нужен.</p>
+
+<h3>Способ 2 — без Docker</h3>
+<pre>npm ci
+npm run build
+npm start</pre>
+
+<h3>Демонстрация без интернета</h3>
+<pre>CASPIAN_OFFLINE=1 npm start</pre>
+<p>В этом режиме живые данные сразу берутся из сохранённого снимка, и интерфейс честно
+пишет «нет сети — последние сохранённые данные».</p>
+
+<h3>Обновление данных (делает разработчик, не комиссия)</h3>
+<pre>npm run pipeline:geo        базовая география
+npm run pipeline:data       курируемые датасеты и реестр источников
+npm run pipeline:coastlines береговая линия по годам
+npm run pipeline:snapshot   свежий офлайн-снимок живых данных
+npm run pipeline:ai         перегенерация текстов анализа (нужен ключ)</pre>
+
+<h2>10. Честные ограничения</h2>
+<p>Раздел, который обычно прячут. У нас он есть и в README, и на сайте.</p>
+<ol>
+  <li><strong>Ряд уровня моря восстановлен</strong>, а не скачан: портал G-REALM был недоступен
+      из сети во время разработки. Опорные точки открыто перечислены в коде пайплайна.</li>
+  <li><strong>Береговая линия — модель</strong>, а не спутниковое наблюдение.</li>
+  <li><strong>Оценки численности тюленя расходятся вчетверо</strong> (70–300 тысяч).
+      Мы показываем диапазон, а не одно число — так честнее.</li>
+  <li><strong>Официальная статистика вылова занижена</strong>: браконьерство оценивается
+      в 4–10 раз выше законного вылова, это показано на графике отдельной полосой.</li>
+  <li><strong>Показатель влияния на здоровье — модельная оценка</strong> по методике ВОЗ.
+      Счётчик в реальном времени тут был бы научно некорректен.</li>
+  <li><strong>Данные Ирана и Туркменистана закрыты.</strong> Мы это не прячем, а вынесли
+      в отдельный слой карты «доступность данных».</li>
+</ol>
+
+<h2>11. Готовые ответы на вопросы жюри</h2>
+
+<p class="q">— Где здесь AI?</p>
+<p class="a">AI не измеряет — измеряет формула. Модель прогнозирует, классифицирует риск и
+объясняет. Если бы мы посадили нейросеть рисовать береговую линию, вы бы спросили, почему
+ей верить. А формуле NDWI и методу створов двадцать лет и тысячи публикаций.</p>
+
+<p class="q">— Почему верить вашим цифрам?</p>
+<p class="a">Под каждым графиком стоит источник и его статус. Формула каждого расчёта
+напечатана на странице «Методика». Любое число можно пересчитать вручную.</p>
+
+<p class="q">— Чем вы лучше готовых карт вроде Google Timelapse?</p>
+<p class="a">Timelapse показывает картинку — мы <em>измеряем</em>: метры, км², прогноз, API.
+Картинку нельзя положить в решение акимата, а цифру можно.</p>
+
+<p class="q">— Уровень может стабилизироваться, зачем это нужно?</p>
+<p class="a">Даже при равновесии ушедшее не вернётся. Атлас фиксирует и то, что уже потеряно,
+и покажет разворот тренда, если он случится. Инструмент нужен при любом направлении движения.</p>
+
+<p class="q">— Это про экологию или про картографию?</p>
+<p class="a">Мелководья — это нерестилища осетровых и залёжки тюленя. Их исчезновение и есть
+сокращение популяций из контекста ТЗ. Обнажённое дно — источник солепылевых бурь.
+Мы измеряем именно среду обитания.</p>
+
+<p class="q">— Что если на защите не будет интернета?</p>
+<p class="a">Всё работает офлайн. Данные в репозитории, карта собрана из файлов, анализ
+считается на месте. Живые данные подменяются сохранённым снимком с честной пометкой.</p>
+
+<footer>
+  Caspian Watch · документация проекта · Caspian Hackathon 2026 ·
+  github.com/muhammed03/caspian-dash
+</footer>
+
+</body>
+</html>
