@@ -1,0 +1,154 @@
+{
+  "status": "semi",
+  "source_id": "industry_reports",
+  "note_ru": "Данные Ирана и Туркменистана фактически закрыты — приведены оценки отраслевых обзоров, точность ниже.",
+  "note_kk": "Иран мен Түрікменстан деректері іс жүзінде жабық — салалық шолулардың бағалаулары келтірілген, дәлдігі төмен.",
+  "reserves": [
+    {
+      "id": "oil",
+      "name_kk": "Мұнай",
+      "name_ru": "Нефть",
+      "unit": "млрд баррелей",
+      "value": 48,
+      "production_per_year": 1.05
+    },
+    {
+      "id": "gas",
+      "name_kk": "Табиғи газ",
+      "name_ru": "Природный газ",
+      "unit": "трлн м³",
+      "value": 8.7,
+      "production_per_year": 0.17
+    }
+  ],
+  "production_series": [
+    {
+      "year": 2015,
+      "oil_mt": 78,
+      "gas_bcm": 148
+    },
+    {
+      "year": 2017,
+      "oil_mt": 84,
+      "gas_bcm": 155
+    },
+    {
+      "year": 2019,
+      "oil_mt": 90,
+      "gas_bcm": 163
+    },
+    {
+      "year": 2021,
+      "oil_mt": 86,
+      "gas_bcm": 158
+    },
+    {
+      "year": 2023,
+      "oil_mt": 92,
+      "gas_bcm": 171
+    },
+    {
+      "year": 2025,
+      "oil_mt": 96,
+      "gas_bcm": 178
+    }
+  ],
+  "fields": [
+    {
+      "id": "kashagan",
+      "name_kk": "Қашаған",
+      "name_ru": "Кашаган",
+      "country": "KAZ",
+      "coords": [
+        51.53,
+        46.35
+      ],
+      "kind": "oil",
+      "reserves_bbl": 13
+    },
+    {
+      "id": "tengiz",
+      "name_kk": "Теңіз",
+      "name_ru": "Тенгиз",
+      "country": "KAZ",
+      "coords": [
+        53.15,
+        46.32
+      ],
+      "kind": "oil",
+      "reserves_bbl": 9
+    },
+    {
+      "id": "karachaganak",
+      "name_kk": "Қарашығанақ",
+      "name_ru": "Карачаганак",
+      "country": "KAZ",
+      "coords": [
+        51.6,
+        51.4
+      ],
+      "kind": "gas",
+      "reserves_bbl": 8
+    },
+    {
+      "id": "azeri-chirag",
+      "name_kk": "Азери-Чираг-Гүнешли",
+      "name_ru": "Азери-Чираг-Гюнешли",
+      "country": "AZE",
+      "coords": [
+        50.6,
+        40.2
+      ],
+      "kind": "oil",
+      "reserves_bbl": 5.4
+    },
+    {
+      "id": "shah-deniz",
+      "name_kk": "Шах-Дениз",
+      "name_ru": "Шах-Дениз",
+      "country": "AZE",
+      "coords": [
+        50.9,
+        39.9
+      ],
+      "kind": "gas",
+      "reserves_bbl": 4.2
+    },
+    {
+      "id": "galkynysh-caspian",
+      "name_kk": "Түркменстан шельфі",
+      "name_ru": "Шельф Туркменистана",
+      "country": "TKM",
+      "coords": [
+        52.5,
+        39.5
+      ],
+      "kind": "gas",
+      "reserves_bbl": 3.1
+    },
+    {
+      "id": "filanovsky",
+      "name_kk": "Филановский",
+      "name_ru": "им. Филановского",
+      "country": "RUS",
+      "coords": [
+        49.3,
+        44.6
+      ],
+      "kind": "oil",
+      "reserves_bbl": 1.6
+    },
+    {
+      "id": "sardar-e-jangal",
+      "name_kk": "Сардар-е Джангал",
+      "name_ru": "Сардар-е Джангаль",
+      "country": "IRN",
+      "coords": [
+        50.3,
+        37.9
+      ],
+      "kind": "gas",
+      "reserves_bbl": 2
+    }
+  ]
+}

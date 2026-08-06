@@ -1,0 +1,14 @@
+{
+  "source_id": "grid_arendal",
+  "status": "semi",
+  "inflow_total": {
+    "min": 300,
+    "max": 310
+  },
+  "precipitation": 130,
+  "kara_bogaz_outflow": 18,
+  "groundwater_seepage": 5,
+  "evaporation_estimate": 400,
+  "note_ru": "Испарение — расчётная величина замыкания баланса при наблюдаемом падении уровня, а не измерение.",
+  "note_kk": "Булану — деңгейдің байқалған төмендеуі кезінде баланстың тұйықталуы бойынша есептелген шама, өлшем емес."
+}

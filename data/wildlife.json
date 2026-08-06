@@ -1,0 +1,414 @@
+{
+  "seal": {
+    "status": "semi",
+    "source_id": "iucn_seal",
+    "iucn_status": "Endangered",
+    "iucn_since": 2008,
+    "kz_redbook_since": 2020,
+    "historic_1900": 1000000,
+    "decline_percent": 90,
+    "estimates": [
+      {
+        "source_ru": "Caspian Seals Research and Rehabilitation Center",
+        "source_kk": "Caspian Seals Research and Rehabilitation Center",
+        "low": 50000,
+        "high": 70000,
+        "year": 2020
+      },
+      {
+        "source_ru": "Britannica (по данным съёмок)",
+        "source_kk": "Britannica (есептеу негізінде)",
+        "low": 60000,
+        "high": 76000,
+        "year": 2019
+      },
+      {
+        "source_ru": "Аэроучёты 2005–2012 (международная группа)",
+        "source_kk": "2005–2012 әуе есептеуі (халықаралық топ)",
+        "low": 100000,
+        "high": 170000,
+        "year": 2012
+      },
+      {
+        "source_ru": "Marine Mammal Protected Areas Task Force (IMMA)",
+        "source_kk": "Marine Mammal Protected Areas Task Force (IMMA)",
+        "low": 150000,
+        "high": 186000,
+        "year": 2021
+      },
+      {
+        "source_ru": "Минприроды Дагестана",
+        "source_kk": "Дағыстан табиғи ресурстар министрлігі",
+        "low": 270000,
+        "high": 300000,
+        "year": 2023
+      }
+    ],
+    "aerial_counts": [
+      {
+        "year": 2020,
+        "count": 179000,
+        "source_id": "ncoc"
+      },
+      {
+        "year": 2021,
+        "count": 158000,
+        "source_id": "ncoc"
+      },
+      {
+        "year": 2022,
+        "count": 141000,
+        "source_id": "ncoc"
+      },
+      {
+        "year": 2023,
+        "count": 152000,
+        "source_id": "ncoc"
+      },
+      {
+        "year": 2024,
+        "count": 147000,
+        "source_id": "ncoc"
+      }
+    ],
+    "mass_mortality": [
+      {
+        "year": 2000,
+        "count": 10000
+      },
+      {
+        "year": 2020,
+        "count": 300
+      },
+      {
+        "year": 2022,
+        "count": 2500
+      },
+      {
+        "year": 2024,
+        "count": 1700
+      }
+    ],
+    "note_ru": "Оценки численности расходятся в четыре раза. Платформа показывает диапазон, а не одно число — это честнее и отражает реальное состояние знаний.",
+    "note_kk": "Сан бағалаулары төрт есе айырмашылықта. Платформа бір санды емес, аралықты көрсетеді — бұл шынайырақ және білім деңгейін дәл бейнелейді."
+  },
+  "sturgeon": {
+    "status": "semi",
+    "source_id": "cites_fao",
+    "iucn_status": "Critically Endangered",
+    "cites_since": 1998,
+    "catch_series": [
+      {
+        "year": 1977,
+        "tonnes": 30000
+      },
+      {
+        "year": 1985,
+        "tonnes": 24000
+      },
+      {
+        "year": 1990,
+        "tonnes": 13500
+      },
+      {
+        "year": 1995,
+        "tonnes": 4200
+      },
+      {
+        "year": 2000,
+        "tonnes": 1100
+      },
+      {
+        "year": 2005,
+        "tonnes": 620
+      },
+      {
+        "year": 2009,
+        "tonnes": 286
+      },
+      {
+        "year": 2015,
+        "tonnes": 180
+      },
+      {
+        "year": 2020,
+        "tonnes": 120
+      }
+    ],
+    "iuu_multiplier": {
+      "min": 4,
+      "max": 10
+    },
+    "note_ru": "Официальная статистика вылова не отражает реальность: незаконный вылов (IUU) оценивается в 4–10 раз выше законного. Современные методы оценки запаса не применяются.",
+    "note_kk": "Ресми аулау статистикасы шындықты көрсетпейді: заңсыз аулау (IUU) заңдыдан 4–10 есе жоғары деп бағаланады. Қордың заманауи бағалау әдістері қолданылмайды.",
+    "species": [
+      {
+        "id": "beluga",
+        "name_kk": "Қортпа (белуга)",
+        "name_ru": "Белуга",
+        "status": "Critically Endangered"
+      },
+      {
+        "id": "russian",
+        "name_kk": "Орыс бекіресі",
+        "name_ru": "Русский осётр",
+        "status": "Critically Endangered"
+      },
+      {
+        "id": "stellate",
+        "name_kk": "Шоқыр (севрюга)",
+        "name_ru": "Севрюга",
+        "status": "Critically Endangered"
+      },
+      {
+        "id": "persian",
+        "name_kk": "Парсы бекіресі",
+        "name_ru": "Персидский осётр",
+        "status": "Critically Endangered"
+      },
+      {
+        "id": "ship",
+        "name_kk": "Пілмай",
+        "name_ru": "Шип",
+        "status": "Critically Endangered"
+      }
+    ]
+  },
+  "birds": {
+    "status": "real",
+    "source_id": "gbif",
+    "note_ru": "Сезонность построена по наблюдениям GBIF в бассейне Каспия.",
+    "note_kk": "Маусымдылық Каспий бассейніндегі GBIF бақылаулары бойынша құрылған.",
+    "species": [
+      {
+        "id": "flamingo",
+        "name_kk": "Қызғылт қоқиқаз",
+        "name_ru": "Розовый фламинго",
+        "arrive_month": 3,
+        "depart_month": 11,
+        "taxon_key": 2481850
+      },
+      {
+        "id": "dalmatian-pelican",
+        "name_kk": "Бұйра бірқазан",
+        "name_ru": "Кудрявый пеликан",
+        "arrive_month": 3,
+        "depart_month": 10,
+        "taxon_key": 2481771
+      },
+      {
+        "id": "mute-swan",
+        "name_kk": "Сұңқылдақ аққу",
+        "name_ru": "Лебедь-шипун",
+        "arrive_month": 10,
+        "depart_month": 4,
+        "taxon_key": 2498027
+      },
+      {
+        "id": "greater-white-fronted-goose",
+        "name_kk": "Үлкен ақмаңдай қаз",
+        "name_ru": "Белолобый гусь",
+        "arrive_month": 10,
+        "depart_month": 3,
+        "taxon_key": 2498036
+      }
+    ]
+  },
+  "greening": {
+    "status": "semi",
+    "source_id": "jrc_gsw",
+    "unit": "NDVI × 100 (средний по прибрежной полосе 20 км)",
+    "regions": [
+      {
+        "id": "mangystau",
+        "name_kk": "Маңғыстау",
+        "name_ru": "Мангистау",
+        "series": [
+          {
+            "year": 2015,
+            "value": 12
+          },
+          {
+            "year": 2018,
+            "value": 11
+          },
+          {
+            "year": 2021,
+            "value": 9
+          },
+          {
+            "year": 2024,
+            "value": 8
+          }
+        ]
+      },
+      {
+        "id": "atyrau",
+        "name_kk": "Атырау",
+        "name_ru": "Атырау",
+        "series": [
+          {
+            "year": 2015,
+            "value": 21
+          },
+          {
+            "year": 2018,
+            "value": 19
+          },
+          {
+            "year": 2021,
+            "value": 17
+          },
+          {
+            "year": 2024,
+            "value": 16
+          }
+        ]
+      },
+      {
+        "id": "gilan",
+        "name_kk": "Гилян (Иран)",
+        "name_ru": "Гилян (Иран)",
+        "series": [
+          {
+            "year": 2015,
+            "value": 62
+          },
+          {
+            "year": 2018,
+            "value": 61
+          },
+          {
+            "year": 2021,
+            "value": 59
+          },
+          {
+            "year": 2024,
+            "value": 58
+          }
+        ]
+      },
+      {
+        "id": "lankaran",
+        "name_kk": "Лenkeran (Әзербайжан)",
+        "name_ru": "Ленкорань (Азербайджан)",
+        "series": [
+          {
+            "year": 2015,
+            "value": 48
+          },
+          {
+            "year": 2018,
+            "value": 47
+          },
+          {
+            "year": 2021,
+            "value": 45
+          },
+          {
+            "year": 2024,
+            "value": 44
+          }
+        ]
+      }
+    ]
+  },
+  "habitats": [
+    {
+      "id": "seal-tyuleniy",
+      "kind": "seal",
+      "name_kk": "Итбалық аралдары (Түлен)",
+      "name_ru": "Тюленьи острова",
+      "coords": [
+        50.55,
+        44.6
+      ],
+      "population": 42000,
+      "threat": "high"
+    },
+    {
+      "id": "seal-kendirli",
+      "kind": "seal",
+      "name_kk": "Кендірлі залежкасы",
+      "name_ru": "Залёжка Кендерли",
+      "coords": [
+        52.3,
+        42.9
+      ],
+      "population": 8500,
+      "threat": "medium"
+    },
+    {
+      "id": "seal-absheron",
+      "kind": "seal",
+      "name_kk": "Апшерон архипелагы",
+      "name_ru": "Апшеронский архипелаг",
+      "coords": [
+        50.35,
+        40.35
+      ],
+      "population": 12000,
+      "threat": "high"
+    },
+    {
+      "id": "sturgeon-ural",
+      "kind": "sturgeon",
+      "name_kk": "Жайық сағасы — уылдырық шашу",
+      "name_ru": "Устье Урала — нерестилища",
+      "coords": [
+        51.85,
+        46.9
+      ],
+      "population": 0,
+      "threat": "critical"
+    },
+    {
+      "id": "sturgeon-volga",
+      "kind": "sturgeon",
+      "name_kk": "Еділ атырауы",
+      "name_ru": "Дельта Волги",
+      "coords": [
+        48.6,
+        45.9
+      ],
+      "population": 0,
+      "threat": "critical"
+    },
+    {
+      "id": "birds-kizilagach",
+      "kind": "bird",
+      "name_kk": "Қызылағаш қорығы",
+      "name_ru": "Кызылагачский заповедник",
+      "coords": [
+        48.95,
+        39.05
+      ],
+      "population": 1200000,
+      "threat": "medium"
+    },
+    {
+      "id": "birds-volga-delta",
+      "kind": "bird",
+      "name_kk": "Еділ атырауы — құс алаңы",
+      "name_ru": "Дельта Волги — птичьи угодья",
+      "coords": [
+        48.9,
+        45.7
+      ],
+      "population": 2400000,
+      "threat": "medium"
+    },
+    {
+      "id": "birds-kendirli-bay",
+      "kind": "bird",
+      "name_kk": "Қараған шығанағы",
+      "name_ru": "Залив Караган",
+      "coords": [
+        50.9,
+        44.5
+      ],
+      "population": 320000,
+      "threat": "high"
+    }
+  ]
+}

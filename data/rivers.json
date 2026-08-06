@@ -1,0 +1,193 @@
+{
+  "source_id": "grid_arendal",
+  "status": "semi",
+  "unit": "км³/год",
+  "rivers": [
+    {
+      "id": "volga",
+      "name_kk": "Еділ",
+      "name_ru": "Волга",
+      "share_percent": 80,
+      "historic_1930": 400,
+      "current": 265,
+      "series": [
+        {
+          "year": 1990,
+          "flow": 288
+        },
+        {
+          "year": 1995,
+          "flow": 275
+        },
+        {
+          "year": 2000,
+          "flow": 270
+        },
+        {
+          "year": 2005,
+          "flow": 268
+        },
+        {
+          "year": 2010,
+          "flow": 258
+        },
+        {
+          "year": 2015,
+          "flow": 262
+        },
+        {
+          "year": 2020,
+          "flow": 254
+        },
+        {
+          "year": 2024,
+          "flow": 245
+        }
+      ]
+    },
+    {
+      "id": "ural",
+      "name_kk": "Жайық (Орал)",
+      "name_ru": "Урал",
+      "share_percent": 5,
+      "historic_1930": 12,
+      "current": 8,
+      "series": [
+        {
+          "year": 1990,
+          "flow": 11
+        },
+        {
+          "year": 1995,
+          "flow": 10.2
+        },
+        {
+          "year": 2000,
+          "flow": 9.6
+        },
+        {
+          "year": 2005,
+          "flow": 9.1
+        },
+        {
+          "year": 2010,
+          "flow": 8.4
+        },
+        {
+          "year": 2015,
+          "flow": 8
+        },
+        {
+          "year": 2020,
+          "flow": 7.4
+        },
+        {
+          "year": 2024,
+          "flow": 6.9
+        }
+      ]
+    },
+    {
+      "id": "kura",
+      "name_kk": "Кура",
+      "name_ru": "Кура",
+      "share_percent": 5,
+      "historic_1930": 18,
+      "current": 13,
+      "series": [
+        {
+          "year": 1990,
+          "flow": 16.2
+        },
+        {
+          "year": 1995,
+          "flow": 15.4
+        },
+        {
+          "year": 2000,
+          "flow": 14.8
+        },
+        {
+          "year": 2005,
+          "flow": 14.1
+        },
+        {
+          "year": 2010,
+          "flow": 13.6
+        },
+        {
+          "year": 2015,
+          "flow": 13.2
+        },
+        {
+          "year": 2020,
+          "flow": 12.7
+        },
+        {
+          "year": 2024,
+          "flow": 12.1
+        }
+      ]
+    },
+    {
+      "id": "terek",
+      "name_kk": "Терек",
+      "name_ru": "Терек",
+      "share_percent": 3,
+      "historic_1930": 11,
+      "current": 8.5,
+      "series": [
+        {
+          "year": 1990,
+          "flow": 10.1
+        },
+        {
+          "year": 2000,
+          "flow": 9.4
+        },
+        {
+          "year": 2010,
+          "flow": 8.9
+        },
+        {
+          "year": 2020,
+          "flow": 8.6
+        },
+        {
+          "year": 2024,
+          "flow": 8.4
+        }
+      ]
+    },
+    {
+      "id": "emba",
+      "name_kk": "Жем (Эмба)",
+      "name_ru": "Эмба",
+      "share_percent": 1,
+      "historic_1930": 1,
+      "current": 0.4,
+      "series": [
+        {
+          "year": 1990,
+          "flow": 0.8
+        },
+        {
+          "year": 2000,
+          "flow": 0.7
+        },
+        {
+          "year": 2010,
+          "flow": 0.55
+        },
+        {
+          "year": 2020,
+          "flow": 0.45
+        },
+        {
+          "year": 2024,
+          "flow": 0.38
+        }
+      ]
+    }
+  ]
+}

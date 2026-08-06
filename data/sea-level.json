@@ -1,0 +1,221 @@
+{
+  "unit": {
+    "level": "м БС",
+    "area": "км²",
+    "volume": "км³"
+  },
+  "reference": {
+    "level_m": -27,
+    "area_km2": 371000,
+    "volume_km3": 78200,
+    "d_area_per_m": 12500
+  },
+  "source_id": "grealm",
+  "status": "semi",
+  "series": [
+    {
+      "year": 1992,
+      "level_m": -26.75,
+      "area_km2": 374125,
+      "volume_km3": 78293
+    },
+    {
+      "year": 1993,
+      "level_m": -26.7,
+      "area_km2": 374750,
+      "volume_km3": 78312
+    },
+    {
+      "year": 1994,
+      "level_m": -26.65,
+      "area_km2": 375375,
+      "volume_km3": 78331
+    },
+    {
+      "year": 1995,
+      "level_m": -26.6,
+      "area_km2": 376000,
+      "volume_km3": 78349
+    },
+    {
+      "year": 1996,
+      "level_m": -26.69,
+      "area_km2": 374875,
+      "volume_km3": 78316
+    },
+    {
+      "year": 1997,
+      "level_m": -26.78,
+      "area_km2": 373750,
+      "volume_km3": 78282
+    },
+    {
+      "year": 1998,
+      "level_m": -26.87,
+      "area_km2": 372625,
+      "volume_km3": 78248
+    },
+    {
+      "year": 1999,
+      "level_m": -26.96,
+      "area_km2": 371500,
+      "volume_km3": 78215
+    },
+    {
+      "year": 2000,
+      "level_m": -27.05,
+      "area_km2": 370375,
+      "volume_km3": 78181
+    },
+    {
+      "year": 2001,
+      "level_m": -27.03,
+      "area_km2": 370625,
+      "volume_km3": 78189
+    },
+    {
+      "year": 2002,
+      "level_m": -27.01,
+      "area_km2": 370875,
+      "volume_km3": 78196
+    },
+    {
+      "year": 2003,
+      "level_m": -26.99,
+      "area_km2": 371125,
+      "volume_km3": 78204
+    },
+    {
+      "year": 2004,
+      "level_m": -26.97,
+      "area_km2": 371375,
+      "volume_km3": 78211
+    },
+    {
+      "year": 2005,
+      "level_m": -26.95,
+      "area_km2": 371625,
+      "volume_km3": 78219
+    },
+    {
+      "year": 2006,
+      "level_m": -27.03,
+      "area_km2": 370625,
+      "volume_km3": 78189
+    },
+    {
+      "year": 2007,
+      "level_m": -27.11,
+      "area_km2": 369625,
+      "volume_km3": 78159
+    },
+    {
+      "year": 2008,
+      "level_m": -27.19,
+      "area_km2": 368625,
+      "volume_km3": 78130
+    },
+    {
+      "year": 2009,
+      "level_m": -27.27,
+      "area_km2": 367625,
+      "volume_km3": 78100
+    },
+    {
+      "year": 2010,
+      "level_m": -27.35,
+      "area_km2": 366625,
+      "volume_km3": 78071
+    },
+    {
+      "year": 2011,
+      "level_m": -27.45,
+      "area_km2": 365375,
+      "volume_km3": 78034
+    },
+    {
+      "year": 2012,
+      "level_m": -27.55,
+      "area_km2": 364125,
+      "volume_km3": 77998
+    },
+    {
+      "year": 2013,
+      "level_m": -27.65,
+      "area_km2": 362875,
+      "volume_km3": 77961
+    },
+    {
+      "year": 2014,
+      "level_m": -27.75,
+      "area_km2": 361625,
+      "volume_km3": 77925
+    },
+    {
+      "year": 2015,
+      "level_m": -27.85,
+      "area_km2": 360375,
+      "volume_km3": 77889
+    },
+    {
+      "year": 2016,
+      "level_m": -27.9,
+      "area_km2": 359750,
+      "volume_km3": 77871
+    },
+    {
+      "year": 2017,
+      "level_m": -27.95,
+      "area_km2": 359125,
+      "volume_km3": 77853
+    },
+    {
+      "year": 2018,
+      "level_m": -28,
+      "area_km2": 358500,
+      "volume_km3": 77835
+    },
+    {
+      "year": 2019,
+      "level_m": -28.05,
+      "area_km2": 357875,
+      "volume_km3": 77817
+    },
+    {
+      "year": 2020,
+      "level_m": -28.24,
+      "area_km2": 355500,
+      "volume_km3": 77750
+    },
+    {
+      "year": 2021,
+      "level_m": -28.48,
+      "area_km2": 352500,
+      "volume_km3": 77665
+    },
+    {
+      "year": 2022,
+      "level_m": -28.72,
+      "area_km2": 349500,
+      "volume_km3": 77580
+    },
+    {
+      "year": 2023,
+      "level_m": -28.94,
+      "area_km2": 346750,
+      "volume_km3": 77504
+    },
+    {
+      "year": 2024,
+      "level_m": -29.18,
+      "area_km2": 343750,
+      "volume_km3": 77421
+    },
+    {
+      "year": 2025,
+      "level_m": -29.38,
+      "area_km2": 341250,
+      "volume_km3": 77352
+    }
+  ]
+}

@@ -1,0 +1,341 @@
+{
+  "status": "semi",
+  "source_id": "model",
+  "reference_year": 2015,
+  "method_ru": "Горизонтальное отступание = падение уровня / уклон дна. Уклон задан по секторам из литературы по батиметрии Каспия; линия смещается по внутренней нормали. Это модель, а не спутниковое наблюдение.",
+  "method_kk": "Көлденең шегіну = деңгейдің төмендеуі / түп еңісі. Еңіс Каспий батиметриясы бойынша әдебиеттен секторлар бойынша берілген; сызық ішкі нормаль бойымен жылжиды. Бұл модель, спутниктік бақылау емес.",
+  "sectors": [
+    {
+      "id": "ural-delta",
+      "slope": 0.00025,
+      "name_ru": "Дельта Урала",
+      "name_kk": "Жайық атырауы"
+    },
+    {
+      "id": "volga-delta",
+      "slope": 0.0003,
+      "name_ru": "Дельта Волги",
+      "name_kk": "Еділ атырауы"
+    },
+    {
+      "id": "buzachi",
+      "slope": 0.0008,
+      "name_ru": "Бузачи / Каражанбас",
+      "name_kk": "Бозашы / Қаражанбас"
+    },
+    {
+      "id": "north-shelf",
+      "slope": 0.0004,
+      "name_ru": "Северный шельф",
+      "name_kk": "Солтүстік қайраң"
+    },
+    {
+      "id": "mangystau",
+      "slope": 0.006,
+      "name_ru": "Мангистау (Актау, Курык)",
+      "name_kk": "Маңғыстау (Ақтау, Құрық)"
+    },
+    {
+      "id": "kendirli",
+      "slope": 0.004,
+      "name_ru": "Кендерли",
+      "name_kk": "Кендірлі"
+    },
+    {
+      "id": "turkmen",
+      "slope": 0.003,
+      "name_ru": "Туркменское побережье",
+      "name_kk": "Түркмен жағалауы"
+    },
+    {
+      "id": "iran",
+      "slope": 0.012,
+      "name_ru": "Иранское побережье",
+      "name_kk": "Иран жағалауы"
+    },
+    {
+      "id": "azerbaijan",
+      "slope": 0.01,
+      "name_ru": "Азербайджанское побережье",
+      "name_kk": "Әзербайжан жағалауы"
+    },
+    {
+      "id": "dagestan",
+      "slope": 0.008,
+      "name_ru": "Дагестанское побережье",
+      "name_kk": "Дағыстан жағалауы"
+    }
+  ],
+  "years": [
+    {
+      "year": 1992,
+      "level_m": -26.75,
+      "max_retreat_m": -4400,
+      "projected": false,
+      "sector_retreat_m": {
+        "turkmen": -367,
+        "kendirli": -275,
+        "mangystau": -183,
+        "buzachi": -1375,
+        "ural-delta": -4400,
+        "north-shelf": -2750,
+        "volga-delta": -3667,
+        "dagestan": -138,
+        "azerbaijan": -110,
+        "iran": -92
+      }
+    },
+    {
+      "year": 1995,
+      "level_m": -26.6,
+      "max_retreat_m": -5000,
+      "projected": false,
+      "sector_retreat_m": {
+        "turkmen": -417,
+        "kendirli": -312,
+        "mangystau": -208,
+        "buzachi": -1562,
+        "ural-delta": -5000,
+        "north-shelf": -3125,
+        "volga-delta": -4167,
+        "dagestan": -156,
+        "azerbaijan": -125,
+        "iran": -104
+      }
+    },
+    {
+      "year": 2000,
+      "level_m": -27.05,
+      "max_retreat_m": -3200,
+      "projected": false,
+      "sector_retreat_m": {
+        "turkmen": -267,
+        "kendirli": -200,
+        "mangystau": -133,
+        "buzachi": -1000,
+        "ural-delta": -3200,
+        "north-shelf": -2000,
+        "volga-delta": -2667,
+        "dagestan": -100,
+        "azerbaijan": -80,
+        "iran": -67
+      }
+    },
+    {
+      "year": 2005,
+      "level_m": -26.95,
+      "max_retreat_m": -3600,
+      "projected": false,
+      "sector_retreat_m": {
+        "turkmen": -300,
+        "kendirli": -225,
+        "mangystau": -150,
+        "buzachi": -1125,
+        "ural-delta": -3600,
+        "north-shelf": -2250,
+        "volga-delta": -3000,
+        "dagestan": -113,
+        "azerbaijan": -90,
+        "iran": -75
+      }
+    },
+    {
+      "year": 2010,
+      "level_m": -27.35,
+      "max_retreat_m": -2000,
+      "projected": false,
+      "sector_retreat_m": {
+        "turkmen": -167,
+        "kendirli": -125,
+        "mangystau": -83,
+        "buzachi": -625,
+        "ural-delta": -2000,
+        "north-shelf": -1250,
+        "volga-delta": -1667,
+        "dagestan": -62,
+        "azerbaijan": -50,
+        "iran": -42
+      }
+    },
+    {
+      "year": 2015,
+      "level_m": -27.85,
+      "max_retreat_m": 0,
+      "projected": false,
+      "sector_retreat_m": {
+        "turkmen": 0,
+        "kendirli": 0,
+        "mangystau": 0,
+        "buzachi": 0,
+        "ural-delta": 0,
+        "north-shelf": 0,
+        "volga-delta": 0,
+        "dagestan": 0,
+        "azerbaijan": 0,
+        "iran": 0
+      }
+    },
+    {
+      "year": 2019,
+      "level_m": -28.05,
+      "max_retreat_m": 800,
+      "projected": false,
+      "sector_retreat_m": {
+        "turkmen": 67,
+        "kendirli": 50,
+        "mangystau": 33,
+        "buzachi": 250,
+        "ural-delta": 800,
+        "north-shelf": 500,
+        "volga-delta": 667,
+        "dagestan": 25,
+        "azerbaijan": 20,
+        "iran": 17
+      }
+    },
+    {
+      "year": 2020,
+      "level_m": -28.24,
+      "max_retreat_m": 1560,
+      "projected": false,
+      "sector_retreat_m": {
+        "turkmen": 130,
+        "kendirli": 97,
+        "mangystau": 65,
+        "buzachi": 487,
+        "ural-delta": 1560,
+        "north-shelf": 975,
+        "volga-delta": 1300,
+        "dagestan": 49,
+        "azerbaijan": 39,
+        "iran": 32
+      }
+    },
+    {
+      "year": 2021,
+      "level_m": -28.48,
+      "max_retreat_m": 2520,
+      "projected": false,
+      "sector_retreat_m": {
+        "turkmen": 210,
+        "kendirli": 157,
+        "mangystau": 105,
+        "buzachi": 787,
+        "ural-delta": 2520,
+        "north-shelf": 1575,
+        "volga-delta": 2100,
+        "dagestan": 79,
+        "azerbaijan": 63,
+        "iran": 52
+      }
+    },
+    {
+      "year": 2022,
+      "level_m": -28.72,
+      "max_retreat_m": 3480,
+      "projected": false,
+      "sector_retreat_m": {
+        "turkmen": 290,
+        "kendirli": 217,
+        "mangystau": 145,
+        "buzachi": 1087,
+        "ural-delta": 3480,
+        "north-shelf": 2175,
+        "volga-delta": 2900,
+        "dagestan": 109,
+        "azerbaijan": 87,
+        "iran": 72
+      }
+    },
+    {
+      "year": 2023,
+      "level_m": -28.94,
+      "max_retreat_m": 4360,
+      "projected": false,
+      "sector_retreat_m": {
+        "turkmen": 363,
+        "kendirli": 272,
+        "mangystau": 182,
+        "buzachi": 1362,
+        "ural-delta": 4360,
+        "north-shelf": 2725,
+        "volga-delta": 3633,
+        "dagestan": 136,
+        "azerbaijan": 109,
+        "iran": 91
+      }
+    },
+    {
+      "year": 2024,
+      "level_m": -29.18,
+      "max_retreat_m": 5320,
+      "projected": false,
+      "sector_retreat_m": {
+        "turkmen": 443,
+        "kendirli": 332,
+        "mangystau": 222,
+        "buzachi": 1662,
+        "ural-delta": 5320,
+        "north-shelf": 3325,
+        "volga-delta": 4433,
+        "dagestan": 166,
+        "azerbaijan": 133,
+        "iran": 111
+      }
+    },
+    {
+      "year": 2025,
+      "level_m": -29.38,
+      "max_retreat_m": 6120,
+      "projected": false,
+      "sector_retreat_m": {
+        "turkmen": 510,
+        "kendirli": 382,
+        "mangystau": 255,
+        "buzachi": 1912,
+        "ural-delta": 6120,
+        "north-shelf": 3825,
+        "volga-delta": 5100,
+        "dagestan": 191,
+        "azerbaijan": 153,
+        "iran": 127
+      }
+    },
+    {
+      "year": 2030,
+      "level_m": -30.027,
+      "max_retreat_m": 8709,
+      "projected": true,
+      "sector_retreat_m": {
+        "turkmen": 726,
+        "kendirli": 544,
+        "mangystau": 363,
+        "buzachi": 2722,
+        "ural-delta": 8709,
+        "north-shelf": 5443,
+        "volga-delta": 7258,
+        "dagestan": 272,
+        "azerbaijan": 218,
+        "iran": 181
+      }
+    },
+    {
+      "year": 2035,
+      "level_m": -30.828,
+      "max_retreat_m": 11911,
+      "projected": true,
+      "sector_retreat_m": {
+        "turkmen": 993,
+        "kendirli": 744,
+        "mangystau": 496,
+        "buzachi": 3722,
+        "ural-delta": 11911,
+        "north-shelf": 7444,
+        "volga-delta": 9926,
+        "dagestan": 372,
+        "azerbaijan": 298,
+        "iran": 248
+      }
+    }
+  ]
+}

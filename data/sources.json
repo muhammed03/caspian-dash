@@ -1,0 +1,169 @@
+{
+  "sources": [
+    {
+      "id": "grealm",
+      "name": "G-REALM (USDA/NASA satellite altimetry)",
+      "url": "https://ipad.fas.usda.gov/cropexplorer/global_reservoir/",
+      "license": "Public domain (US Government)",
+      "attribution": "USDA FAS / NASA G-REALM",
+      "status": "semi",
+      "coverage_years": "1992–2025",
+      "note_kk": "Хакатон желісінен портал қолжетімсіз болды. Қатар жарияланған альтиметрия мәндері мен төмендеу қарқыны бойынша қалпына келтірілді; scripts/pipeline/fetch-sea-level.ts арқылы нақты файлмен ауыстыруға болады.",
+      "note_ru": "Портал был недоступен из сети хакатона. Ряд восстановлен по опубликованным значениям альтиметрии и скоростям падения; заменяется реальным файлом через scripts/pipeline/fetch-sea-level.ts.",
+      "last_checked": "2026-08-07"
+    },
+    {
+      "id": "ras_ocean",
+      "name": "Институт океанологии РАН — оценки уровня Каспия",
+      "url": "https://ocean.ru/",
+      "license": "Публикации, цитирование",
+      "attribution": "Институт океанологии им. П.П. Ширшова РАН",
+      "status": "semi",
+      "coverage_years": "1995–2026",
+      "last_checked": "2026-08-07"
+    },
+    {
+      "id": "open_meteo",
+      "name": "Open-Meteo (погода и ветер)",
+      "url": "https://open-meteo.com/",
+      "license": "CC BY 4.0, free, no key",
+      "attribution": "Weather data by Open-Meteo.com",
+      "status": "real",
+      "coverage_years": "live",
+      "last_checked": "2026-08-07"
+    },
+    {
+      "id": "open_meteo_aq",
+      "name": "Open-Meteo Air Quality (CAMS)",
+      "url": "https://open-meteo.com/en/docs/air-quality-api",
+      "license": "CC BY 4.0, free, no key",
+      "attribution": "Air quality by Open-Meteo.com / Copernicus CAMS",
+      "status": "real",
+      "coverage_years": "live",
+      "last_checked": "2026-08-07"
+    },
+    {
+      "id": "natural_earth",
+      "name": "Natural Earth (базовая география)",
+      "url": "https://www.naturalearthdata.com/",
+      "license": "Public domain",
+      "attribution": "Made with Natural Earth",
+      "status": "real",
+      "coverage_years": "—",
+      "last_checked": "2026-08-07"
+    },
+    {
+      "id": "grid_arendal",
+      "name": "GRID-Arendal / Vital Caspian Graphics (водный баланс)",
+      "url": "https://www.grida.no/publications/155",
+      "license": "UNEP/GRID-Arendal, attribution",
+      "attribution": "UNEP/GRID-Arendal",
+      "status": "semi",
+      "coverage_years": "—",
+      "last_checked": "2026-08-07"
+    },
+    {
+      "id": "aquastat",
+      "name": "FAO AQUASTAT (водозабор по странам)",
+      "url": "https://www.fao.org/aquastat/",
+      "license": "CC BY-NC-SA 3.0 IGO",
+      "attribution": "FAO AQUASTAT",
+      "status": "semi",
+      "coverage_years": "1990–2021",
+      "note_ru": "Профили Ирана (2008) и Туркменистана (2012) устарели.",
+      "note_kk": "Иран (2008) және Түрікменстан (2012) профильдері ескірген.",
+      "last_checked": "2026-08-07"
+    },
+    {
+      "id": "jrc_gsw",
+      "name": "JRC Global Surface Water",
+      "url": "https://global-surface-water.appspot.com/",
+      "license": "Copernicus — free, attribution required",
+      "attribution": "Source: EC JRC/Google",
+      "status": "semi",
+      "coverage_years": "1984–2021",
+      "last_checked": "2026-08-07"
+    },
+    {
+      "id": "osm",
+      "name": "OpenStreetMap (промышленные объекты, порты)",
+      "url": "https://www.openstreetmap.org/",
+      "license": "ODbL",
+      "attribution": "© OpenStreetMap contributors",
+      "status": "semi",
+      "coverage_years": "—",
+      "last_checked": "2026-08-07"
+    },
+    {
+      "id": "koshkar_pub",
+      "name": "Публикации по хвостохранилищу Кошкар-Ата",
+      "url": "https://www.gov.kz/memleket/entities/mangystau",
+      "license": "Публикации / СМИ",
+      "attribution": "Научные публикации, отчёты акимата Мангистауской области",
+      "status": "semi",
+      "coverage_years": "2021–2024",
+      "last_checked": "2026-08-07"
+    },
+    {
+      "id": "iucn_seal",
+      "name": "IUCN Red List — Pusa caspica",
+      "url": "https://www.iucnredlist.org/species/41669/45230700",
+      "license": "IUCN terms of use",
+      "attribution": "IUCN Red List",
+      "status": "semi",
+      "coverage_years": "2008–2024",
+      "last_checked": "2026-08-07"
+    },
+    {
+      "id": "ncoc",
+      "name": "NCOC — авиаучёты каспийского тюленя",
+      "url": "https://www.ncoc.kz/",
+      "license": "Опубликованные отчёты (PDF)",
+      "attribution": "North Caspian Operating Company",
+      "status": "semi",
+      "coverage_years": "2020–2024",
+      "last_checked": "2026-08-07"
+    },
+    {
+      "id": "cites_fao",
+      "name": "CITES / FAO — осетровые",
+      "url": "https://cites.org/eng/app/appendices.php",
+      "license": "Публикации",
+      "attribution": "CITES, FAO",
+      "status": "semi",
+      "coverage_years": "1977–2020",
+      "last_checked": "2026-08-07"
+    },
+    {
+      "id": "gbif",
+      "name": "GBIF (наблюдения птиц и тюленя)",
+      "url": "https://www.gbif.org/",
+      "license": "CC BY 4.0",
+      "attribution": "GBIF.org occurrence download",
+      "status": "real",
+      "coverage_years": "1990–2026",
+      "last_checked": "2026-08-07"
+    },
+    {
+      "id": "industry_reports",
+      "name": "Отраслевые отчёты по запасам и добыче углеводородов",
+      "url": "https://www.energy.gov.kz/",
+      "license": "Публичные отчёты",
+      "attribution": "Министерство энергетики РК, отраслевые обзоры",
+      "status": "semi",
+      "coverage_years": "2015–2025",
+      "last_checked": "2026-08-07"
+    },
+    {
+      "id": "model",
+      "name": "Собственная модель платформы (расчёт)",
+      "url": "/methodology",
+      "license": "—",
+      "attribution": "Caspian Watch — формулы на странице «Методика»",
+      "status": "semi",
+      "coverage_years": "—",
+      "last_checked": "2026-08-07"
+    }
+  ],
+  "last_checked": "2026-08-07"
+}
