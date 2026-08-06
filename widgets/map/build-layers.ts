@@ -1,13 +1,16 @@
 "use client";
 
 import {
+  BitmapLayer,
   GeoJsonLayer,
   IconLayer,
   ScatterplotLayer,
   TextLayer,
   LineLayer,
+  PathLayer,
   PolygonLayer,
 } from "@deck.gl/layers";
+import { TileLayer } from "@deck.gl/geo-layers";
 import {
   FACILITY_ICON,
   FACILITY_ICON_APPROX,
@@ -75,8 +78,25 @@ type BuildArgs = {
   };
   /** Dispersion cones for the hour currently being shown. */
   plume?: { facility: PlumeFacility; frame: PlumeFrame; detected: boolean }[];
+  /** Advected cloud positions at +30 min, +1 h and +3 h. */
+  drift?: {
+    facility: { short: string; lat: number; lng: number };
+    marks: { minutes: number; label: string; lat: number; lng: number; distanceKm: number; radiusKm: number }[];
+  }[];
+  /** Onshore/offshore breeze arrows, only where confidence is medium or high. */
+  breeze?: {
+    id: string;
+    name: string;
+    lat: number;
+    lon: number;
+    coastNormal: number;
+    onshore: number;
+    confidence: "high" | "medium";
+  }[];
   /** Loops 0→1; drives the wind streak phase. */
   time?: number;
+  /** Which backdrop the map is drawn on. */
+  basemap?: BasemapMode;
   onHover: (info: PickingInfo, kind: string) => void;
   onClick: (kind: string, payload: Record<string, unknown>) => void;
 };
@@ -87,14 +107,80 @@ const HABITAT_COLORS: Record<string, RGB> = {
   bird: [15, 143, 102],
 };
 
+export type BasemapMode = "default" | "satellite" | "terrain";
+
+/**
+ * Raster backdrops. Both need the network, so the drawn vector basemap stays
+ * the default and the only one guaranteed to work during an offline demo.
+ */
+const RASTER_BASEMAPS: Record<
+  Exclude<BasemapMode, "default">,
+  { url: string; attribution: string; opacity: number }
+> = {
+  satellite: {
+    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    attribution: "Esri, Maxar, Earthstar Geographics",
+    opacity: 1,
+  },
+  terrain: {
+    url: "https://a.tile.opentopomap.org/{z}/{x}/{y}.png",
+    attribution: "© OpenTopoMap (CC-BY-SA), © OpenStreetMap contributors",
+    opacity: 0.95,
+  },
+};
+
 export function buildLayers(args: BuildArgs): Layer[] {
   const { active, locale, year, onHover, onClick } = args;
   const nameOf = (o: Record<string, unknown>) =>
     String((locale === "ru" ? o.name_ru : o.name_kk) ?? o.name_en ?? "");
   const layers: Layer[] = [];
+  const mode: BasemapMode = args.basemap ?? "default";
+  const raster = mode !== "default" ? RASTER_BASEMAPS[mode] : null;
+
+  /* --- basemap: raster imagery when asked for, otherwise the drawn one --- */
+  if (raster) {
+    layers.push(
+      new TileLayer({
+        id: `basemap-${mode}`,
+        data: raster.url,
+        minZoom: 0,
+        maxZoom: 17,
+        tileSize: 256,
+        opacity: raster.opacity,
+        renderSubLayers: (props) => {
+          const { boundingBox } = props.tile;
+          return new BitmapLayer(props, {
+            data: undefined,
+            image: props.data,
+            bounds: [
+              boundingBox[0][0],
+              boundingBox[0][1],
+              boundingBox[1][0],
+              boundingBox[1][1],
+            ],
+          });
+        },
+      })
+    );
+    // the shoreline still needs to read against imagery
+    if (args.basemapCaspian) {
+      layers.push(
+        new GeoJsonLayer({
+          id: "raster-shoreline",
+          data: args.basemapCaspian,
+          filled: false,
+          stroked: true,
+          getLineColor: [255, 255, 255, 190],
+          getLineWidth: 1.4,
+          lineWidthUnits: "pixels",
+          parameters: { depthTest: false },
+        })
+      );
+    }
+  }
 
   /* --- basemap: land, sea and the lit shoreline, all from committed data --- */
-  if (args.basemapCountries) {
+  if (!raster && args.basemapCountries) {
     layers.push(
       new GeoJsonLayer({
         id: "base-land",
@@ -109,7 +195,7 @@ export function buildLayers(args: BuildArgs): Layer[] {
       })
     );
   }
-  if (args.basemapCaspian) {
+  if (!raster && args.basemapCaspian) {
     layers.push(
       new GeoJsonLayer({
         id: "base-sea",
@@ -146,7 +232,7 @@ export function buildLayers(args: BuildArgs): Layer[] {
       })
     );
   }
-  if (args.basemapLakes) {
+  if (!raster && args.basemapLakes) {
     layers.push(
       new GeoJsonLayer({
         id: "base-lakes",
@@ -158,7 +244,7 @@ export function buildLayers(args: BuildArgs): Layer[] {
       })
     );
   }
-  if (args.basemapRivers) {
+  if (!raster && args.basemapRivers) {
     layers.push(
       new GeoJsonLayer({
         id: "base-rivers",
@@ -345,15 +431,22 @@ export function buildLayers(args: BuildArgs): Layer[] {
         ],
       })
     );
+    // The dirtier the air, the stronger the station pulses — motion carries
+    // the magnitude, so the reader notices the bad ones without reading numbers.
+    const airPulse = args.time ?? 0;
     layers.push(
       new ScatterplotLayer<AirReading>({
         id: "air-stations",
         data: args.air,
         pickable: true,
         getPosition: (d) => [d.lon, d.lat],
-        getRadius: 6,
+        getRadius: (d) => {
+          const severity = Math.min((d.eaqi ?? 0) / 80, 1);
+          return 6 + severity * 3 * (0.5 + 0.5 * Math.sin(airPulse * Math.PI * 2));
+        },
         radiusUnits: "pixels",
         radiusMinPixels: 5,
+        updateTriggers: { getRadius: airPulse },
         getFillColor: (d) => aqiColor(d.eaqi),
         stroked: true,
         lineWidthUnits: "pixels",
@@ -543,6 +636,126 @@ export function buildLayers(args: BuildArgs): Layer[] {
         updateTriggers: { getPolygon: args.plume.map((p) => p.frame.time).join(), getLineColor: args.plume.map((p) => p.detected).join() },
       })
     );
+  }
+
+  /* --- pollution: where the cloud released now will be later ---
+     Positions come from the server, which stepped through the hourly forecast
+     wind; the client only draws them. Recomputing here from "current" wind
+     would put these circles kilometres away from the caption beside them on
+     any hour the wind turns. */
+  if (active.has("plume") && args.drift?.length) {
+    const pulse = 0.85 + 0.15 * Math.sin((args.time ?? 0) * Math.PI * 2);
+
+    // the track from the stack to the three-hour mark
+    layers.push(
+      new PathLayer<NonNullable<BuildArgs["drift"]>[number]>({
+        id: "drift-track",
+        data: args.drift,
+        getPath: (d) =>
+          [
+            [d.facility.lng, d.facility.lat] as [number, number],
+            ...d.marks.map((m) => [m.lng, m.lat] as [number, number]),
+          ] as [number, number][],
+        getColor: [190, 24, 93, 150],
+        getWidth: 1.6,
+        widthUnits: "pixels",
+      })
+    );
+
+    const marks = args.drift.flatMap((d) =>
+      d.marks.map((m) => ({ ...m, short: d.facility.short }))
+    );
+
+    // the cloud itself: radius is 2σy at the distance travelled
+    layers.push(
+      new ScatterplotLayer({
+        id: "drift-clouds",
+        data: marks,
+        pickable: true,
+        getPosition: (d) => [d.lng, d.lat],
+        getRadius: (d) => d.radiusKm * 1000,
+        radiusMinPixels: 4,
+        stroked: true,
+        lineWidthUnits: "pixels",
+        getLineWidth: 1.4,
+        // fades with time ahead, and breathes so it reads as a forecast
+        getFillColor: (d) =>
+          [190, 24, 93, Math.round((d.minutes === 30 ? 70 : d.minutes === 60 ? 50 : 32) * pulse)] as [
+            number, number, number, number,
+          ],
+        getLineColor: (d) =>
+          [190, 24, 93, Math.round((d.minutes === 30 ? 230 : d.minutes === 60 ? 190 : 150) * pulse)] as [
+            number, number, number, number,
+          ],
+        updateTriggers: { getFillColor: pulse, getLineColor: pulse },
+        onHover: (info) => onHover(info, "drift"),
+      })
+    );
+
+    layers.push(
+      new TextLayer({
+        id: "drift-labels",
+        data: marks,
+        getPosition: (d) => [d.lng, d.lat],
+        getText: (d) => d.label,
+        getSize: 10,
+        sizeUnits: "pixels",
+        getColor: [190, 24, 93, 255],
+        getPixelOffset: [0, -12],
+        fontFamily: "Inter, system-ui, sans-serif",
+        fontWeight: 700,
+        outlineColor: [255, 255, 255, 255],
+        outlineWidth: 3,
+        fontSettings: { sdf: true, buffer: 8 },
+        characterSet: "auto",
+      })
+    );
+  }
+
+  /* --- pollution: sea-breeze arrows, drawn only where the evidence supports
+     it. The arrow animates along the coast normal so the direction of the
+     flow is readable without a legend. */
+  if (active.has("breeze") && args.breeze?.length) {
+    const t = args.time ?? 0;
+    for (let k = 0; k < 3; k++) {
+      const phase = (t + k / 3) % 1;
+      layers.push(
+        new LineLayer({
+          id: `breeze-arrow-${k}`,
+          data: args.breeze,
+          getSourcePosition: (d) => {
+            // onshore blows toward the land, offshore away from it
+            const heading = d.onshore > 0 ? d.coastNormal : (d.coastNormal + 180) % 360;
+            const start = -0.55 + phase * 1.1;
+            const rad = (heading * Math.PI) / 180;
+            return [d.lon + Math.sin(rad) * start, d.lat + Math.cos(rad) * start];
+          },
+          getTargetPosition: (d) => {
+            const heading = d.onshore > 0 ? d.coastNormal : (d.coastNormal + 180) % 360;
+            const start = -0.55 + phase * 1.1;
+            const rad = (heading * Math.PI) / 180;
+            return [
+              d.lon + Math.sin(rad) * (start + 0.3),
+              d.lat + Math.cos(rad) * (start + 0.3),
+            ];
+          },
+          getColor: (d) =>
+            [
+              14,
+              116,
+              190,
+              Math.round((d.confidence === "high" ? 235 : 165) * Math.sin(Math.PI * phase)),
+            ] as [number, number, number, number],
+          getWidth: 3,
+          widthUnits: "pixels",
+          updateTriggers: {
+            getSourcePosition: phase,
+            getTargetPosition: phase,
+            getColor: phase,
+          },
+        })
+      );
+    }
   }
 
   /* --- life: habitats coloured by species --- */

@@ -4,9 +4,9 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { Droplets, Factory, Bird, Fuel, Gauge, PanelRightClose, PanelRightOpen } from "lucide-react";
+import { Droplets, Factory, Bird, Fuel, Gauge, PanelRightClose, PanelRightOpen, Map as MapIcon, Satellite, Mountain } from "lucide-react";
 import { cn } from "@/shared/lib/cn";
-import { useT } from "@/shared/lib/i18n/client";
+import { useLocale, useT } from "@/shared/lib/i18n/client";
 import { defaultLayersFor } from "@/shared/config/layers";
 import { useMapStore, type ModuleId } from "@/shared/store/map-store";
 import { LayerManager } from "./layer-manager";
@@ -116,10 +116,11 @@ export function MapShell({ module, panel }: { module: ModuleId; panel: React.Rea
             </motion.div>
           )}
 
+          {/* backdrop switch — the drawn map is the only one that works offline */}
+          <BasemapSwitch />
+
           {/* attribution — required by the JRC and OSM licences */}
-          <div className="bg-paper/80 text-ink-2 pointer-events-none absolute bottom-0 left-0 z-10 hidden rounded-tr px-2 py-1 text-[10px] md:block">
-            Natural Earth · © OpenStreetMap contributors · Open-Meteo · EC JRC/Google
-          </div>
+          <Attribution />
         </div>
 
         {/* reading column */}
@@ -129,6 +130,64 @@ export function MapShell({ module, panel }: { module: ModuleId; panel: React.Rea
           </aside>
         )}
       </div>
+    </div>
+  );
+}
+
+const BASEMAPS = [
+  { id: "default" as const, icon: MapIcon, kk: "Әдепкі", ru: "Обычная" },
+  { id: "satellite" as const, icon: Satellite, kk: "Спутник", ru: "Спутник" },
+  { id: "terrain" as const, icon: Mountain, kk: "Бедер", ru: "Рельеф" },
+];
+
+/**
+ * Switches the map backdrop. Satellite and terrain are raster tiles and need
+ * the network, so the button says so rather than silently showing a blank map
+ * during an offline demo.
+ */
+function BasemapSwitch() {
+  const locale = useLocale();
+  const { basemap, setBasemap } = useMapStore();
+
+  return (
+    <div className="pointer-events-auto absolute top-3 right-3 z-20 md:top-4 md:right-4">
+      <div className="border-rule bg-paper flex overflow-hidden rounded-md border">
+        {BASEMAPS.map(({ id, icon: Icon, kk, ru }) => {
+          const active = basemap === id;
+          return (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setBasemap(id)}
+              aria-pressed={active}
+              title={id === "default" ? undefined : locale === "ru" ? "Нужен интернет" : "Интернет қажет"}
+              className={cn(
+                "flex items-center gap-1.5 px-2.5 py-1.5 text-[11.5px] transition-colors",
+                active ? "bg-ink text-paper" : "text-ink-2 hover:bg-tint hover:text-ink"
+              )}
+            >
+              <Icon className="size-3.5" strokeWidth={1.5} />
+              <span className="hidden sm:inline">{locale === "ru" ? ru : kk}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/** Licence text changes with the backdrop, so it is rendered from the mode. */
+function Attribution() {
+  const basemap = useMapStore((s) => s.basemap);
+  const base =
+    basemap === "satellite"
+      ? "Esri, Maxar, Earthstar Geographics"
+      : basemap === "terrain"
+        ? "© OpenTopoMap (CC-BY-SA), © OpenStreetMap contributors"
+        : "Natural Earth";
+  return (
+    <div className="bg-paper/80 text-ink-2 pointer-events-none absolute bottom-0 left-0 z-10 hidden rounded-tr px-2 py-1 text-[10px] md:block">
+      {base} · © OpenStreetMap contributors · Open-Meteo · EC JRC/Google
     </div>
   );
 }

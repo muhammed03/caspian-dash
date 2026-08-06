@@ -97,6 +97,16 @@ export const LAYERS: LayerDef[] = [
     ],
   },
   {
+    id: "breeze",
+    module: ["pollution"],
+    label_kk: "Теңіз бризі",
+    label_ru: "Морской бриз",
+    sourceId: "open_meteo",
+    legend: [
+      { color: "#0e74be", label_kk: "Теңізден құрлыққа", label_ru: "С моря на сушу" },
+    ],
+  },
+  {
     id: "habitats",
     module: ["life", "index"],
     label_kk: "Мекендеу орындары",

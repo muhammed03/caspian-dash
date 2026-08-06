@@ -17,6 +17,16 @@ export type PlumeFrame = {
   cone: [number, number][];
 };
 
+export type DriftMark = {
+  minutes: number;
+  label: string;
+  lat: number;
+  lng: number;
+  distanceKm: number;
+  radiusKm: number;
+  bearing: number;
+};
+
 export type PlumeFacility = {
   id: string;
   available: true;
@@ -32,6 +42,8 @@ export type PlumeFacility = {
   lat: number;
   lng: number;
   dirSigma: number;
+  /** Where a parcel released now will have drifted to. */
+  drift: DriftMark[];
   frames: PlumeFrame[];
   forecastFrames: PlumeFrame[];
   current: PlumeFrame | null;

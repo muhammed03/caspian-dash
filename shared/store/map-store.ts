@@ -40,8 +40,9 @@ type MapState = {
   selected: { kind: string; payload: Record<string, unknown> } | null;
   select: (s: { kind: string; payload: Record<string, unknown> } | null) => void;
 
-  satellite: boolean;
-  toggleSatellite: () => void;
+  /** Which backdrop the map draws on; "default" is the only offline-safe one. */
+  basemap: "default" | "satellite" | "terrain";
+  setBasemap: (m: "default" | "satellite" | "terrain") => void;
 
   /** Hour being shown by the plume animation, and whether it is running. */
   plumeFrame: number;
@@ -88,8 +89,8 @@ export const useMapStore = create<MapState>((set) => ({
   selected: null,
   select: (selected) => set({ selected }),
 
-  satellite: false,
-  toggleSatellite: () => set((s) => ({ satellite: !s.satellite })),
+  basemap: "default",
+  setBasemap: (basemap) => set({ basemap }),
 
   plumeFrame: 0,
   setPlumeFrame: (plumeFrame) => set({ plumeFrame }),

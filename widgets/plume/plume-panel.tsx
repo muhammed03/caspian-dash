@@ -9,6 +9,8 @@ import { Label, Plain } from "@/shared/ui/primitives";
 import { SourceBadge } from "@/shared/ui/source-badge";
 import { useMapStore } from "@/shared/store/map-store";
 import { usePlume, isAvailable, type PlumeFacility } from "@/entities/plume/use-plume";
+import { useBreeze, isBreezeAvailable } from "@/entities/breeze/use-breeze";
+import { CONFIDENCE_TEXT } from "@/shared/lib/breeze";
 import { STABILITY_TEXT } from "@/shared/lib/plume";
 
 /**
@@ -225,6 +227,39 @@ export function PlumePanel() {
         </Plain>
       </dl>
 
+      {/* where the cloud released now will be — positions from the server */}
+      {lead.drift?.length ? (
+        <div className="rule-t mt-4 pt-3">
+          <Label>{locale === "ru" ? "Снос облака от источника" : "Бұлттың көзден сүрілуі"}</Label>
+          <table className="mt-2 w-full text-[12px]">
+            <thead>
+              <tr className="text-ink-3 rule-b text-left">
+                <th className="pb-1.5 font-normal">{locale === "ru" ? "Через" : "Кейін"}</th>
+                <th className="pb-1.5 text-right font-normal">{locale === "ru" ? "Расстояние" : "Қашықтық"}</th>
+                <th className="pb-1.5 text-right font-normal">{locale === "ru" ? "Радиус" : "Радиус"}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {lead.drift.map((m) => (
+                <tr key={m.minutes} className="border-rule border-b last:border-0">
+                  <td className="text-ink-2 py-1.5">{m.label}</td>
+                  <td className="tabular text-ink py-1.5 text-right">{m.distanceKm} км</td>
+                  <td className="tabular text-ink-2 py-1.5 text-right">± {m.radiusKm} км</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <Plain className="mt-2">
+            {locale === "ru"
+              ? "Положение считается по почасовому прогнозу ветра, поэтому при повороте ветра трек изгибается. Радиус — поперечное рассеивание (2σy) на пройденном расстоянии."
+              : "Орны сағаттық жел болжамы бойынша есептеледі, сондықтан жел бұрылғанда трек иіледі. Радиус — өтілген қашықтықтағы көлденең жайылу (2σy)."}
+          </Plain>
+        </div>
+      ) : null}
+
+      {/* breeze — the most dangerous regime for a coastal plant */}
+      <BreezeBlock />
+
       {/* colour semantics, spelled out */}
       <ul className="mt-4 space-y-1.5">
         <li className="text-ink-2 flex items-center gap-2 text-[11.5px]">
@@ -276,5 +311,128 @@ export function PlumePanel() {
           : `Модель: орнықтылық класы үшін Pasquill–Turner (1961/64), σy/σz үшін Briggs (1973). Есептеудегі нысан саны: ${facilities.length}.`}
       </Plain>
     </section>
+  );
+}
+
+const CRITERIA_TEXT: Record<string, { kk: string; ru: string }> = {
+  onshoreWind: { kk: "жел теңіз жағынан", ru: "ветер со стороны моря" },
+  thermalContrast: { kk: "термиялық контраст > 3 °C", ru: "термический контраст > 3 °C" },
+  weakSynoptic: { kk: "синоптикалық жел әлсіз", ru: "синоптический ветер слабый" },
+  daytimeWindow: { kk: "күндізгі терезе 10–20 сағ", ru: "дневное окно 10–20 ч" },
+  diurnalReversal: { kk: "түнде бағыт кері болған", ru: "ночью направление менялось на обратное" },
+};
+
+/**
+ * Sea breeze, stated as evidence rather than as a fact. Onshore wind alone
+ * proves nothing — an ordinary westerly does the same thing — so the block
+ * lists which of the five criteria actually hold and never says "there is a
+ * breeze".
+ */
+function BreezeBlock() {
+  const locale = useLocale();
+  const L = locale === "ru" ? "ru" : "kk";
+  const breeze = useBreeze(true);
+
+  if (breeze.isLoading) {
+    return (
+      <div className="rule-t mt-4 pt-3">
+        <Label>{locale === "ru" ? "Морской бриз" : "Теңіз бризі"}</Label>
+        <div className="bg-tint mt-2 h-20 animate-pulse rounded" />
+      </div>
+    );
+  }
+  if (!breeze.data?.available) return null;
+
+  const cities = breeze.data.cities.filter(isBreezeAvailable);
+  if (!cities.length) return null;
+
+  // the city with the strongest current evidence leads
+  const order = { high: 3, medium: 2, low: 1, none: 0 } as const;
+  const lead = [...cities].sort((a, b) => order[b.confidence] - order[a.confidence])[0];
+  const met = Object.entries(lead.criteria).filter(([, v]) => v);
+
+  return (
+    <div className="rule-t mt-4 pt-3">
+      <div className="flex items-baseline justify-between gap-3">
+        <Label>{locale === "ru" ? "Морской бриз" : "Теңіз бризі"}</Label>
+        <span className="text-ink-2 text-[11.5px]">{L === "ru" ? lead.name_ru : lead.name_kk}</span>
+      </div>
+
+      {lead.suppressed ? (
+        <Plain className="mt-2">
+          {L === "ru" ? lead.suppressedReason_ru : lead.suppressedReason_kk}
+        </Plain>
+      ) : (
+        <>
+          <p className="text-ink mt-2 text-[13px]">
+            {CONFIDENCE_TEXT[lead.confidence][L]}
+            <span className="text-ink-3"> · {lead.criteriaMet}/5</span>
+            {lead.downgraded && (
+              <span className="text-warn">
+                {" "}
+                · {locale === "ru" ? "понижено (30 км от моря)" : "төмендетілген (теңізден 30 км)"}
+              </span>
+            )}
+          </p>
+
+          <dl className="mt-2 space-y-1 text-[11.5px]">
+            <div className="flex justify-between gap-3">
+              <dt className="text-ink-2">onshore</dt>
+              <dd className="tabular text-ink">{lead.now.onshore.toFixed(2)}</dd>
+            </div>
+            <div className="flex justify-between gap-3">
+              <dt className="text-ink-2">
+                ΔT ({locale === "ru" ? "суша − море" : "құрлық − теңіз"})
+              </dt>
+              <dd className="tabular text-ink">{lead.now.deltaT.toFixed(1)} °C</dd>
+            </div>
+            <div className="flex justify-between gap-3">
+              <dt className="text-ink-2">{locale === "ru" ? "ветер" : "жел"}</dt>
+              <dd className="tabular text-ink">{lead.now.windMs.toFixed(1)} м/с</dd>
+            </div>
+          </dl>
+
+          {met.length > 0 && (
+            <ul className="mt-2 space-y-1">
+              {met.map(([k]) => (
+                <li key={k} className="text-ink-2 flex gap-2 text-[11.5px]">
+                  <span className="text-good">✓</span>
+                  {CRITERIA_TEXT[k]?.[L] ?? k}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {/* the falsifiable test, reported whatever it says */}
+          <Plain className="mt-2">
+            {lead.signature.hasSignature
+              ? locale === "ru"
+                ? `Суточная кривая за месяц показывает чёткий цикл (амплитуда ${lead.signature.amplitude}) — бриз здесь действительно бывает.`
+                : `Айлық тәуліктік қисық айқын циклді көрсетеді (амплитуда ${lead.signature.amplitude}) — мұнда бриз шынымен болады.`
+              : locale === "ru"
+                ? `Суточная кривая за месяц плоская (амплитуда ${lead.signature.amplitude}) — устойчивого бриза здесь не наблюдается, поэтому выводы о нём делать нельзя.`
+                : `Айлық тәуліктік қисық тегіс (амплитуда ${lead.signature.amplitude}) — мұнда тұрақты бриз байқалмайды, сондықтан ол туралы тұжырым жасауға болмайды.`}
+          </Plain>
+
+          {(lead.confidence === "high" || lead.confidence === "medium") && (
+            <div className="border-warn/40 bg-warn/5 mt-2 rounded border-l-2 px-3 py-2">
+              <p className="text-ink-2 text-[11.5px] leading-relaxed">
+                {locale === "ru"
+                  ? `Бризовый режим — самый опасный для прибрежного завода: шлейф направлен на город, а при переходе с холодной воды на горячий берег возможна фумигация примерно в ${lead.fumigation.min}–${lead.fumigation.max} км от берега. Диапазон оценочный: высота трубы неизвестна.`
+                  : `Бриз режимі жағалау зауыты үшін ең қауіпті: шлейф қалаға бағытталады, ал салқын судан ыстық жағаға өткенде жағадан шамамен ${lead.fumigation.min}–${lead.fumigation.max} км жерде фумигация болуы мүмкін. Аралық болжамды: құбыр биіктігі белгісіз.`}
+              </p>
+            </div>
+          )}
+        </>
+      )}
+
+      {breeze.data.excluded.length > 0 && (
+        <Plain className="mt-2">
+          {L === "ru"
+            ? breeze.data.excluded.map((e) => `${e.name_ru}: ${e.reason_ru}`).join(" ")
+            : breeze.data.excluded.map((e) => `${e.name_kk}: ${e.reason_kk}`).join(" ")}
+        </Plain>
+      )}
+    </div>
   );
 }

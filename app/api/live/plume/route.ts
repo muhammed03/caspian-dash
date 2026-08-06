@@ -6,8 +6,10 @@ import {
   bearingStdDev,
   coneHalfAngle,
   compassLabel,
+  destPoint,
   plumeCone,
   plumeLengthKm,
+  sigmaY,
   stabilityClass,
   toBearing,
   type ConeAngle,
@@ -40,6 +42,20 @@ type Facility = {
     profile: { so2: number; no2: number; pm: number; voc: number };
   };
   geometry: { coordinates: [number, number] };
+};
+
+/** Where the parcel released now will have drifted to, and how spread out. */
+type DriftMark = {
+  minutes: number;
+  label: string;
+  lat: number;
+  lng: number;
+  /** Distance travelled from the source, km. */
+  distanceKm: number;
+  /** Crosswind spread at that distance, km — the cloud's radius. */
+  radiusKm: number;
+  /** Bearing of the straight line source → mark, for the connecting path. */
+  bearing: number;
 };
 
 type Frame = {
@@ -105,7 +121,7 @@ export async function GET() {
   const out = facilities.map((facility, i) => {
     const hourly = list[i]?.hourly;
     const p = facility.properties;
-    const [lng, latitude] = facility.geometry.coordinates;
+    const [lng0, latitude] = facility.geometry.coordinates;
 
     if (!hourly?.time?.length) {
       return { id: p.id, available: false as const };
@@ -150,8 +166,64 @@ export async function GET() {
         lengthKm: Number(lengthKm.toFixed(1)),
         angle,
         // minVisualDeg is a drawing concession only; every number above is true
-        cone: plumeCone({ lat: latitude, lng }, to, lengthKm, angle.total, 3),
+        cone: plumeCone({ lat: latitude, lng: lng0 }, to, lengthKm, angle.total, 3),
       };
+    }
+
+    /**
+     * Advects a parcel released now, stepping through the HOURLY FORECAST wind
+     * rather than freezing the current wind. When the wind turns during the
+     * three hours, the track bends with it — this is the whole point, and it
+     * is done here on the server so the client cannot disagree with the text
+     * it is drawing next to.
+     */
+    function drift(): DriftMark[] {
+      const STEP_MIN = 5;
+      const MARKS = [30, 60, 180];
+      const out: DriftMark[] = [];
+
+      let lat = latitude;
+      let lng = lng0;
+      let travelled = 0;
+
+      for (let minute = STEP_MIN; minute <= 180; minute += STEP_MIN) {
+        // which forecast hour this step falls in
+        const hourIdx = Math.min(
+          hourly!.time.length - 1,
+          nowIdx + Math.floor((minute - 1) / 60)
+        );
+        const speedKmh = hourly!.wind_speed_10m[hourIdx];
+        const from = hourly!.wind_direction_10m[hourIdx];
+        if (speedKmh === null || from === null) break;
+
+        const stepKm = (speedKmh * STEP_MIN) / 60;
+        const heading = toBearing(from);
+        [lng, lat] = destPoint(lat, lng, heading, stepKm);
+        travelled += stepKm;
+
+        if (MARKS.includes(minute)) {
+          const cls = stabilityClass(
+            speedKmh / 3.6,
+            hourly!.shortwave_radiation[hourIdx],
+            hourly!.cloud_cover[hourIdx],
+            (hourly!.is_day[hourIdx] ?? 0) === 1
+          );
+          // 2σy holds ~95% of the plume mass, so it reads as the cloud edge
+          const radiusKm = (2 * sigmaY(travelled * 1000, cls)) / 1000;
+          const dLat = lat - latitude;
+          const dLng = (lng - lng0) * Math.cos((latitude * Math.PI) / 180);
+          out.push({
+            minutes: minute,
+            label: minute === 30 ? "+30 мин" : minute === 60 ? "+1 ч" : "+3 ч",
+            lat: Number(lat.toFixed(5)),
+            lng: Number(lng.toFixed(5)),
+            distanceKm: Number(travelled.toFixed(1)),
+            radiusKm: Number(radiusKm.toFixed(1)),
+            bearing: Number((((Math.atan2(dLng, dLat) * 180) / Math.PI + 360) % 360).toFixed(1)),
+          });
+        }
+      }
+      return out;
     }
 
     const build = (from: number, to: number) =>
@@ -179,8 +251,9 @@ export async function GET() {
       approx: p.approx,
       profile: p.profile,
       lat: latitude,
-      lng,
+      lng: lng0,
       dirSigma: Number(dirSigma.toFixed(2)),
+      drift: drift(),
       frames: past,
       forecastFrames: forecast,
       current: forecast[0] ?? past.at(-1) ?? null,

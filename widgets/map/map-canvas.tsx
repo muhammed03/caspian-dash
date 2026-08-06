@@ -9,6 +9,7 @@ import { useLocale } from "@/shared/lib/i18n/client";
 import { buildLayers } from "./build-layers";
 import { useAirQuality, useCoastline, useDataset, useWind } from "./use-map-data";
 import { usePlume, isAvailable } from "@/entities/plume/use-plume";
+import { useBreeze, isBreezeAvailable } from "@/entities/breeze/use-breeze";
 
 // Basemap geometry is bundled, not fetched: the map draws with no network.
 import countries from "@/data/geo/countries.json";
@@ -31,7 +32,8 @@ const FRAMES: Record<ModuleId, { longitude: number; latitude: number; zoom: numb
 
 export function MapCanvas({ module }: { module: ModuleId }) {
   const locale = useLocale();
-  const { view, setView, year, activeLayers, setHover, select, plumeFrame, plumeMode } = useMapStore();
+  const { view, setView, year, activeLayers, setHover, select, plumeFrame, plumeMode, basemap } =
+    useMapStore();
   const firstFrame = useRef(true);
 
   const [viewState, setViewState] = useState<MapViewState>({
@@ -64,6 +66,37 @@ export function MapCanvas({ module }: { module: ModuleId }) {
   const air = useAirQuality(needs("air-quality") || needs("plume"));
   const wind = useWind(needs("wind"));
   const plume = usePlume(needs("plume"));
+  const breeze = useBreeze(needs("breeze"));
+
+  /** Drift marks come straight from the server; nothing is recomputed here. */
+  const driftData = useMemo(() => {
+    if (!plume.data?.available) return undefined;
+    return plume.data.facilities
+      .filter(isAvailable)
+      .filter((f) => f.drift?.length)
+      .map((f) => ({
+        facility: { short: f.short, lat: f.lat, lng: f.lng },
+        marks: f.drift,
+      }));
+  }, [plume.data]);
+
+  /** Arrows are drawn only where the breeze evidence is at least medium. */
+  const breezeData = useMemo(() => {
+    if (!breeze.data?.available) return undefined;
+    return breeze.data.cities
+      .filter(isBreezeAvailable)
+      .filter((c) => !c.suppressed)
+      .filter((c) => c.confidence === "high" || c.confidence === "medium")
+      .map((c) => ({
+        id: c.id,
+        name: locale === "ru" ? c.name_ru : c.name_kk,
+        lat: c.lat,
+        lon: c.lon,
+        coastNormal: c.coastNormal,
+        onshore: c.now.onshore,
+        confidence: c.confidence as "high" | "medium",
+      }));
+  }, [breeze.data, locale]);
 
   /**
    * Pairs each facility with the hour the animation is on, and decides whether
@@ -98,7 +131,11 @@ export function MapCanvas({ module }: { module: ModuleId }) {
   /* Clock for the wind streaks. Runs only while that layer is on, and pauses
      for anyone who asked the system to reduce motion. */
   const [windPhase, setWindPhase] = useState(0);
-  const windOn = activeLayers.has("wind");
+  const windOn =
+    activeLayers.has("wind") ||
+    activeLayers.has("plume") ||
+    activeLayers.has("breeze") ||
+    activeLayers.has("air-quality");
   useEffect(() => {
     if (!windOn) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -154,6 +191,9 @@ export function MapCanvas({ module }: { module: ModuleId }) {
         air: air.data?.readings,
         wind: wind.data?.points,
         plume: plumeFrames,
+        drift: driftData,
+        breeze: breezeData,
+        basemap,
         onHover: handleHover,
         onClick: handleClick,
       }),
@@ -174,6 +214,9 @@ export function MapCanvas({ module }: { module: ModuleId }) {
       air.data,
       wind.data,
       plumeFrames,
+      driftData,
+      breezeData,
+      basemap,
       handleHover,
       handleClick,
     ]
