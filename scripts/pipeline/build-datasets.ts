@@ -32,9 +32,9 @@ const sources = [
     status: "semi",
     coverage_years: "1992–2025",
     note_kk:
-      "Хакатон желісінен портал қолжетімсіз болды. Қатар жарияланған альтиметрия мәндері мен төмендеу қарқыны бойынша қалпына келтірілді; scripts/pipeline/fetch-sea-level.ts арқылы нақты файлмен ауыстыруға болады.",
+      "Хакатон желісінен портал қолжетімсіз болды. Қатар жарияланған альтиметрия мәндері мен төмендеу қарқыны бойынша қалпына келтірілді (тірек нүктелер scripts/pipeline/build-datasets.ts ішінде ашық көрсетілген). Портал қолжетімді болса, қатар нақты файлмен ауыстырылады.",
     note_ru:
-      "Портал был недоступен из сети хакатона. Ряд восстановлен по опубликованным значениям альтиметрии и скоростям падения; заменяется реальным файлом через scripts/pipeline/fetch-sea-level.ts.",
+      "Портал был недоступен из сети хакатона. Ряд восстановлен по опубликованным значениям альтиметрии и скоростям падения (опорные точки открыто перечислены в scripts/pipeline/build-datasets.ts). При доступности портала ряд заменяется реальным файлом.",
     last_checked: CHECKED,
   },
   {
@@ -598,11 +598,11 @@ save("wildlife.json", {
     decline_percent: 90,
     // Estimates disagree by a factor of four — the UI shows the range, never one number.
     estimates: [
-      { source_ru: "Caspian Seals Research and Rehabilitation Center", source_kk: "Caspian Seals Research and Rehabilitation Center", low: 50_000, high: 70_000, year: 2020 },
-      { source_ru: "Britannica (по данным съёмок)", source_kk: "Britannica (есептеу негізінде)", low: 60_000, high: 76_000, year: 2019 },
-      { source_ru: "Аэроучёты 2005–2012 (международная группа)", source_kk: "2005–2012 әуе есептеуі (халықаралық топ)", low: 100_000, high: 170_000, year: 2012 },
-      { source_ru: "Marine Mammal Protected Areas Task Force (IMMA)", source_kk: "Marine Mammal Protected Areas Task Force (IMMA)", low: 150_000, high: 186_000, year: 2021 },
-      { source_ru: "Минприроды Дагестана", source_kk: "Дағыстан табиғи ресурстар министрлігі", low: 270_000, high: 300_000, year: 2023 },
+      { source_ru: "Caspian Seals Center", source_kk: "Caspian Seals Center", full_ru: "Caspian Seals Research and Rehabilitation Center", low: 50_000, high: 70_000, year: 2020 },
+      { source_ru: "Britannica", source_kk: "Britannica", full_ru: "Britannica, по данным съёмок", low: 60_000, high: 76_000, year: 2019 },
+      { source_ru: "Аэроучёты 2005–2012", source_kk: "Әуе есептеуі 2005–2012", full_ru: "Аэроучёты 2005–2012, международная группа", low: 100_000, high: 170_000, year: 2012 },
+      { source_ru: "IMMA Task Force", source_kk: "IMMA Task Force", full_ru: "Marine Mammal Protected Areas Task Force (IMMA)", low: 150_000, high: 186_000, year: 2021 },
+      { source_ru: "Минприроды Дагестана", source_kk: "Дағыстан минприроды", full_ru: "Министерство природных ресурсов Дагестана", low: 270_000, high: 300_000, year: 2023 },
     ],
     aerial_counts: [
       { year: 2020, count: 179_000, source_id: "ncoc" },

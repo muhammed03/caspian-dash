@@ -11,11 +11,18 @@ type City = { id: string; lat: number; lon: number; name_kk: string; name_ru: st
 
 const FIELDS = "pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone,european_aqi";
 
-export const revalidate = 900;
+// The route itself must always run (otherwise Next serves a response
+// frozen at build time and the "live" reading stops being live).
+// Upstream calls are still cached, so Open-Meteo is not hammered.
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   const citiesRaw = await readFile(join(process.cwd(), "data", "monitored-cities.json"), "utf8");
   const cities = (JSON.parse(citiesRaw).cities ?? []) as City[];
+
+  // CASPIAN_OFFLINE=1 forces the snapshot path — for demoing on a machine with
+  // no network without waiting for a fetch to time out.
+  if (process.env.CASPIAN_OFFLINE === "1") return snapshot();
 
   try {
     const lat = cities.map((c) => c.lat).join(",");
@@ -54,15 +61,19 @@ export async function GET() {
       readings,
     });
   } catch {
-    try {
-      const snap = await readFile(join(process.cwd(), "data", "snapshots", "air.json"), "utf8");
-      const parsed = JSON.parse(snap);
-      return NextResponse.json({ ...parsed, live: false });
-    } catch {
-      return NextResponse.json(
-        { live: false, readings: [], source_id: "open_meteo_aq", error: "no data" },
-        { status: 503 }
-      );
-    }
+    return snapshot();
+  }
+}
+
+/** Last committed reading, clearly flagged as not live. */
+async function snapshot() {
+  try {
+    const raw = await readFile(join(process.cwd(), "data", "snapshots", "air.json"), "utf8");
+    return NextResponse.json({ ...JSON.parse(raw), live: false });
+  } catch {
+    return NextResponse.json(
+      { live: false, readings: [], source_id: "open_meteo_aq", error: "no data" },
+      { status: 503 }
+    );
   }
 }

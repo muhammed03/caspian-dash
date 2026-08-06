@@ -13,9 +13,14 @@ for (let lat = 37; lat <= 47; lat += 2.5) {
   }
 }
 
-export const revalidate = 1800;
+// The route itself must always run (otherwise Next serves a response
+// frozen at build time and the "live" reading stops being live).
+// Upstream calls are still cached, so Open-Meteo is not hammered.
+export const dynamic = "force-dynamic";
 
 export async function GET() {
+  if (process.env.CASPIAN_OFFLINE === "1") return snapshot();
+
   try {
     const lat = GRID.map((g) => g[0]).join(",");
     const lon = GRID.map((g) => g[1]).join(",");
@@ -46,11 +51,16 @@ export async function GET() {
       points,
     });
   } catch {
-    try {
-      const snap = await readFile(join(process.cwd(), "data", "snapshots", "wind.json"), "utf8");
-      return NextResponse.json({ ...JSON.parse(snap), live: false });
-    } catch {
-      return NextResponse.json({ live: false, points: [], source_id: "open_meteo" }, { status: 503 });
-    }
+    return snapshot();
+  }
+}
+
+/** Last committed wind field, clearly flagged as not live. */
+async function snapshot() {
+  try {
+    const raw = await readFile(join(process.cwd(), "data", "snapshots", "wind.json"), "utf8");
+    return NextResponse.json({ ...JSON.parse(raw), live: false });
+  } catch {
+    return NextResponse.json({ live: false, points: [], source_id: "open_meteo" }, { status: 503 });
   }
 }

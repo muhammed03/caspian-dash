@@ -9,36 +9,41 @@
     "decline_percent": 90,
     "estimates": [
       {
-        "source_ru": "Caspian Seals Research and Rehabilitation Center",
-        "source_kk": "Caspian Seals Research and Rehabilitation Center",
+        "source_ru": "Caspian Seals Center",
+        "source_kk": "Caspian Seals Center",
+        "full_ru": "Caspian Seals Research and Rehabilitation Center",
         "low": 50000,
         "high": 70000,
         "year": 2020
       },
       {
-        "source_ru": "Britannica (по данным съёмок)",
-        "source_kk": "Britannica (есептеу негізінде)",
+        "source_ru": "Britannica",
+        "source_kk": "Britannica",
+        "full_ru": "Britannica, по данным съёмок",
         "low": 60000,
         "high": 76000,
         "year": 2019
       },
       {
-        "source_ru": "Аэроучёты 2005–2012 (международная группа)",
-        "source_kk": "2005–2012 әуе есептеуі (халықаралық топ)",
+        "source_ru": "Аэроучёты 2005–2012",
+        "source_kk": "Әуе есептеуі 2005–2012",
+        "full_ru": "Аэроучёты 2005–2012, международная группа",
         "low": 100000,
         "high": 170000,
         "year": 2012
       },
       {
-        "source_ru": "Marine Mammal Protected Areas Task Force (IMMA)",
-        "source_kk": "Marine Mammal Protected Areas Task Force (IMMA)",
+        "source_ru": "IMMA Task Force",
+        "source_kk": "IMMA Task Force",
+        "full_ru": "Marine Mammal Protected Areas Task Force (IMMA)",
         "low": 150000,
         "high": 186000,
         "year": 2021
       },
       {
         "source_ru": "Минприроды Дагестана",
-        "source_kk": "Дағыстан табиғи ресурстар министрлігі",
+        "source_kk": "Дағыстан минприроды",
+        "full_ru": "Министерство природных ресурсов Дагестана",
         "low": 270000,
         "high": 300000,
         "year": 2023
@@ -290,7 +295,7 @@
       },
       {
         "id": "lankaran",
-        "name_kk": "Лenkeran (Әзербайжан)",
+        "name_kk": "Ленкорань (Әзербайжан)",
         "name_ru": "Ленкорань (Азербайджан)",
         "series": [
           {
