@@ -1,0 +1,226 @@
+{
+  "type": "FeatureCollection",
+  "meta": {
+    "source_id": "osm",
+    "status": "semi",
+    "unit": "т/год (оценка выбросов)"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "aktau-mangistaumunaigas",
+        "name_kk": "Маңғыстаумұнайгаз (Ақтау)",
+        "name_ru": "Мангистаумунайгаз (Актау)",
+        "kind": "oil",
+        "emissions_t": 8400,
+        "city": "aqtau"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.22,
+          43.66
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "aktau-maek",
+        "name_kk": "МАЭК-Қазатомөнеркәсіп",
+        "name_ru": "МАЭК-Казатомпром",
+        "kind": "power",
+        "emissions_t": 14200,
+        "city": "aqtau"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.19,
+          43.62
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "aktau-caspi-bitum",
+        "name_kk": "Caspi Bitum",
+        "name_ru": "Caspi Bitum",
+        "kind": "refinery",
+        "emissions_t": 5100,
+        "city": "zhanaozen"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          52.86,
+          43.35
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "atyrau-refinery",
+        "name_kk": "Атырау мұнай өңдеу зауыты",
+        "name_ru": "Атырауский НПЗ",
+        "kind": "refinery",
+        "emissions_t": 21600,
+        "city": "atyrau"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.88,
+          47.09
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "tengiz",
+        "name_kk": "Теңізшевройл",
+        "name_ru": "Тенгизшевройл",
+        "kind": "oil",
+        "emissions_t": 38900,
+        "city": "atyrau"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          53.15,
+          46.32
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "kashagan",
+        "name_kk": "Қашаған (D аралы)",
+        "name_ru": "Кашаган (остров D)",
+        "kind": "oil",
+        "emissions_t": 19400,
+        "city": "atyrau"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          51.53,
+          46.35
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "baku-refinery",
+        "name_kk": "Гейдар Әлиев ЗМӨЗ",
+        "name_ru": "НПЗ им. Гейдара Алиева",
+        "kind": "refinery",
+        "emissions_t": 24800,
+        "city": "baku"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.83,
+          40.41
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "sumqayit-chem",
+        "name_kk": "Сумгайыт химия кешені",
+        "name_ru": "Сумгаитский химкомплекс",
+        "kind": "chemical",
+        "emissions_t": 16700,
+        "city": "sumqayit"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.66,
+          40.59
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "turkmenbashi-refinery",
+        "name_kk": "Түркменбашы МӨЗ",
+        "name_ru": "Туркменбашинский НПЗ",
+        "kind": "refinery",
+        "emissions_t": 22100,
+        "city": "turkmenbasy"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          52.98,
+          40.03
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "astrakhan-gas",
+        "name_kk": "Астрахан газ өңдеу зауыты",
+        "name_ru": "Астраханский ГПЗ",
+        "kind": "gas",
+        "emissions_t": 41300,
+        "city": "astrakhan"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          48.14,
+          46.13
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "makhachkala-port",
+        "name_kk": "Махачкала мұнай терминалы",
+        "name_ru": "Махачкалинский нефтетерминал",
+        "kind": "terminal",
+        "emissions_t": 4300,
+        "city": "makhachkala"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          47.51,
+          42.98
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "anzali-port",
+        "name_kk": "Бендер-Энзели порты",
+        "name_ru": "Порт Бендер-Энзели",
+        "kind": "terminal",
+        "emissions_t": 3900,
+        "city": "anzali"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          49.46,
+          37.47
+        ]
+      }
+    }
+  ]
+}

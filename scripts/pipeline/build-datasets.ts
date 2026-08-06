@@ -546,7 +546,7 @@ const factories = [
   { id: "makhachkala-port", name_kk: "Махачкала мұнай терминалы", name_ru: "Махачкалинский нефтетерминал", type: "terminal", coords: [47.51, 42.98], emissions_t: 4300, city: "makhachkala" },
   { id: "anzali-port", name_kk: "Бендер-Энзели порты", name_ru: "Порт Бендер-Энзели", type: "terminal", coords: [49.46, 37.47], emissions_t: 3900, city: "anzali" },
 ];
-save("factories.geojson", {
+const factoriesFc = {
   type: "FeatureCollection",
   meta: { source_id: "osm", status: "semi", unit: "т/год (оценка выбросов)" },
   features: factories.map((f) => ({
@@ -561,7 +561,11 @@ save("factories.geojson", {
     },
     geometry: { type: "Point", coordinates: f.coords },
   })),
-});
+};
+save("factories.geojson", factoriesFc);
+// Same payload as .json too: the map fetches the .geojson over HTTP while the
+// panels import it directly, and TypeScript only resolves .json imports.
+save("factories.json", factoriesFc);
 
 /* Cities monitored for live AQI */
 save("monitored-cities.json", {
