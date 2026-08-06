@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+@theme {
+  /* Palette */
+  --color-abyss: #05070b;
+  --color-deep: #09131c;
+  --color-surface: #0d1b28;
+  --color-mist: #94a3b8;
+  --color-foam: #e2e8f0;
+  --color-glow: #22d3ee;
+  --color-tide: #2dd4bf;
+  --color-alive: #34d399;
+  --color-warn: #fbbf24;
+  --color-danger: #fb7185;
+
+  /* Typography */
+  --font-display: var(--font-unbounded), system-ui, sans-serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+
+  /* Motion */
+  --ease-fluid: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  color-scheme: dark;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.25) transparent;
+}
+
+body {
+  background: var(--color-abyss);
+  color: var(--color-foam);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(34, 211, 238, 0.28);
+  color: #fff;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Glass surfaces */
+@utility glass {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+@utility glass-strong {
+  background: rgba(9, 19, 28, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+}
+
+@utility text-glow {
+  text-shadow:
+    0 0 24px rgba(34, 211, 238, 0.55),
+    0 0 64px rgba(34, 211, 238, 0.25);
+}
+
+@utility ring-glow {
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.25),
+    0 0 32px rgba(34, 211, 238, 0.18),
+    inset 0 0 24px rgba(34, 211, 238, 0.05);
+}
+
+/* Grain overlay — applied once on <body> */
+.noise::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Ocean gradient backdrop for sections */
+@utility bg-ocean {
+  background:
+    radial-gradient(120% 90% at 70% -10%, rgba(14, 46, 66, 0.55) 0%, transparent 60%),
+    radial-gradient(100% 80% at 10% 110%, rgba(8, 47, 53, 0.4) 0%, transparent 55%),
+    linear-gradient(180deg, var(--color-abyss) 0%, var(--color-deep) 100%);
+}
+
+/* Big numerals never wiggle while counting */
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
