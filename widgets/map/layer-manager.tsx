@@ -42,7 +42,11 @@ export function LayerManager({ module }: { module: ModuleId }) {
             transition={{ duration: 0.45, ease: EASE_FLUID }}
             className="overflow-hidden"
           >
-            <GlassCard static className="glass-strong space-y-1 p-2">
+            {/* capped so a long layer list never reaches the timeline below */}
+            <GlassCard
+              static
+              className="glass-strong max-h-[calc(100svh-19rem)] space-y-1 overflow-y-auto p-2"
+            >
               {layers.map((layer) => {
                 const on = activeLayers.has(layer.id);
                 return (
