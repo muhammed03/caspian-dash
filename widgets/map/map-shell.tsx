@@ -101,7 +101,8 @@ export function MapShell({
         transition={{ duration: 0.8, ease: EASE_FLUID, delay: 0.15 }}
         className={cn(
           "absolute right-0 top-16 z-20 h-[calc(100svh-4rem)] w-full overflow-y-auto md:w-[440px]",
-          "glass-strong border-y-0 border-r-0 px-5 py-6 pt-20 md:pt-6"
+          // top padding clears the floating module rail
+          "glass-strong border-y-0 border-r-0 px-5 pb-6 pt-24"
         )}
       >
         {panel}

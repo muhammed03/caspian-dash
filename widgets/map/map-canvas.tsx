@@ -107,7 +107,16 @@ export function MapCanvas({ module }: { module: ModuleId }) {
       index: { center: [50.9, 42.6], zoom: 4.5 },
     };
     const frame = FRAMES[module];
-    map.easeTo({ center: frame.center, zoom: frame.zoom, duration: 1600, essential: true });
+    // The right panel covers ~440px on desktop and the layer rail ~290px on the
+    // left, so the sea is offset to stay centred in what the user can see.
+    const wide = window.innerWidth >= 768;
+    map.easeTo({
+      center: frame.center,
+      zoom: frame.zoom,
+      duration: 1600,
+      essential: true,
+      padding: wide ? { top: 90, bottom: 90, left: 300, right: 460 } : { top: 60, bottom: 60, left: 0, right: 0 },
+    });
   }, [module]);
 
   return (

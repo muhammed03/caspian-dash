@@ -1,0 +1,11 @@
+services:
+  web:
+    build: .
+    container_name: caspian-watch
+    ports:
+      - "3000:3000"
+    environment:
+      # Optional: only needed to regenerate AI narratives with
+      # `npm run pipeline:ai`. The app itself never calls the API.
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    restart: unless-stopped

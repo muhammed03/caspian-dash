@@ -137,7 +137,12 @@ export function WaterPanel() {
               </defs>
               <CartesianGrid stroke={CHART_INK.grid} vertical={false} />
               <XAxis dataKey="year" {...AXIS_PROPS} interval="preserveStartEnd" minTickGap={28} />
-              <YAxis {...AXIS_PROPS} domain={["dataMin - 0.3", "dataMax + 0.3"]} width={46} />
+              <YAxis
+                {...AXIS_PROPS}
+                domain={["dataMin - 0.3", "dataMax + 0.3"]}
+                width={54}
+                tickFormatter={(v: number) => v.toFixed(1)}
+              />
               <Tooltip {...tip} formatter={fmt((v) => `${Number(v).toFixed(2)} м`)} />
               <ReferenceLine
                 y={-29}

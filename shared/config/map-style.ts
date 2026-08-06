@@ -34,14 +34,14 @@ export function buildMapStyle(): StyleSpecification {
         id: "land",
         type: "fill",
         source: "countries",
-        paint: { "fill-color": "#0b131c", "fill-opacity": 1 },
+        paint: { "fill-color": "#0d1722", "fill-opacity": 1 },
       },
       {
         id: "land-border",
         type: "line",
         source: "countries",
         paint: {
-          "line-color": "#1c2c3c",
+          "line-color": "#22364a",
           "line-width": ["interpolate", ["linear"], ["zoom"], 3, 0.4, 8, 1.2],
         },
       },

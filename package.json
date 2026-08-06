@@ -6,7 +6,12 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "pipeline:geo": "tsx scripts/pipeline/build-geo.ts",
+    "pipeline:data": "tsx scripts/pipeline/build-datasets.ts",
+    "pipeline:coastlines": "tsx scripts/pipeline/build-coastlines.ts",
+    "pipeline:snapshot": "tsx scripts/pipeline/snapshot-live.ts",
+    "pipeline:ai": "tsx scripts/pipeline/gen-insights.ts"
   },
   "dependencies": {
     "@deck.gl/aggregation-layers": "^9.3.7",

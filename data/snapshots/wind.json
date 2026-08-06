@@ -1,0 +1,150 @@
+{
+  "fetched_at": "2026-08-06T20:13:27.392Z",
+  "source_id": "open_meteo",
+  "unit": {
+    "speed": "km/h",
+    "direction": "° (from)"
+  },
+  "points": [
+    {
+      "lat": 37,
+      "lon": 47,
+      "speed": 8.7,
+      "direction": 30,
+      "temp": 17.3
+    },
+    {
+      "lat": 37,
+      "lon": 49.33,
+      "speed": 5.6,
+      "direction": 207,
+      "temp": 21.5
+    },
+    {
+      "lat": 37,
+      "lon": 51.66,
+      "speed": 19.5,
+      "direction": 298,
+      "temp": 28.9
+    },
+    {
+      "lat": 37,
+      "lon": 53.99,
+      "speed": 20,
+      "direction": 252,
+      "temp": 28.1
+    },
+    {
+      "lat": 39.5,
+      "lon": 47,
+      "speed": 6.5,
+      "direction": 19,
+      "temp": 17.7
+    },
+    {
+      "lat": 39.5,
+      "lon": 49.33,
+      "speed": 28.8,
+      "direction": 43,
+      "temp": 27.6
+    },
+    {
+      "lat": 39.5,
+      "lon": 51.66,
+      "speed": 31.2,
+      "direction": 31,
+      "temp": 27.3
+    },
+    {
+      "lat": 39.5,
+      "lon": 53.99,
+      "speed": 18.7,
+      "direction": 23,
+      "temp": 32.4
+    },
+    {
+      "lat": 42,
+      "lon": 47,
+      "speed": 4.3,
+      "direction": 228,
+      "temp": 6.4
+    },
+    {
+      "lat": 42,
+      "lon": 49.33,
+      "speed": 29.6,
+      "direction": 296,
+      "temp": 26.3
+    },
+    {
+      "lat": 42,
+      "lon": 51.66,
+      "speed": 19.4,
+      "direction": 312,
+      "temp": 26.2
+    },
+    {
+      "lat": 42,
+      "lon": 53.99,
+      "speed": 23.5,
+      "direction": 32,
+      "temp": 31
+    },
+    {
+      "lat": 44.5,
+      "lon": 47,
+      "speed": 7,
+      "direction": 235,
+      "temp": 26.6
+    },
+    {
+      "lat": 44.5,
+      "lon": 49.33,
+      "speed": 7.4,
+      "direction": 29,
+      "temp": 27.3
+    },
+    {
+      "lat": 44.5,
+      "lon": 51.66,
+      "speed": 4.1,
+      "direction": 345,
+      "temp": 25.4
+    },
+    {
+      "lat": 44.5,
+      "lon": 53.99,
+      "speed": 10.2,
+      "direction": 321,
+      "temp": 25.3
+    },
+    {
+      "lat": 47,
+      "lon": 47,
+      "speed": 5.7,
+      "direction": 55,
+      "temp": 26
+    },
+    {
+      "lat": 47,
+      "lon": 49.33,
+      "speed": 10.5,
+      "direction": 27,
+      "temp": 23.9
+    },
+    {
+      "lat": 47,
+      "lon": 51.66,
+      "speed": 9.5,
+      "direction": 25,
+      "temp": 24.6
+    },
+    {
+      "lat": 47,
+      "lon": 53.99,
+      "speed": 10.6,
+      "direction": 332,
+      "temp": 25.4
+    }
+  ]
+}
