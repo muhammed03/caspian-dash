@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 import { useLocale, useT } from "@/shared/lib/i18n/client";
-import { byLocale, pick, type Locale } from "@/shared/lib/i18n";
+import { byLocale, pick } from "@/shared/lib/i18n";
 import {
   Display,
   Label,
@@ -80,10 +80,7 @@ export function PollutionSection() {
             <Label>{t.pollution.koshkarAta}</Label>
             <div className="display text-bad mt-3 flex items-baseline gap-2 text-6xl md:text-7xl">
               <AnimatedNumber value={koshkar.waste_mt} />
-              {/* tracking-normal: `display` sets letter-spacing in em against a
-                  72px parent, and the computed −2.5px would be inherited whole
-                  by this 18px unit and crush the letters together. */}
-              <span className="text-ink-3 text-lg font-normal tracking-normal">
+              <span className="text-ink-3 text-lg font-normal">
                 {byLocale(locale, { kk: "млн т", ru: "млн т", en: "million t" })}
               </span>
             </div>
@@ -159,7 +156,7 @@ export function LifeSection() {
             <div key={s.title} className="rule-t pt-6">
               <div className="display text-bad flex items-baseline text-7xl md:text-8xl">
                 <AnimatedNumber value={s.value} />
-                <span className="text-ink-3 ml-2 text-2xl font-normal tracking-normal">
+                <span className="text-ink-3 ml-2 text-2xl font-normal">
                   {s.suffix}
                 </span>
               </div>
@@ -181,9 +178,7 @@ export function AiSummarySection() {
   const t = useT();
   const locale = useLocale();
   const analysis = computeAnalysis("index");
-  // Keyed, not branched: locales without their own narrative yet fall back to Kazakh.
-  const narratives: Partial<Record<Locale, { summary: string }>> = NARRATIVES.index;
-  const narrative = narratives[locale] ?? NARRATIVES.index.kk;
+  const narrative = NARRATIVES.index[locale];
 
   return (
     <section className="rule-t py-28 md:py-40">

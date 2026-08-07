@@ -82,6 +82,19 @@ body {
   line-height: 0.94;
 }
 
+/*
+ * `letter-spacing` in em resolves against the element that declares it and is
+ * then inherited as an absolute length. A unit set in 16px inside a 72px
+ * display figure would inherit that figure's −2.5px and print its letters on
+ * top of each other. Units and suffixes therefore reset to normal tracking.
+ *
+ * `:where()` keeps this at zero specificity, so an explicit `tracking-*`
+ * utility on the span still wins.
+ */
+.display :where(span, sup, sub, small) {
+  letter-spacing: normal;
+}
+
 @utility tabular {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";

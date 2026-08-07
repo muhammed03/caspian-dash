@@ -72,10 +72,7 @@ export function SeaLevelScene() {
               <Label>{t.home.metricLevel}</Label>
               <div className="display tabular text-bad mt-1.5 text-4xl whitespace-nowrap md:text-5xl">
                 {formatFixed(row.level_m, locale, 2)}
-                {/* tracking-normal: `display` sets letter-spacing in em against
-                    the parent's size, and the computed value is inherited whole
-                    by this much smaller unit. */}
-                <span className="text-ink-3 ml-1 text-base font-normal tracking-normal">
+                <span className="text-ink-3 ml-1 text-base font-normal">
                   {byLocale(locale, { kk: "м", ru: "м", en: "m" })}
                 </span>
               </div>
@@ -90,7 +87,7 @@ export function SeaLevelScene() {
               </Label>
               <div className="display tabular text-warn mt-1.5 text-3xl whitespace-nowrap md:text-4xl">
                 {areaLost > 0 ? `−${formatNumber(areaLost, locale)}` : "0"}
-                <span className="text-ink-3 ml-1 text-sm font-normal tracking-normal">
+                <span className="text-ink-3 ml-1 text-sm font-normal">
                   {byLocale(locale, { kk: "км²", ru: "км²", en: "km²" })}
                 </span>
               </div>
