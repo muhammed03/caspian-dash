@@ -10,5 +10,6 @@
   "groundwater_seepage": 5,
   "evaporation_estimate": 400,
   "note_ru": "Испарение — расчётная величина замыкания баланса при наблюдаемом падении уровня, а не измерение.",
+  "note_en": "Evaporation is a calculated closure term for the balance at the observed rate of decline, not a measurement.",
   "note_kk": "Булану — деңгейдің байқалған төмендеуі кезінде баланстың тұйықталуы бойынша есептелген шама, өлшем емес."
 }

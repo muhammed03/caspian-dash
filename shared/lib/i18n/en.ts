@@ -1,0 +1,165 @@
+import type { Dict } from "./types";
+
+export const en = {
+  common: {
+    appName: "Caspian Watch",
+    tagline: "Environmental monitoring of the Caspian Sea",
+    openMap: "Open the map",
+    home: "Home",
+    map: "Map",
+    methodology: "Methodology",
+    source: "Source",
+    sources: "Sources",
+    mock: "Demonstration data",
+    semi: "Entered from a publication",
+    real: "Measured data",
+    aiLabel: "AI analysis",
+    year: "year",
+    loading: "Loading…",
+    offline: "No connection — last saved data",
+    updated: "Updated",
+    close: "Close",
+    play: "Play",
+    pause: "Pause",
+    scroll: "Scroll down",
+    viewData: "View the source data",
+    riskLevel: { low: "Low", medium: "Moderate", high: "High", critical: "Critical" },
+    trend: { up: "Rising", down: "Falling", stable: "Stable" },
+    confidence: { low: "low confidence", medium: "medium confidence", high: "high confidence" },
+  },
+  plain: {
+    whatIsThis: "What this is",
+    howToRead: "How to read it",
+    whatItMeans: "What it means",
+    levelMeans:
+      "The height of the sea surface. The more negative the number, the lower the water. Since 1992 the sea has fallen by 2.6 metres.",
+    rateMeans:
+      "How many centimetres the water drops each year. Before 2015 it was happening half as fast.",
+    retreatMeans:
+      "The width of the shore strip left dry after the water withdrew. On the flat northern coast one centimetre of level yields tens of metres of land.",
+    areaMeans:
+      "The total area covered by water. Since 1992 the Caspian has lost a water surface roughly the size of Crimea.",
+    sealMeans:
+      "How far the seal population has fallen, in per cent, compared with the start of the 20th century.",
+    aqiMeans:
+      "How polluted the air is. 0–20 is clean, above 40 is harmful to sensitive people, above 80 is harmful to everyone.",
+    purityMeans:
+      "How clean the water is, on a scale to 100. Below 70 is worse than a normal state.",
+    indexMeans:
+      "A score that folds every indicator into one number. 100 is a healthy sea, 0 is complete collapse.",
+    forecastMeans:
+      "A calculation of what happens if the present rate holds. It is a projection, not a guarantee.",
+    rangeMeans:
+      "Sources give different figures, so we show a range rather than a single number — that is the honest answer.",
+    sturgeonMeans:
+      "The official catch volume. The real figure is several times higher, because poaching is not counted.",
+  },
+  nav: {
+    water: "Water and retreat",
+    pollution: "Pollution and air",
+    life: "Flora and fauna",
+    resources: "Resources",
+    index: "Eco-index",
+  },
+  home: {
+    heroTitle: "The sea is leaving in silence",
+    heroSubtitle:
+      "The Caspian is below its historic minimum. Satellite data, AI analysis and projections — on one platform.",
+    ecoIndex: "Composite environmental index",
+    metricLevel: "Sea level",
+    metricRate: "Rate of decline",
+    metricArea: "Surface area",
+    metricSeal: "Seal population",
+    sectionSeaTitle: "The level is falling",
+    sectionSeaBody:
+      "The Caspian has been falling without interruption since 1995. Between 2020 and 2024 the rate tripled, to roughly 23 cm a year.",
+    sectionCoastTitle: "The shore is retreating",
+    sectionCoastBody:
+      "On the flat Kazakh coast every centimetre of level means tens of metres of exposed seabed. Drag the slider to see the change.",
+    sectionPollutionTitle: "The pollution map",
+    sectionPollutionBody:
+      "Oil products, industrial emissions and the Koshkar-Ata tailings pond — over 105 million tonnes of waste, 5 km from Aktau.",
+    sectionLifeTitle: "Life is disappearing",
+    sectionLifeBody:
+      "The Caspian seal has lost more than 90% of its population in a century. The sturgeon catch collapsed from 30,000 tonnes to 286.",
+    aiSummaryTitle: "AI conclusion",
+    cta: "Go to the interactive map",
+  },
+  water: {
+    title: "Water volume and retreat",
+    seaLevel: "Sea level (m, Baltic system)",
+    levelChart: "Level over time, 1992–2025",
+    forecast: "Projection",
+    forecastNote: "Linear and exponential regression, with a confidence interval",
+    volume: "Water volume",
+    area: "Surface area",
+    retreat: "Shoreline retreat",
+    rivers: "Inflowing rivers",
+    riverInflow: "Annual flow, km³/year",
+    consumption: "Water use by country",
+    coastlineYear: "Shoreline — year",
+    modelLine: "Model estimate",
+  },
+  pollution: {
+    title: "Pollution and air quality",
+    structure: "Structure of pollution",
+    purity: "Water purity index",
+    factories: "Industrial facilities",
+    koshkarAta: "Koshkar-Ata tailings pond",
+    aqi: "Air quality (AQI)",
+    aqiLive: "Live — Open-Meteo / CAMS",
+    health: "Effect on health",
+    healthNote:
+      "An annual model estimate following WHO methodology. No real-time figures are collected.",
+    emissions: "Emissions, t/year",
+  },
+  life: {
+    title: "Flora and fauna",
+    seal: "Caspian seal",
+    sealRange: "Range of estimates: the sources disagree",
+    sealStatus: "IUCN: Endangered (2008), Red Book of Kazakhstan (2020)",
+    sturgeon: "Sturgeon",
+    sturgeonNote:
+      "Official catch statistics do not reflect reality: illegal fishing is estimated at several times the legal catch.",
+    birds: "Bird migration",
+    greening: "Greening (NDVI)",
+    habitats: "Habitats",
+  },
+  resources: {
+    title: "Mineral resources",
+    reserves: "Reserves",
+    production: "Annual production",
+    depletion: "Years to depletion",
+    depletionNote:
+      "Remaining reserves ÷ mean annual production. New fields and changes in technology are not accounted for.",
+    fields: "Fields",
+  },
+  index: {
+    title: "Composite environmental index",
+    components: "Index components",
+    dataAvailability: "Data availability",
+    availabilityNote:
+      "Regional inequality in data is an environmental problem in its own right. Satellite data covers the whole sea evenly.",
+  },
+  map: {
+    layers: "Layers",
+    legend: "Legend",
+    search: "Search for a city…",
+    timeline: "Timeline",
+    basemap: "Basemap",
+    satellite: "Satellite (needs a connection)",
+    population: "Population",
+    threat: "Threat level",
+  },
+  methodology: {
+    title: "Methodology",
+    intro:
+      "The formula, source and limitations of every calculation on this site are set out openly on this page. The platform is not a black box.",
+    forecastModel: "Sea-level projection model",
+    coastlineModel: "Shoreline model",
+    ecoIndexModel: "Composite eco-index",
+    aiModel: "How the AI analysis works",
+    limitations: "Limitations",
+    dataRegistry: "Registry of data sources",
+  },
+} satisfies Dict;

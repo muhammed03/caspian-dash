@@ -10,40 +10,50 @@
     "estimates": [
       {
         "source_ru": "Caspian Seals Center",
+        "source_en": "Caspian Seals Center",
         "source_kk": "Caspian Seals Center",
         "full_ru": "Caspian Seals Research and Rehabilitation Center",
+        "full_en": "Caspian Seals Research and Rehabilitation Center",
         "low": 50000,
         "high": 70000,
         "year": 2020
       },
       {
         "source_ru": "Britannica",
+        "source_en": "Britannica",
         "source_kk": "Britannica",
         "full_ru": "Britannica, по данным съёмок",
+        "full_en": "Britannica, from survey data",
         "low": 60000,
         "high": 76000,
         "year": 2019
       },
       {
         "source_ru": "Аэроучёты 2005–2012",
+        "source_en": "Aerial surveys 2005–2012",
         "source_kk": "Әуе есептеуі 2005–2012",
         "full_ru": "Аэроучёты 2005–2012, международная группа",
+        "full_en": "Aerial surveys 2005–2012, international team",
         "low": 100000,
         "high": 170000,
         "year": 2012
       },
       {
         "source_ru": "IMMA Task Force",
+        "source_en": "IMMA Task Force",
         "source_kk": "IMMA Task Force",
         "full_ru": "Marine Mammal Protected Areas Task Force (IMMA)",
+        "full_en": "Marine Mammal Protected Areas Task Force (IMMA)",
         "low": 150000,
         "high": 186000,
         "year": 2021
       },
       {
         "source_ru": "Минприроды Дагестана",
+        "source_en": "Dagestan Ministry of Natural Resources",
         "source_kk": "Дағыстан минприроды",
         "full_ru": "Министерство природных ресурсов Дагестана",
+        "full_en": "Dagestan Ministry of Natural Resources",
         "low": 270000,
         "high": 300000,
         "year": 2023
@@ -95,6 +105,7 @@
       }
     ],
     "note_ru": "Оценки численности расходятся в четыре раза. Платформа показывает диапазон, а не одно число — это честнее и отражает реальное состояние знаний.",
+    "note_en": "Population estimates differ by a factor of four. The platform shows a range rather than a single number — that is the honest answer, and it reflects the real state of knowledge.",
     "note_kk": "Сан бағалаулары төрт есе айырмашылықта. Платформа бір санды емес, аралықты көрсетеді — бұл шынайырақ және білім деңгейін дәл бейнелейді."
   },
   "sturgeon": {
@@ -145,36 +156,42 @@
       "max": 10
     },
     "note_ru": "Официальная статистика вылова не отражает реальность: незаконный вылов (IUU) оценивается в 4–10 раз выше законного. Современные методы оценки запаса не применяются.",
+    "note_en": "Official catch statistics do not reflect reality: illegal (IUU) fishing is estimated at 4–10 times the legal catch. Modern stock assessment methods are not applied.",
     "note_kk": "Ресми аулау статистикасы шындықты көрсетпейді: заңсыз аулау (IUU) заңдыдан 4–10 есе жоғары деп бағаланады. Қордың заманауи бағалау әдістері қолданылмайды.",
     "species": [
       {
         "id": "beluga",
         "name_kk": "Қортпа (белуга)",
         "name_ru": "Белуга",
+        "name_en": "Beluga sturgeon",
         "status": "Critically Endangered"
       },
       {
         "id": "russian",
         "name_kk": "Орыс бекіресі",
         "name_ru": "Русский осётр",
+        "name_en": "Russian sturgeon",
         "status": "Critically Endangered"
       },
       {
         "id": "stellate",
         "name_kk": "Шоқыр (севрюга)",
         "name_ru": "Севрюга",
+        "name_en": "Stellate sturgeon",
         "status": "Critically Endangered"
       },
       {
         "id": "persian",
         "name_kk": "Парсы бекіресі",
         "name_ru": "Персидский осётр",
+        "name_en": "Persian sturgeon",
         "status": "Critically Endangered"
       },
       {
         "id": "ship",
         "name_kk": "Пілмай",
         "name_ru": "Шип",
+        "name_en": "Ship sturgeon",
         "status": "Critically Endangered"
       }
     ]
@@ -183,12 +200,14 @@
     "status": "real",
     "source_id": "gbif",
     "note_ru": "Сезонность построена по наблюдениям GBIF в бассейне Каспия.",
+    "note_en": "Seasonality is derived from GBIF observations in the Caspian basin.",
     "note_kk": "Маусымдылық Каспий бассейніндегі GBIF бақылаулары бойынша құрылған.",
     "species": [
       {
         "id": "flamingo",
         "name_kk": "Қызғылт қоқиқаз",
         "name_ru": "Розовый фламинго",
+        "name_en": "Greater flamingo",
         "arrive_month": 3,
         "depart_month": 11,
         "taxon_key": 2481850
@@ -197,6 +216,7 @@
         "id": "dalmatian-pelican",
         "name_kk": "Бұйра бірқазан",
         "name_ru": "Кудрявый пеликан",
+        "name_en": "Dalmatian pelican",
         "arrive_month": 3,
         "depart_month": 10,
         "taxon_key": 2481771
@@ -205,6 +225,7 @@
         "id": "mute-swan",
         "name_kk": "Сұңқылдақ аққу",
         "name_ru": "Лебедь-шипун",
+        "name_en": "Mute swan",
         "arrive_month": 10,
         "depart_month": 4,
         "taxon_key": 2498027
@@ -213,6 +234,7 @@
         "id": "greater-white-fronted-goose",
         "name_kk": "Үлкен ақмаңдай қаз",
         "name_ru": "Белолобый гусь",
+        "name_en": "Greater white-fronted goose",
         "arrive_month": 10,
         "depart_month": 3,
         "taxon_key": 2498036
@@ -228,6 +250,7 @@
         "id": "mangystau",
         "name_kk": "Маңғыстау",
         "name_ru": "Мангистау",
+        "name_en": "Mangystau",
         "series": [
           {
             "year": 2015,
@@ -251,6 +274,7 @@
         "id": "atyrau",
         "name_kk": "Атырау",
         "name_ru": "Атырау",
+        "name_en": "Atyrau",
         "series": [
           {
             "year": 2015,
@@ -274,6 +298,7 @@
         "id": "gilan",
         "name_kk": "Гилян (Иран)",
         "name_ru": "Гилян (Иран)",
+        "name_en": "Gilan (Iran)",
         "series": [
           {
             "year": 2015,
@@ -297,6 +322,7 @@
         "id": "lankaran",
         "name_kk": "Ленкорань (Әзербайжан)",
         "name_ru": "Ленкорань (Азербайджан)",
+        "name_en": "Lankaran (Azerbaijan)",
         "series": [
           {
             "year": 2015,
@@ -324,6 +350,7 @@
       "kind": "seal",
       "name_kk": "Итбалық аралдары (Түлен)",
       "name_ru": "Тюленьи острова",
+      "name_en": "Seal Islands",
       "coords": [
         50.55,
         44.6
@@ -336,6 +363,7 @@
       "kind": "seal",
       "name_kk": "Кендірлі залежкасы",
       "name_ru": "Залёжка Кендерли",
+      "name_en": "Kenderli haul-out",
       "coords": [
         52.3,
         42.9
@@ -348,6 +376,7 @@
       "kind": "seal",
       "name_kk": "Апшерон архипелагы",
       "name_ru": "Апшеронский архипелаг",
+      "name_en": "Absheron archipelago",
       "coords": [
         50.35,
         40.35
@@ -360,6 +389,7 @@
       "kind": "sturgeon",
       "name_kk": "Жайық сағасы — уылдырық шашу",
       "name_ru": "Устье Урала — нерестилища",
+      "name_en": "Ural mouth — spawning grounds",
       "coords": [
         51.85,
         46.9
@@ -372,6 +402,7 @@
       "kind": "sturgeon",
       "name_kk": "Еділ атырауы",
       "name_ru": "Дельта Волги",
+      "name_en": "Volga delta",
       "coords": [
         48.6,
         45.9
@@ -384,6 +415,7 @@
       "kind": "bird",
       "name_kk": "Қызылағаш қорығы",
       "name_ru": "Кызылагачский заповедник",
+      "name_en": "Gizilagaj nature reserve",
       "coords": [
         48.95,
         39.05
@@ -396,6 +428,7 @@
       "kind": "bird",
       "name_kk": "Еділ атырауы — құс алаңы",
       "name_ru": "Дельта Волги — птичьи угодья",
+      "name_en": "Volga delta — bird grounds",
       "coords": [
         48.9,
         45.7
@@ -408,6 +441,7 @@
       "kind": "bird",
       "name_kk": "Қараған шығанағы",
       "name_ru": "Залив Караган",
+      "name_en": "Karagan bay",
       "coords": [
         50.9,
         44.5

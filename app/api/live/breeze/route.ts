@@ -106,6 +106,7 @@ export async function GET(request: Request) {
         available: true as const,
         name_kk: city.name_kk,
         name_ru: city.name_ru,
+        name_en: city.name_en,
         distanceKm: city.distanceKm,
         seaElevation: sea.elevation ?? null,
         hoursAnalysed: hours.length,
@@ -138,6 +139,7 @@ export async function GET(request: Request) {
       available: true as const,
       name_kk: city.name_kk,
       name_ru: city.name_ru,
+      name_en: city.name_en,
       lat: city.lat,
       lon: city.lon,
       coastNormal: city.coastNormal,
@@ -145,12 +147,16 @@ export async function GET(request: Request) {
       seaElevation: sea.elevation ?? null,
       caveat_kk: city.caveat_kk ?? null,
       caveat_ru: city.caveat_ru ?? null,
+      caveat_en: city.caveat_en ?? null,
       suppressed: northAndFrozen,
       suppressedReason_kk: northAndFrozen
         ? "Қыста солтүстік Каспий қатады — мұз үсті құрлықтай суық, контраст керісінше. Бриз есептелмейді."
         : null,
       suppressedReason_ru: northAndFrozen
         ? "Зимой северный Каспий замерзает — надо льдом холодно, как над сушей, контраст обратный. Бриз не рассчитывается."
+        : null,
+      suppressedReason_en: northAndFrozen
+        ? "In winter the northern Caspian freezes — over ice it is as cold as over land, so the contrast is reversed. The breeze is not computed."
         : null,
       now: {
         time: now.time,
@@ -190,8 +196,10 @@ function excludedCities() {
     id: c.id,
     name_kk: c.name_kk,
     name_ru: c.name_ru,
+    name_en: c.name_en,
     distanceKm: c.distanceKm,
     reason_kk: c.caveat_kk,
     reason_ru: c.caveat_ru,
+    reason_en: c.caveat_en,
   }));
 }

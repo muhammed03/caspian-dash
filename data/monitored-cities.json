@@ -6,6 +6,7 @@
       "id": "aqtau",
       "name_kk": "Ақтау",
       "name_ru": "Актау",
+      "name_en": "Aktau",
       "lat": 43.65,
       "lon": 51.16,
       "country": "KAZ"
@@ -14,6 +15,7 @@
       "id": "atyrau",
       "name_kk": "Атырау",
       "name_ru": "Атырау",
+      "name_en": "Atyrau",
       "lat": 47.09,
       "lon": 51.88,
       "country": "KAZ"
@@ -22,6 +24,7 @@
       "id": "zhanaozen",
       "name_kk": "Жаңаөзен",
       "name_ru": "Жанаозен",
+      "name_en": "Zhanaozen",
       "lat": 43.34,
       "lon": 52.86,
       "country": "KAZ"
@@ -30,6 +33,7 @@
       "id": "baku",
       "name_kk": "Баку",
       "name_ru": "Баку",
+      "name_en": "Baku",
       "lat": 40.41,
       "lon": 49.87,
       "country": "AZE"
@@ -38,6 +42,7 @@
       "id": "sumqayit",
       "name_kk": "Сумгайыт",
       "name_ru": "Сумгаит",
+      "name_en": "Sumqayit",
       "lat": 40.59,
       "lon": 49.66,
       "country": "AZE"
@@ -46,6 +51,7 @@
       "id": "astrakhan",
       "name_kk": "Астрахан",
       "name_ru": "Астрахань",
+      "name_en": "Astrakhan",
       "lat": 46.35,
       "lon": 48.04,
       "country": "RUS"
@@ -54,6 +60,7 @@
       "id": "makhachkala",
       "name_kk": "Махачкала",
       "name_ru": "Махачкала",
+      "name_en": "Makhachkala",
       "lat": 42.98,
       "lon": 47.5,
       "country": "RUS"
@@ -62,6 +69,7 @@
       "id": "turkmenbasy",
       "name_kk": "Түркменбашы",
       "name_ru": "Туркменбаши",
+      "name_en": "Turkmenbashi",
       "lat": 40.02,
       "lon": 52.97,
       "country": "TKM"
@@ -70,6 +78,7 @@
       "id": "anzali",
       "name_kk": "Бендер-Энзели",
       "name_ru": "Бендер-Энзели",
+      "name_en": "Bandar-e Anzali",
       "lat": 37.47,
       "lon": 49.46,
       "country": "IRN"

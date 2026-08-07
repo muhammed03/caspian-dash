@@ -17,6 +17,9 @@
  *  · Mardia & Jupp, Directional Statistics — circular standard deviation
  */
 
+import type { Locale } from "./i18n/locales";
+import type { Trio } from "./i18n/pick";
+
 export type StabilityClass = "A" | "B" | "C" | "D" | "E" | "F";
 
 /**
@@ -204,37 +207,46 @@ export function toBearing(fromBearing: number): number {
   return (fromBearing + 180) % 360;
 }
 
-const COMPASS_KK = ["С", "ССШ", "СШ", "ШСШ", "Ш", "ОШШ", "ОШ", "ОСШ", "О", "ОБО", "ОБ", "БОБ", "Б", "БСБ", "СБ", "ССБ"];
-const COMPASS_RU = ["С", "ССВ", "СВ", "ВСВ", "В", "ВЮВ", "ЮВ", "ЮЮВ", "Ю", "ЮЮЗ", "ЮЗ", "ЗЮЗ", "З", "ЗСЗ", "СЗ", "ССЗ"];
+const COMPASS: Record<Locale, string[]> = {
+  kk: ["С", "ССШ", "СШ", "ШСШ", "Ш", "ОШШ", "ОШ", "ОСШ", "О", "ОБО", "ОБ", "БОБ", "Б", "БСБ", "СБ", "ССБ"],
+  ru: ["С", "ССВ", "СВ", "ВСВ", "В", "ВЮВ", "ЮВ", "ЮЮВ", "Ю", "ЮЮЗ", "ЮЗ", "ЗЮЗ", "З", "ЗСЗ", "СЗ", "ССЗ"],
+  en: ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"],
+};
 
-export function compassLabel(bearing: number, locale: "kk" | "ru"): string {
+export function compassLabel(bearing: number, locale: Locale): string {
   const i = Math.round(((bearing % 360) / 22.5)) % 16;
-  return (locale === "ru" ? COMPASS_RU : COMPASS_KK)[i];
+  return (COMPASS[locale] ?? COMPASS.kk)[i];
 }
 
-export const STABILITY_TEXT: Record<StabilityClass, { kk: string; ru: string }> = {
+export const STABILITY_TEXT: Record<StabilityClass, Trio> = {
   A: {
     kk: "A — қатты орнықсыз: шлейф кең жайылып, тез сұйылады",
     ru: "A — сильно неустойчиво: шлейф широкий, быстро разбавляется",
+    en: "A — very unstable: the plume spreads wide and dilutes quickly",
   },
   B: {
     kk: "B — орнықсыз: күндізгі кең жайылу",
     ru: "B — неустойчиво: дневное широкое рассеивание",
+    en: "B — unstable: wide daytime dispersion",
   },
   C: {
     kk: "C — әлсіз орнықсыз: орташа жайылу",
     ru: "C — слабо неустойчиво: умеренное рассеивание",
+    en: "C — slightly unstable: moderate dispersion",
   },
   D: {
     kk: "D — бейтарап: желмен тікелей тасымал",
     ru: "D — нейтрально: перенос по ветру без сильного рассеивания",
+    en: "D — neutral: carried downwind without strong dispersion",
   },
   E: {
     kk: "E — әлсіз орнықты: шлейф тарылып, алысқа жетеді",
     ru: "E — слабо устойчиво: шлейф сужается и уходит дальше",
+    en: "E — slightly stable: the plume narrows and travels further",
   },
   F: {
     kk: "F — түнгі орнықты қабат: шлейф жіңішке әрі алысқа жетеді",
     ru: "F — ночной устойчивый слой: шлейф узкий и уходит далеко",
+    en: "F — stable night-time layer: the plume is narrow and travels far",
   },
 };

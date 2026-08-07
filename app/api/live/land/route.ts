@@ -13,11 +13,11 @@ export const dynamic = "force-dynamic";
 
 /** Coastal points the indices are averaged over — one per stretch of coast. */
 const REGIONS = [
-  { id: "mangystau", name_kk: "Маңғыстау", name_ru: "Мангистау", lat: 43.65, lon: 51.16 },
-  { id: "atyrau", name_kk: "Атырау", name_ru: "Атырау", lat: 47.09, lon: 51.88 },
-  { id: "north-caspian", name_kk: "Солтүстік Каспий", name_ru: "Северный Каспий", lat: 46.35, lon: 48.04 },
-  { id: "dagestan", name_kk: "Дағыстан", name_ru: "Дагестан", lat: 42.98, lon: 47.5 },
-  { id: "absheron", name_kk: "Апшерон", name_ru: "Апшерон", lat: 40.41, lon: 49.87 },
+  { id: "mangystau", name_kk: "Маңғыстау", name_ru: "Мангистау", name_en: "Mangystau", lat: 43.65, lon: 51.16 },
+  { id: "atyrau", name_kk: "Атырау", name_ru: "Атырау", name_en: "Atyrau", lat: 47.09, lon: 51.88 },
+  { id: "north-caspian", name_kk: "Солтүстік Каспий", name_ru: "Северный Каспий", name_en: "Northern Caspian", lat: 46.35, lon: 48.04 },
+  { id: "dagestan", name_kk: "Дағыстан", name_ru: "Дагестан", name_en: "Dagestan", lat: 42.98, lon: 47.5 },
+  { id: "absheron", name_kk: "Апшерон", name_ru: "Апшерон", name_en: "Absheron", lat: 40.41, lon: 49.87 },
 ];
 
 const DAILY = "temperature_2m_max,relative_humidity_2m_mean,precipitation_sum";
@@ -65,6 +65,7 @@ export async function GET() {
         id: region.id,
         name_kk: region.name_kk,
         name_ru: region.name_ru,
+        name_en: region.name_en,
         lat: region.lat,
         lon: region.lon,
         soilTemperature: cur.soil_temperature_0cm ?? null,

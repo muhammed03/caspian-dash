@@ -7,33 +7,39 @@
       "iso3": "KAZ",
       "name_kk": "Қазақстан",
       "name_ru": "Казахстан",
+      "name_en": "Kazakhstan",
       "score": 68
     },
     {
       "iso3": "RUS",
       "name_kk": "Ресей",
       "name_ru": "Россия",
+      "name_en": "Russia",
       "score": 45
     },
     {
       "iso3": "AZE",
       "name_kk": "Әзербайжан",
       "name_ru": "Азербайджан",
+      "name_en": "Azerbaijan",
       "score": 32
     },
     {
       "iso3": "TKM",
       "name_kk": "Түрікменстан",
       "name_ru": "Туркменистан",
+      "name_en": "Turkmenistan",
       "score": 9
     },
     {
       "iso3": "IRN",
       "name_kk": "Иран",
       "name_ru": "Иран",
+      "name_en": "Iran",
       "score": 12
     }
   ],
   "satellite_note_ru": "Спутниковые источники (JRC GSW, Sentinel-5P, Sentinel-1, FIRMS, ERA5) покрывают всё море равномерно и не зависят от разрешения какой-либо страны — именно они закрывают этот разрыв.",
+  "satellite_note_en": "Satellite sources (JRC GSW, Sentinel-5P, Sentinel-1, FIRMS, ERA5) cover the whole sea evenly and depend on no country's permission — they are what closes this gap.",
   "satellite_note_kk": "Спутниктік дереккөздер (JRC GSW, Sentinel-5P, Sentinel-1, FIRMS, ERA5) бүкіл теңізді біркелкі қамтиды және ешбір елдің рұқсатына тәуелді емес — дәл солар осы алшақтықты жабады."
 }

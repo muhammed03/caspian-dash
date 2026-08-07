@@ -32,9 +32,11 @@ type Facility = {
     id: string;
     name_kk: string;
     name_ru: string;
+    name_en: string;
     short: string;
     kind_kk: string;
     kind_ru: string;
+    kind_en: string;
     country: string;
     source: string;
     approx: boolean;
@@ -47,6 +49,7 @@ type Facility = {
 /** Where the parcel released now will have drifted to, and how spread out. */
 type DriftMark = {
   minutes: number;
+  /** Horizon key — "m30" | "h1" | "h3". Localized by the client. */
   label: string;
   lat: number;
   lng: number;
@@ -65,6 +68,7 @@ type Frame = {
   toBearing: number;
   fromLabel_kk: string;
   fromLabel_ru: string;
+  fromLabel_en: string;
   speedMs: number;
   stability: StabilityClass;
   lengthKm: number;
@@ -161,6 +165,7 @@ export async function GET() {
         toBearing: Number(to.toFixed(1)),
         fromLabel_kk: compassLabel(from, "kk"),
         fromLabel_ru: compassLabel(from, "ru"),
+        fromLabel_en: compassLabel(from, "en"),
         speedMs: Number(speedMs.toFixed(1)),
         stability: cls,
         lengthKm: Number(lengthKm.toFixed(1)),
@@ -214,7 +219,9 @@ export async function GET() {
           const dLng = (lng - lng0) * Math.cos((latitude * Math.PI) / 180);
           out.push({
             minutes: minute,
-            label: minute === 30 ? "+30 мин" : minute === 60 ? "+1 ч" : "+3 ч",
+            // A key, not a caption: the wording is chosen by the client at
+            // render time so it follows the reader's language.
+            label: minute === 30 ? "m30" : minute === 60 ? "h1" : "h3",
             lat: Number(lat.toFixed(5)),
             lng: Number(lng.toFixed(5)),
             distanceKm: Number(travelled.toFixed(1)),
@@ -243,9 +250,11 @@ export async function GET() {
       available: true as const,
       name_kk: p.name_kk,
       name_ru: p.name_ru,
+      name_en: p.name_en,
       short: p.short,
       kind_kk: p.kind_kk,
       kind_ru: p.kind_ru,
+      kind_en: p.kind_en,
       country: p.country,
       source: p.source,
       approx: p.approx,

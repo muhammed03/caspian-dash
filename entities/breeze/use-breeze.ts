@@ -8,6 +8,7 @@ export type BreezeCityState = {
   available: true;
   name_kk: string;
   name_ru: string;
+  name_en: string;
   lat: number;
   lon: number;
   coastNormal: number;
@@ -15,9 +16,11 @@ export type BreezeCityState = {
   seaElevation: number | null;
   caveat_kk: string | null;
   caveat_ru: string | null;
+  caveat_en: string | null;
   suppressed: boolean;
   suppressedReason_kk: string | null;
   suppressedReason_ru: string | null;
+  suppressedReason_en: string | null;
   now: {
     time: string;
     hour: number;
@@ -48,9 +51,11 @@ type BreezeResponse = {
     id: string;
     name_kk: string;
     name_ru: string;
+    name_en: string;
     distanceKm: number;
     reason_kk: string | null;
     reason_ru: string | null;
+    reason_en: string | null;
   }[];
 };
 

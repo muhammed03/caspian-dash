@@ -6,7 +6,7 @@ import { cn } from "@/shared/lib/cn";
 import { LOCALES, type Locale } from "@/shared/lib/i18n";
 import { useLocale } from "@/shared/lib/i18n/client";
 
-const LABELS: Record<Locale, string> = { kk: "ҚАЗ", ru: "РУС" };
+const LABELS: Record<Locale, string> = { kk: "ҚАЗ", ru: "РУС", en: "ENG" };
 
 export function LocaleSwitch({ className }: { className?: string }) {
   const current = useLocale();

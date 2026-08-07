@@ -10,6 +10,7 @@ export type PlumeFrame = {
   toBearing: number;
   fromLabel_kk: string;
   fromLabel_ru: string;
+  fromLabel_en: string;
   speedMs: number;
   stability: StabilityClass;
   lengthKm: number;
@@ -19,6 +20,7 @@ export type PlumeFrame = {
 
 export type DriftMark = {
   minutes: number;
+  /** Horizon key — "m30" | "h1" | "h3"; the wording is chosen at render time. */
   label: string;
   lat: number;
   lng: number;
@@ -32,9 +34,11 @@ export type PlumeFacility = {
   available: true;
   name_kk: string;
   name_ru: string;
+  name_en: string;
   short: string;
   kind_kk: string;
   kind_ru: string;
+  kind_en: string;
   country: string;
   source: string;
   approx: boolean;

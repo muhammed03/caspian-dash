@@ -7,6 +7,7 @@ export type LandRegion = LandIndices & {
   id: string;
   name_kk: string;
   name_ru: string;
+  name_en: string;
   lat: number;
   lon: number;
   soilTemperature: number | null;

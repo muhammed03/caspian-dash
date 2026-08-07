@@ -1,3 +1,5 @@
+import type { Dict } from "./types";
+
 export const ru = {
   common: {
     appName: "Caspian Watch",
@@ -149,4 +151,4 @@ export const ru = {
     limitations: "Ограничения",
     dataRegistry: "Реестр источников данных",
   },
-};
+} satisfies Dict;

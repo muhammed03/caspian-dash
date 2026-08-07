@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
  * If the network is down (jury machine, offline demo) the last committed
  * snapshot is returned instead, flagged so the UI can say so.
  */
-type City = { id: string; lat: number; lon: number; name_kk: string; name_ru: string };
+type City = { id: string; lat: number; lon: number; name_kk: string; name_ru: string; name_en: string };
 
 const FIELDS = "pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone,european_aqi";
 
@@ -41,6 +41,7 @@ export async function GET() {
         city_id: city.id,
         name_kk: city.name_kk,
         name_ru: city.name_ru,
+        name_en: city.name_en,
         lat: city.lat,
         lon: city.lon,
         time: current.time ?? null,

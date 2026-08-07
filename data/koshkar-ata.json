@@ -3,6 +3,7 @@
   "source_id": "koshkar_pub",
   "name_kk": "Қошқар-Ата қалдық қоймасы",
   "name_ru": "Хвостохранилище Кошкар-Ата",
+  "name_en": "Koshkar-Ata tailings pond",
   "coordinates": [
     51.13,
     43.71
@@ -28,5 +29,12 @@
     "5 км от Актау, 8 км от берега моря",
     "Исследование 2024 года: уровень загрязнения не превышает ПДК, выбрана биологическая рекультивация",
     "Главный риск — токсичная пыль с высохшей поверхности"
+  ],
+  "facts_en": [
+    "Area 77 km² (2021 figure)",
+    "Over 105 million tonnes of toxic waste, of which 52 million tonnes are low-level radioactive",
+    "5 km from Aktau, 8 km from the sea shore",
+    "A 2024 study: contamination does not exceed the permissible limits, and biological remediation was chosen",
+    "The main risk is toxic dust blown off the dried surface"
   ]
 }

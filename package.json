@@ -12,6 +12,8 @@
     "pipeline:coastlines": "tsx scripts/pipeline/build-coastlines.ts",
     "pipeline:snapshot": "tsx scripts/pipeline/snapshot-live.ts",
     "pipeline:ai": "tsx scripts/pipeline/gen-insights.ts",
+    "pipeline:en": "node scripts/pipeline/add-english.mjs",
+    "i18n:check": "node scripts/pipeline/add-english.mjs --check",
     "docs": "bash scripts/build-docs.sh"
   },
   "dependencies": {

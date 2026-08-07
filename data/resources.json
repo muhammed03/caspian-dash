@@ -2,12 +2,14 @@
   "status": "semi",
   "source_id": "industry_reports",
   "note_ru": "Данные Ирана и Туркменистана фактически закрыты — приведены оценки отраслевых обзоров, точность ниже.",
+  "note_en": "Iranian and Turkmen figures are effectively closed — the estimates shown come from industry reviews and are less precise.",
   "note_kk": "Иран мен Түрікменстан деректері іс жүзінде жабық — салалық шолулардың бағалаулары келтірілген, дәлдігі төмен.",
   "reserves": [
     {
       "id": "oil",
       "name_kk": "Мұнай",
       "name_ru": "Нефть",
+      "name_en": "Oil",
       "unit": "млрд баррелей",
       "value": 48,
       "production_per_year": 1.05
@@ -16,6 +18,7 @@
       "id": "gas",
       "name_kk": "Табиғи газ",
       "name_ru": "Природный газ",
+      "name_en": "Natural gas",
       "unit": "трлн м³",
       "value": 8.7,
       "production_per_year": 0.17
@@ -58,6 +61,7 @@
       "id": "kashagan",
       "name_kk": "Қашаған",
       "name_ru": "Кашаган",
+      "name_en": "Kashagan",
       "country": "KAZ",
       "coords": [
         51.53,
@@ -70,6 +74,7 @@
       "id": "tengiz",
       "name_kk": "Теңіз",
       "name_ru": "Тенгиз",
+      "name_en": "Tengiz",
       "country": "KAZ",
       "coords": [
         53.15,
@@ -82,6 +87,7 @@
       "id": "karachaganak",
       "name_kk": "Қарашығанақ",
       "name_ru": "Карачаганак",
+      "name_en": "Karachaganak",
       "country": "KAZ",
       "coords": [
         51.6,
@@ -94,6 +100,7 @@
       "id": "azeri-chirag",
       "name_kk": "Азери-Чираг-Гүнешли",
       "name_ru": "Азери-Чираг-Гюнешли",
+      "name_en": "Azeri-Chirag-Gunashli",
       "country": "AZE",
       "coords": [
         50.6,
@@ -106,6 +113,7 @@
       "id": "shah-deniz",
       "name_kk": "Шах-Дениз",
       "name_ru": "Шах-Дениз",
+      "name_en": "Shah Deniz",
       "country": "AZE",
       "coords": [
         50.9,
@@ -118,6 +126,7 @@
       "id": "galkynysh-caspian",
       "name_kk": "Түркменстан шельфі",
       "name_ru": "Шельф Туркменистана",
+      "name_en": "Turkmenistan shelf",
       "country": "TKM",
       "coords": [
         52.5,
@@ -130,6 +139,7 @@
       "id": "filanovsky",
       "name_kk": "Филановский",
       "name_ru": "им. Филановского",
+      "name_en": "Filanovsky field",
       "country": "RUS",
       "coords": [
         49.3,
@@ -142,6 +152,7 @@
       "id": "sardar-e-jangal",
       "name_kk": "Сардар-е Джангал",
       "name_ru": "Сардар-е Джангаль",
+      "name_en": "Sardar-e Jangal",
       "country": "IRN",
       "coords": [
         50.3,

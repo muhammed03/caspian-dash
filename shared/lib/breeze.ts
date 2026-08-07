@@ -19,12 +19,15 @@
  *  · Venkatram A. (1977) Boundary-Layer Meteorology 11 — TIBL growth
  */
 
+import type { Trio } from "./i18n/pick";
+
 export type BreezeConfidence = "high" | "medium" | "low" | "none";
 
 export type BreezeCity = {
   id: string;
   name_kk: string;
   name_ru: string;
+  name_en: string;
   lat: number;
   lon: number;
   /** Bearing pointing FROM the sea TOWARD the land, degrees. */
@@ -41,6 +44,7 @@ export type BreezeCity = {
   /** Why the city is limited or excluded — shown to the reader, never hidden. */
   caveat_kk?: string;
   caveat_ru?: string;
+  caveat_en?: string;
 };
 
 /**
@@ -52,6 +56,7 @@ export const BREEZE_CITIES: BreezeCity[] = [
     id: "aqtau",
     name_kk: "Ақтау",
     name_ru: "Актау",
+    name_en: "Aktau",
     lat: 43.641,
     lon: 51.198,
     coastNormal: 90, // sea lies west, breeze blows east onto the land
@@ -63,6 +68,7 @@ export const BREEZE_CITIES: BreezeCity[] = [
     id: "baku",
     name_kk: "Баку",
     name_ru: "Баку",
+    name_en: "Baku",
     lat: 40.409,
     lon: 49.867,
     coastNormal: 270, // sea lies east
@@ -71,11 +77,13 @@ export const BREEZE_CITIES: BreezeCity[] = [
     applicable: true,
     caveat_kk: "Күшті синоптикалық солтүстік жел («хазри») бризді жиі басып кетеді.",
     caveat_ru: "Сильный синоптический северный ветер («хазри») часто подавляет бриз.",
+    caveat_en: "A strong synoptic northerly (the \"khazri\") often suppresses the breeze.",
   },
   {
     id: "sumqayit",
     name_kk: "Сумқайыт",
     name_ru: "Сумгаит",
+    name_en: "Sumqayit",
     lat: 40.589,
     lon: 49.668,
     coastNormal: 270,
@@ -87,6 +95,7 @@ export const BREEZE_CITIES: BreezeCity[] = [
     id: "turkmenbasy",
     name_kk: "Түркменбашы",
     name_ru: "Туркменбаши",
+    name_en: "Turkmenbashi",
     lat: 40.023,
     lon: 52.96,
     coastNormal: 90, // bay lies west
@@ -95,11 +104,13 @@ export const BREEZE_CITIES: BreezeCity[] = [
     applicable: true,
     caveat_kk: "Шығанақ геометриясы жел бағытын бұрмалауы мүмкін.",
     caveat_ru: "Геометрия залива может искажать направление ветра.",
+    caveat_en: "The geometry of the bay can distort the wind direction.",
   },
   {
     id: "anzali",
     name_kk: "Бендер-Энзели",
     name_ru: "Бендер-Энзели",
+    name_en: "Bandar-e Anzali",
     lat: 37.472,
     lon: 49.462,
     coastNormal: 180, // sea lies north
@@ -108,11 +119,13 @@ export const BREEZE_CITIES: BreezeCity[] = [
     applicable: true,
     caveat_kk: "Албурз тауы тау-аңғар циркуляциясын қосады — екі режим араласады.",
     caveat_ru: "Хребет Албурз добавляет горно-долинную циркуляцию — режимы смешиваются.",
+    caveat_en: "The Alborz range adds a mountain-valley circulation — the two regimes mix.",
   },
   {
     id: "makhachkala",
     name_kk: "Махачкала",
     name_ru: "Махачкала",
+    name_en: "Makhachkala",
     lat: 42.976,
     lon: 47.502,
     coastNormal: 270, // sea lies east
@@ -121,11 +134,13 @@ export const BREEZE_CITIES: BreezeCity[] = [
     applicable: true,
     caveat_kk: "Кавказ бөктері қосылады — аралас режим.",
     caveat_ru: "Добавляется влияние предгорий Кавказа — смешанный режим.",
+    caveat_en: "The Caucasus foothills add their own influence — a mixed regime.",
   },
   {
     id: "atyrau",
     name_kk: "Атырау",
     name_ru: "Атырау",
+    name_en: "Atyrau",
     lat: 47.117,
     lon: 51.883,
     coastNormal: 0, // sea lies south, breeze blows north onto the land
@@ -136,11 +151,14 @@ export const BREEZE_CITIES: BreezeCity[] = [
       "Теңізден ~30 км — бриздің ену шегінің шетінде, сондықтан сенімділік әрқашан бір деңгейге төмендетіледі. Солтүстік Каспий таяз: жазда су тез қызып, контраст жоғалуы мүмкін.",
     caveat_ru:
       "~30 км от моря — на самом краю зоны проникновения бриза, поэтому уверенность всегда понижается на уровень. Северный Каспий мелкий: летом вода быстро прогревается и контраст может исчезать.",
+    caveat_en:
+      "~30 km from the sea — at the very edge of the breeze penetration zone, so confidence is always lowered by one level. The northern Caspian is shallow: in summer the water warms quickly and the contrast can disappear.",
   },
   {
     id: "astrakhan",
     name_kk: "Астрахан",
     name_ru: "Астрахань",
+    name_en: "Astrakhan",
     lat: 46.35,
     lon: 48.041,
     coastNormal: 180,
@@ -149,6 +167,7 @@ export const BREEZE_CITIES: BreezeCity[] = [
     applicable: false,
     caveat_kk: "Теңізге дейін ~70 км — бриз бұл жерге жетпейді, сондықтан есептелмейді.",
     caveat_ru: "~70 км до моря — бриз сюда не доходит, поэтому не рассчитывается.",
+    caveat_en: "~70 km from the sea — the breeze does not reach this far, so it is not computed.",
   },
 ];
 
@@ -210,14 +229,27 @@ export function confidenceFrom(criteria: BreezeCriteria, downgrade = false): Bre
   return level;
 }
 
-export const CONFIDENCE_TEXT: Record<BreezeConfidence, { kk: string; ru: string }> = {
-  high: { kk: "бриз белгілері айқын", ru: "признаки бриза выражены" },
-  medium: { kk: "бриз болуы ықтимал", ru: "бриз вероятен" },
+export const CONFIDENCE_TEXT: Record<BreezeConfidence, Trio> = {
+  high: {
+    kk: "бриз белгілері айқын",
+    ru: "признаки бриза выражены",
+    en: "breeze signatures are clear",
+  },
+  medium: {
+    kk: "бриз болуы ықтимал",
+    ru: "бриз вероятен",
+    en: "a breeze is likely",
+  },
   low: {
     kk: "жел теңіз жағынан, бірақ бриз екені расталмады",
     ru: "ветер со стороны моря, но бриз не подтверждён",
+    en: "the wind is off the sea, but a breeze is not confirmed",
   },
-  none: { kk: "бриз белгілері жоқ", ru: "признаков бриза нет" },
+  none: {
+    kk: "бриз белгілері жоқ",
+    ru: "признаков бриза нет",
+    en: "no signs of a breeze",
+  },
 };
 
 /** Night land breeze: the weaker, rarer reverse flow. */

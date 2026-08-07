@@ -6,30 +6,35 @@
       "id": "oil",
       "name_kk": "Мұнай өнімдері",
       "name_ru": "Нефтепродукты",
+      "name_en": "Oil products",
       "percent": 41
     },
     {
       "id": "industrial",
       "name_kk": "Өнеркәсіп ағызындылары",
       "name_ru": "Промышленные стоки",
+      "name_en": "Industrial effluent",
       "percent": 24
     },
     {
       "id": "municipal",
       "name_kk": "Тұрмыстық қалдық",
       "name_ru": "Бытовые стоки",
+      "name_en": "Domestic sewage",
       "percent": 19
     },
     {
       "id": "plastic",
       "name_kk": "Пластик және микропластик",
       "name_ru": "Пластик и микропластик",
+      "name_en": "Plastic and microplastics",
       "percent": 11
     },
     {
       "id": "agro",
       "name_kk": "Ауылшаруашылық ағыны",
       "name_ru": "Сельхозсток",
+      "name_en": "Agricultural runoff",
       "percent": 5
     }
   ],
@@ -38,34 +43,40 @@
       "region_id": "north",
       "name_kk": "Солтүстік Каспий",
       "name_ru": "Северный Каспий",
+      "name_en": "Northern Caspian",
       "value": 54
     },
     {
       "region_id": "mangystau",
       "name_kk": "Маңғыстау жағалауы",
       "name_ru": "Мангистауское побережье",
+      "name_en": "Mangystau coast",
       "value": 61
     },
     {
       "region_id": "middle",
       "name_kk": "Орта Каспий",
       "name_ru": "Средний Каспий",
+      "name_en": "Middle Caspian",
       "value": 72
     },
     {
       "region_id": "apsheron",
       "name_kk": "Апшерон",
       "name_ru": "Апшерон",
+      "name_en": "Absheron",
       "value": 48
     },
     {
       "region_id": "south",
       "name_kk": "Оңтүстік Каспий",
       "name_ru": "Южный Каспий",
+      "name_en": "Southern Caspian",
       "value": 66
     }
   ],
   "purity_note_ru": "Индекс чистоты — сводная модельная оценка платформы по доле нефтепродуктов, промышленной нагрузке и спутниковым данным по аэрозолям. Формула на странице «Методика».",
+  "purity_note_en": "The purity index is this platform's composite model estimate, built from the share of oil products, the industrial load and satellite aerosol data. The formula is on the Methodology page.",
   "purity_note_kk": "Тазалық индексі — мұнай өнімдерінің үлесі, өнеркәсіптік жүктеме және аэрозоль бойынша спутниктік дерек негізіндегі платформаның жиынтық модельдік бағасы. Формула «Әдістеме» бетінде.",
   "health": {
     "status": "semi",
@@ -77,6 +88,7 @@
     ],
     "population_covered": 2400000,
     "method_ru": "Годовая модельная оценка избыточной смертности, связанной с загрязнением воздуха, по методике ВОЗ (концентрация PM2.5 × функция «доза-эффект» × население). Не измерение и не счётчик реального времени.",
+    "method_en": "An annual model estimate of excess mortality associated with air pollution, following WHO methodology (PM2.5 concentration × exposure-response function × population). It is not a measurement and not a real-time counter.",
     "method_kk": "Ауа ластануына байланысты артық өлім-жітімнің WHO әдістемесі бойынша жылдық модельдік бағасы (PM2.5 концентрациясы × «доза-эффект» функциясы × халық саны). Бұл өлшем емес және нақты уақыт счётчигі емес."
   }
 }

@@ -3,66 +3,77 @@
   "source_id": "model",
   "reference_year": 2015,
   "method_ru": "Горизонтальное отступание = падение уровня / уклон дна. Уклон задан по секторам из литературы по батиметрии Каспия; линия смещается по внутренней нормали. Это модель, а не спутниковое наблюдение.",
+  "method_en": "Horizontal retreat = drop in level ÷ seabed slope. The slope is set per sector from the published literature on Caspian bathymetry; the line is shifted along the inward normal. This is a model, not a satellite observation.",
   "method_kk": "Көлденең шегіну = деңгейдің төмендеуі / түп еңісі. Еңіс Каспий батиметриясы бойынша әдебиеттен секторлар бойынша берілген; сызық ішкі нормаль бойымен жылжиды. Бұл модель, спутниктік бақылау емес.",
   "sectors": [
     {
       "id": "ural-delta",
       "slope": 0.00025,
       "name_ru": "Дельта Урала",
+      "name_en": "Ural delta",
       "name_kk": "Жайық атырауы"
     },
     {
       "id": "volga-delta",
       "slope": 0.0003,
       "name_ru": "Дельта Волги",
+      "name_en": "Volga delta",
       "name_kk": "Еділ атырауы"
     },
     {
       "id": "buzachi",
       "slope": 0.0008,
       "name_ru": "Бузачи / Каражанбас",
+      "name_en": "Buzachi / Karazhanbas",
       "name_kk": "Бозашы / Қаражанбас"
     },
     {
       "id": "north-shelf",
       "slope": 0.0004,
       "name_ru": "Северный шельф",
+      "name_en": "Northern shelf",
       "name_kk": "Солтүстік қайраң"
     },
     {
       "id": "mangystau",
       "slope": 0.006,
       "name_ru": "Мангистау (Актау, Курык)",
+      "name_en": "Mangystau (Aktau, Kuryk)",
       "name_kk": "Маңғыстау (Ақтау, Құрық)"
     },
     {
       "id": "kendirli",
       "slope": 0.004,
       "name_ru": "Кендерли",
+      "name_en": "Kenderli",
       "name_kk": "Кендірлі"
     },
     {
       "id": "turkmen",
       "slope": 0.003,
       "name_ru": "Туркменское побережье",
+      "name_en": "Turkmen coast",
       "name_kk": "Түркмен жағалауы"
     },
     {
       "id": "iran",
       "slope": 0.012,
       "name_ru": "Иранское побережье",
+      "name_en": "Iranian coast",
       "name_kk": "Иран жағалауы"
     },
     {
       "id": "azerbaijan",
       "slope": 0.01,
       "name_ru": "Азербайджанское побережье",
+      "name_en": "Azerbaijani coast",
       "name_kk": "Әзербайжан жағалауы"
     },
     {
       "id": "dagestan",
       "slope": 0.008,
       "name_ru": "Дагестанское побережье",
+      "name_en": "Dagestan coast",
       "name_kk": "Дағыстан жағалауы"
     }
   ],

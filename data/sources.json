@@ -10,6 +10,7 @@
       "coverage_years": "1992–2025",
       "note_kk": "Хакатон желісінен портал қолжетімсіз болды. Қатар жарияланған альтиметрия мәндері мен төмендеу қарқыны бойынша қалпына келтірілді (тірек нүктелер scripts/pipeline/build-datasets.ts ішінде ашық көрсетілген). Портал қолжетімді болса, қатар нақты файлмен ауыстырылады.",
       "note_ru": "Портал был недоступен из сети хакатона. Ряд восстановлен по опубликованным значениям альтиметрии и скоростям падения (опорные точки открыто перечислены в scripts/pipeline/build-datasets.ts). При доступности портала ряд заменяется реальным файлом.",
+      "note_en": "The portal was unreachable from the hackathon network. The series was reconstructed from published altimetry values and rates of decline (the anchor points are listed openly in scripts/pipeline/build-datasets.ts). When the portal is reachable, the series is replaced by the real file.",
       "last_checked": "2026-08-07"
     },
     {
@@ -71,6 +72,7 @@
       "status": "semi",
       "coverage_years": "1990–2021",
       "note_ru": "Профили Ирана (2008) и Туркменистана (2012) устарели.",
+      "note_en": "The Iranian (2008) and Turkmen (2012) profiles are out of date.",
       "note_kk": "Иран (2008) және Түрікменстан (2012) профильдері ескірген.",
       "last_checked": "2026-08-07"
     },

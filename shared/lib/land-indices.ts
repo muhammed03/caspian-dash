@@ -7,6 +7,8 @@
  * we have, the honest weaker version is used and labelled as such.
  */
 
+import type { Trio } from "./i18n/pick";
+
 export type LandIndices = {
   /** Topsoil water content, m³/m³, and its 0–100 score. */
   soil: { moisture: number; score: number };
@@ -64,12 +66,12 @@ export function nesterovClass(g: number): 1 | 2 | 3 | 4 | 5 {
   return 5;
 }
 
-export const FIRE_CLASS_TEXT: Record<1 | 2 | 3 | 4 | 5, { kk: string; ru: string }> = {
-  1: { kk: "I — қауіп жоқ", ru: "I — опасности нет" },
-  2: { kk: "II — шағын қауіп", ru: "II — малая опасность" },
-  3: { kk: "III — орташа қауіп", ru: "III — средняя опасность" },
-  4: { kk: "IV — жоғары қауіп", ru: "IV — высокая опасность" },
-  5: { kk: "V — төтенше қауіп", ru: "V — чрезвычайная опасность" },
+export const FIRE_CLASS_TEXT: Record<1 | 2 | 3 | 4 | 5, Trio> = {
+  1: { kk: "I — қауіп жоқ", ru: "I — опасности нет", en: "I — no danger" },
+  2: { kk: "II — шағын қауіп", ru: "II — малая опасность", en: "II — low danger" },
+  3: { kk: "III — орташа қауіп", ru: "III — средняя опасность", en: "III — moderate danger" },
+  4: { kk: "IV — жоғары қауіп", ru: "IV — высокая опасность", en: "IV — high danger" },
+  5: { kk: "V — төтенше қауіп", ru: "V — чрезвычайная опасность", en: "V — extreme danger" },
 };
 
 /**
