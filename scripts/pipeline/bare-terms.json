@@ -1,0 +1,54 @@
+{
+  "_comment": "Fields that were stored as a single string with no _kk/_ru/_en pair — units, facility abbreviations and provenance notes. Keyed by the original value; add-english.mjs expands each into a full language triple.",
+
+  "0–100, доля индикаторов платформы, закрытых машиночитаемыми открытыми данными": {
+    "kk": "0–100, платформа индикаторларының машинамен оқылатын ашық деректермен жабылған үлесі",
+    "ru": "0–100, доля индикаторов платформы, закрытых машиночитаемыми открытыми данными",
+    "en": "0–100, share of the platform's indicators covered by machine-readable open data"
+  },
+
+  "т/год (оценка выбросов)": {
+    "kk": "т/жыл (шығарынды бағасы)",
+    "ru": "т/год (оценка выбросов)",
+    "en": "t/year (emissions estimate)"
+  },
+  "млрд баррелей": { "kk": "млрд баррель", "ru": "млрд баррелей", "en": "bn barrels" },
+  "трлн м³": { "kk": "трлн м³", "ru": "трлн м³", "en": "tn m³" },
+  "км³/год": { "kk": "км³/жыл", "ru": "км³/год", "en": "km³/year" },
+  "км³/год (общий водозабор)": {
+    "kk": "км³/жыл (жалпы су алу)",
+    "ru": "км³/год (общий водозабор)",
+    "en": "km³/year (total abstraction)"
+  },
+  "м БС": { "kk": "м БЖ", "ru": "м БС", "en": "m BS" },
+  "км²": { "kk": "км²", "ru": "км²", "en": "km²" },
+  "км³": { "kk": "км³", "ru": "км³", "en": "km³" },
+
+  "АГПЗ": { "kk": "АГӨЗ", "ru": "АГПЗ", "en": "Astrakhan GPP" },
+  "АНПЗ": { "kk": "АМӨЗ", "ru": "АНПЗ", "en": "Atyrau Ref." },
+  "Баку МӨЗ": { "kk": "Баку МӨЗ", "ru": "Бакинский НПЗ", "en": "Baku Ref." },
+  "МАЭК": { "kk": "МАЭК", "ru": "МАЭК", "en": "MAEK" },
+  "ММГ": { "kk": "ММГ", "ru": "ММГ", "en": "MMG" },
+  "Махачкала": { "kk": "Махачкала", "ru": "Махачкала", "en": "Makhachkala" },
+  "Сумқайыт": { "kk": "Сумқайыт", "ru": "Сумгаит", "en": "Sumqayit" },
+  "ТМӨЗ": { "kk": "ТМӨЗ", "ru": "ТНПЗ", "en": "Turkmenbashi Ref." },
+  "Теңіз": { "kk": "Теңіз", "ru": "Тенгиз", "en": "Tengiz" },
+  "Энзели": { "kk": "Энзели", "ru": "Энзели", "en": "Anzali" },
+  "Қашаған": { "kk": "Қашаған", "ru": "Кашаган", "en": "Kashagan" },
+
+  "OpenStreetMap (ODbL); иранский сегмент OSM неполон": {
+    "kk": "OpenStreetMap (ODbL); OSM-дің иран сегменті толық емес",
+    "ru": "OpenStreetMap (ODbL); иранский сегмент OSM неполон",
+    "en": "OpenStreetMap (ODbL); the Iranian segment of OSM is incomplete"
+  },
+  "Искусственный остров D, публичные координаты проекта": {
+    "kk": "Жасанды D аралы, жобаның ашық координаттары",
+    "ru": "Искусственный остров D, публичные координаты проекта",
+    "en": "Artificial island D, publicly stated project coordinates"
+  },
+  "Центр месторождения; промплощадка растянута на несколько км": {
+    "kk": "Кен орнының орталығы; өнеркәсіп алаңы бірнеше км-ге созылған",
+    "ru": "Центр месторождения; промплощадка растянута на несколько км",
+    "en": "Centre of the field; the industrial site extends over several km"
+  }
+}

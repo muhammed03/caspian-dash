@@ -14,6 +14,7 @@
     "pipeline:ai": "tsx scripts/pipeline/gen-insights.ts",
     "pipeline:en": "node scripts/pipeline/add-english.mjs",
     "i18n:check": "node scripts/pipeline/add-english.mjs --check",
+    "i18n:leak": "node scripts/check-locale-leak.mjs",
     "docs": "bash scripts/build-docs.sh"
   },
   "dependencies": {

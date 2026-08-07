@@ -1,7 +1,9 @@
 {
   "source_id": "aquastat",
   "status": "semi",
-  "unit": "км³/год (общий водозабор)",
+  "unit_kk": "км³/жыл (жалпы су алу)",
+  "unit_ru": "км³/год (общий водозабор)",
+  "unit_en": "km³/year (total abstraction)",
   "countries": [
     {
       "iso3": "RUS",

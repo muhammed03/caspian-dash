@@ -604,7 +604,7 @@ export function DriftPanel() {
           <h3 className="text-ink text-[15px] font-semibold tracking-tight">
             {byLocale(locale, DRIFT_TITLE)}
           </h3>
-          <Label className="mt-1">{lead.short}</Label>
+          <Label className="mt-1">{pick(lead, "short", locale)}</Label>
         </div>
         <button
           type="button"

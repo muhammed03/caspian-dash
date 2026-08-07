@@ -23,12 +23,25 @@ const CHECK = process.argv.includes("--check");
 const terms = JSON.parse(await readFile(join(ROOT, "scripts/pipeline/en-terms.json"), "utf8"));
 delete terms._comment;
 
+/**
+ * Fields that were stored as one string with no language pair at all — units,
+ * facility abbreviations, provenance notes. Each expands into a full triple,
+ * replacing the bare key.
+ */
+const bare = JSON.parse(await readFile(join(ROOT, "scripts/pipeline/bare-terms.json"), "utf8"));
+delete bare._comment;
+
+const CYRILLIC = /[Ѐ-ӿ]/;
 const missing = new Set();
+const untriaged = new Set();
 
 function translate(value) {
   if (Array.isArray(value)) return value.map(translate);
   if (typeof value !== "string") return value;
   if (Object.prototype.hasOwnProperty.call(terms, value)) return terms[value];
+  // Once a bare field has been expanded, its `_ru` half comes back through
+  // here on the next run — bare-terms already holds the English for it.
+  if (Object.prototype.hasOwnProperty.call(bare, value)) return bare[value].en;
   missing.add(value);
   return value;
 }
@@ -41,6 +54,20 @@ function walk(node) {
   const out = {};
   for (const [key, value] of Object.entries(node)) {
     if (key.endsWith("_en")) continue; // rewritten from its _ru twin below
+
+    // A bare Cyrillic string is a field nobody ever localized. Expand it into
+    // the three suffixed fields so `pick` can resolve it like everything else.
+    if (typeof value === "string" && CYRILLIC.test(value) && !/_(kk|ru)$/.test(key)) {
+      const triple = bare[value];
+      if (triple) {
+        out[`${key}_kk`] = triple.kk;
+        out[`${key}_ru`] = triple.ru;
+        out[`${key}_en`] = triple.en;
+        continue;
+      }
+      untriaged.add(`${key}: ${value}`);
+    }
+
     out[key] = walk(value);
     if (key.endsWith("_ru")) out[`${key.slice(0, -3)}_en`] = translate(value);
   }
@@ -60,7 +87,9 @@ for (const path of files(DATA)) {
   const before = await readFile(path, "utf8");
   // Files with nothing to localize are left byte-for-byte alone — re-serializing
   // the big geometry files would bury the real change in a whole-file diff.
-  if (!before.includes('_ru"')) continue;
+  const hasPairs = before.includes('_ru"');
+  const hasBare = Object.keys(bare).some((value) => before.includes(`"${value}"`));
+  if (!hasPairs && !hasBare) continue;
   const after = `${JSON.stringify(walk(JSON.parse(before)), null, 2)}\n`;
   if (after === before) continue;
   changed++;
@@ -71,7 +100,11 @@ for (const path of files(DATA)) {
 if (missing.size) {
   console.error(`\n${missing.size} string(s) have no English in en-terms.json:\n`);
   for (const value of missing) console.error(`  ${JSON.stringify(value)}`);
-  process.exit(1);
 }
+if (untriaged.size) {
+  console.error(`\n${untriaged.size} bare Cyrillic field(s) missing from bare-terms.json:\n`);
+  for (const value of untriaged) console.error(`  ${value}`);
+}
+if (missing.size || untriaged.size) process.exit(1);
 
 console.log(`\n${changed} file(s) ${CHECK ? "would change" : "changed"}, every localized field translated.`);

@@ -1,7 +1,9 @@
 {
   "source_id": "grid_arendal",
   "status": "semi",
-  "unit": "км³/год",
+  "unit_kk": "км³/жыл",
+  "unit_ru": "км³/год",
+  "unit_en": "km³/year",
   "rivers": [
     {
       "id": "volga",

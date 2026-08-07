@@ -35,7 +35,9 @@ export type PlumeFacility = {
   name_kk: string;
   name_ru: string;
   name_en: string;
-  short: string;
+  short_kk: string;
+  short_ru: string;
+  short_en: string;
   kind_kk: string;
   kind_ru: string;
   kind_en: string;

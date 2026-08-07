@@ -1,8 +1,14 @@
 {
   "unit": {
-    "level": "м БС",
-    "area": "км²",
-    "volume": "км³"
+    "level_kk": "м БЖ",
+    "level_ru": "м БС",
+    "level_en": "m BS",
+    "area_kk": "км²",
+    "area_ru": "км²",
+    "area_en": "km²",
+    "volume_kk": "км³",
+    "volume_ru": "км³",
+    "volume_en": "km³"
   },
   "reference": {
     "level_m": -27,

@@ -76,10 +76,10 @@ export function MapCanvas({ module }: { module: ModuleId }) {
       .filter(isAvailable)
       .filter((f) => f.drift?.length)
       .map((f) => ({
-        facility: { short: f.short, lat: f.lat, lng: f.lng },
+        facility: { short: pick(f, "short", locale), lat: f.lat, lng: f.lng },
         marks: f.drift,
       }));
-  }, [plume.data]);
+  }, [plume.data, locale]);
 
   /** Arrows are drawn only where the breeze evidence is at least medium. */
   const breezeData = useMemo(() => {

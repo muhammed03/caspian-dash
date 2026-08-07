@@ -10,7 +10,9 @@
       "name_kk": "Мұнай",
       "name_ru": "Нефть",
       "name_en": "Oil",
-      "unit": "млрд баррелей",
+      "unit_kk": "млрд баррель",
+      "unit_ru": "млрд баррелей",
+      "unit_en": "bn barrels",
       "value": 48,
       "production_per_year": 1.05
     },
@@ -19,7 +21,9 @@
       "name_kk": "Табиғи газ",
       "name_ru": "Природный газ",
       "name_en": "Natural gas",
-      "unit": "трлн м³",
+      "unit_kk": "трлн м³",
+      "unit_ru": "трлн м³",
+      "unit_en": "tn m³",
       "value": 8.7,
       "production_per_year": 0.17
     }

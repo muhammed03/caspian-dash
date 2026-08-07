@@ -33,7 +33,9 @@ type Facility = {
     name_kk: string;
     name_ru: string;
     name_en: string;
-    short: string;
+    short_kk: string;
+    short_ru: string;
+    short_en: string;
     kind_kk: string;
     kind_ru: string;
     kind_en: string;
@@ -251,7 +253,9 @@ export async function GET() {
       name_kk: p.name_kk,
       name_ru: p.name_ru,
       name_en: p.name_en,
-      short: p.short,
+      short_kk: p.short_kk,
+      short_ru: p.short_ru,
+      short_en: p.short_en,
       kind_kk: p.kind_kk,
       kind_ru: p.kind_ru,
       kind_en: p.kind_en,
