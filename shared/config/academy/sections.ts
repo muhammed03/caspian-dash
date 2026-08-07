@@ -10,6 +10,7 @@ export const ACADEMY_SECTIONS = [
   "journey",
   "lessons",
   "quiz",
+  "explorer",
   "missions",
   "achievements",
   "simulator",

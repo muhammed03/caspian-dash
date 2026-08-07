@@ -226,6 +226,9 @@ export const en = {
     resetProgress: "Clear progress",
     assistantIntro:
       "Prepared explanations drawn from the platform's data. Pick a question — the answer is assembled from those same datasets.",
+    explorer: "Explorer",
+    reveal: "Reveal",
+    exploreOnMap: "Show on the map",
     recommended: "Recommended",
   },
 } satisfies Dict;

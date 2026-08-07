@@ -5,7 +5,14 @@ import { getDict } from "@/shared/lib/i18n";
 import { getLocale } from "@/shared/lib/i18n/server";
 import { AcademyShell } from "@/widgets/academy/academy-shell";
 import { ACADEMY_SECTIONS, type AcademySection } from "@/shared/config/academy/sections";
-import { JourneySection, MissionsSection, AchievementsSection, SimulatorSection, CommunitySection } from "@/widgets/academy/sections";
+import {
+  JourneySection,
+  MissionsSection,
+  AchievementsSection,
+  SimulatorSection,
+  CommunitySection,
+  ExplorerSection,
+} from "@/widgets/academy/sections";
 import { LessonsSection } from "@/widgets/academy/lesson-view";
 import { QuizSection } from "@/widgets/academy/quiz-view";
 
@@ -30,6 +37,7 @@ const VIEWS: Record<AcademySection, React.ComponentType> = {
   journey: JourneySection,
   lessons: LessonsSection,
   quiz: QuizSection,
+  explorer: ExplorerSection,
   missions: MissionsSection,
   achievements: AchievementsSection,
   simulator: SimulatorSection,

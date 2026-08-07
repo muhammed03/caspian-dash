@@ -531,3 +531,96 @@ export function CommunitySection() {
     </Reveal>
   );
 }
+
+/* ----------------------------------------------------------------- explorer */
+
+/**
+ * Explorer mode.
+ *
+ * Every discovery is a real object already drawn on one of the map modules —
+ * a habitat, a hotspot, a field — so revealing one and then opening it on the
+ * map lands the reader on the same feature the dashboards show. The fact is
+ * held back until the reader claims it, which is what makes exploring worth
+ * doing; nothing is invented to fill the grid.
+ */
+export function ExplorerSection() {
+  const t = useT();
+  const locale = useLocale();
+  const { progress, record } = useLearning();
+  const found = progress.done.discovery_found;
+
+  const KIND_LABEL = {
+    species: { kk: "Түр", ru: "Вид", en: "Species" },
+    habitat: { kk: "Мекен", ru: "Место обитания", en: "Habitat" },
+    hotspot: { kk: "Ластану ошағы", ru: "Очаг загрязнения", en: "Pollution hotspot" },
+    coastline: { kk: "Жағалау", ru: "Береговая линия", en: "Shoreline" },
+    facility: { kk: "Нысан", ru: "Объект", en: "Facility" },
+  } as const;
+
+  return (
+    <Reveal>
+      <RevealItem>
+        <AcademyHead
+          title={t.academy.explorer}
+          intro={t.academy.explorerHint}
+          aside={
+            <div className="text-right">
+              <Label>{t.academy.discoveries}</Label>
+              <div className="display tabular mt-1.5 text-3xl">
+                {found.size}
+                <span className="text-ink-3 ml-1.5 text-sm font-normal">
+                  / {DISCOVERIES.length}
+                </span>
+              </div>
+            </div>
+          }
+        />
+      </RevealItem>
+
+      <RevealItem>
+        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {DISCOVERIES.map((d) => {
+            const open = found.has(d.id);
+            return (
+              <Panel key={d.id} tint={open} className="flex h-full flex-col p-5">
+                <div className="flex items-baseline justify-between gap-3">
+                  <Label>{byLocale(locale, KIND_LABEL[d.kind])}</Label>
+                  <span className="label tabular">
+                    {d.lat.toFixed(2)}, {d.lng.toFixed(2)}
+                  </span>
+                </div>
+                <h3 className="display mt-3 text-lg">{byLocale(locale, d.title)}</h3>
+
+                {open ? (
+                  <>
+                    <Plain className="mt-3 flex-1">{byLocale(locale, d.fact)}</Plain>
+                    <div className="mt-4">
+                      <SourceBadge sourceId={d.sourceId} />
+                    </div>
+                    <Link
+                      href={`/map/${d.module}`}
+                      className="text-ink-2 hover:text-ink mt-4 inline-flex items-center gap-1 text-[13px] transition-colors"
+                    >
+                      {t.academy.exploreOnMap}
+                      <ArrowRight className="size-3.5" strokeWidth={1.5} />
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex-1" />
+                    <div className="mt-5">
+                      <Button variant="outline" onClick={() => record("discovery_found", d.id)}>
+                        {t.academy.reveal}
+                        <ArrowRight className="size-4" strokeWidth={1.5} />
+                      </Button>
+                    </div>
+                  </>
+                )}
+              </Panel>
+            );
+          })}
+        </div>
+      </RevealItem>
+    </Reveal>
+  );
+}

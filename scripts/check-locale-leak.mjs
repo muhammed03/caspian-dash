@@ -22,6 +22,14 @@ const ROUTES = [
   "/map/resources",
   "/map/index",
   "/methodology",
+  "/academy/journey",
+  "/academy/lessons",
+  "/academy/quiz",
+  "/academy/explorer",
+  "/academy/missions",
+  "/academy/achievements",
+  "/academy/simulator",
+  "/academy/community",
 ];
 
 const CYRILLIC = /[Ѐ-ӿ]/g;

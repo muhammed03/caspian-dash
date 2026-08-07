@@ -10,6 +10,7 @@ import {
   HelpCircle,
   SlidersHorizontal,
   Users,
+  Telescope,
 } from "lucide-react";
 
 import { cn } from "@/shared/lib/cn";
@@ -22,6 +23,7 @@ const ICONS: Record<AcademySection, typeof Compass> = {
   journey: Compass,
   lessons: BookOpen,
   quiz: HelpCircle,
+  explorer: Telescope,
   missions: ListChecks,
   achievements: Medal,
   simulator: SlidersHorizontal,

@@ -215,6 +215,9 @@ export const ru = {
     resetProgress: "Очистить прогресс",
     assistantIntro:
       "Готовые объяснения по данным платформы. Выберите вопрос — ответ собирается из тех же датасетов.",
+    explorer: "Проводник",
+    reveal: "Открыть",
+    exploreOnMap: "Показать на карте",
     recommended: "Рекомендуем",
   },
 } satisfies Dict;
