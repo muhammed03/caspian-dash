@@ -1,6 +1,5 @@
 {
   "_comment": "English for every localized data field, keyed by the Russian text. Applied by scripts/pipeline/add-english.mjs to data/*.json and data/**/*.geojson. Place names follow the romanisation used in English-language literature on the Caspian.",
-
   "Дельта Урала": "Ural delta",
   "Дельта Волги": "Volga delta",
   "Бузачи / Каражанбас": "Buzachi / Karazhanbas",
@@ -12,14 +11,12 @@
   "Азербайджанское побережье": "Azerbaijani coast",
   "Дагестанское побережье": "Dagestan coast",
   "Горизонтальное отступание = падение уровня / уклон дна. Уклон задан по секторам из литературы по батиметрии Каспия; линия смещается по внутренней нормали. Это модель, а не спутниковое наблюдение.": "Horizontal retreat = drop in level ÷ seabed slope. The slope is set per sector from the published literature on Caspian bathymetry; the line is shifted along the inward normal. This is a model, not a satellite observation.",
-
   "Казахстан": "Kazakhstan",
   "Россия": "Russia",
   "Азербайджан": "Azerbaijan",
   "Туркменистан": "Turkmenistan",
   "Иран": "Iran",
   "Спутниковые источники (JRC GSW, Sentinel-5P, Sentinel-1, FIRMS, ERA5) покрывают всё море равномерно и не зависят от разрешения какой-либо страны — именно они закрывают этот разрыв.": "Satellite sources (JRC GSW, Sentinel-5P, Sentinel-1, FIRMS, ERA5) cover the whole sea evenly and depend on no country's permission — they are what closes this gap.",
-
   "Нефтепереработка": "Oil refining",
   "Добыча нефти и газа + сера": "Oil and gas production + sulphur",
   "Морская добыча": "Offshore production",
@@ -43,7 +40,6 @@
   "Махачкалинский нефтетерминал": "Makhachkala oil terminal",
   "Порт Бендер-Энзели": "Port of Bandar-e Anzali",
   "Координаты сверены с Global Energy Monitor, WRI и OpenStreetMap. Записи без подтверждённой точки помечены approx и показаны в интерфейсе как приблизительные. profile — описательный вес по типу объекта, а не измеренный состав выбросов.": "Coordinates were cross-checked against Global Energy Monitor, WRI and OpenStreetMap. Records without a confirmed point are flagged approx and shown in the interface as approximate. `profile` is a descriptive weight by facility type, not a measured emissions composition.",
-
   "Дербент": "Derbent",
   "Махачкала": "Makhachkala",
   "Актау": "Aktau",
@@ -56,7 +52,6 @@
   "Жанаозен": "Zhanaozen",
   "Форт-Шевченко": "Fort-Shevchenko",
   "Сумгаит": "Sumqayit",
-
   "Хвостохранилище Кошкар-Ата": "Koshkar-Ata tailings pond",
   "Площадь 77 км² (данные 2021 года)": "Area 77 km² (2021 figure)",
   "Более 105 млн тонн токсичных отходов, из них 52 млн тонн слабо радиоактивных": "Over 105 million tonnes of toxic waste, of which 52 million tonnes are low-level radioactive",
@@ -65,12 +60,10 @@
   "5 км от Актау, 8 км от берега моря": "5 km from Aktau, 8 km from the sea shore",
   "Главный риск — токсичная пыль с высохшей поверхности": "The main risk is toxic dust blown off the dried surface",
   "Исследование 2024 года: уровень загрязнения не превышает ПДК, выбрана биологическая рекультивация": "A 2024 study: contamination does not exceed the permissible limits, and biological remediation was chosen",
-
   "Мангистау": "Mangystau",
   "Северный Каспий": "Northern Caspian",
   "Дагестан": "Dagestan",
   "Апшерон": "Absheron",
-
   "Нефтепродукты": "Oil products",
   "Промышленные стоки": "Industrial effluent",
   "Бытовые стоки": "Domestic sewage",
@@ -81,7 +74,6 @@
   "Южный Каспий": "Southern Caspian",
   "Индекс чистоты — сводная модельная оценка платформы по доле нефтепродуктов, промышленной нагрузке и спутниковым данным по аэрозолям. Формула на странице «Методика».": "The purity index is this platform's composite model estimate, built from the share of oil products, the industrial load and satellite aerosol data. The formula is on the Methodology page.",
   "Годовая модельная оценка избыточной смертности, связанной с загрязнением воздуха, по методике ВОЗ (концентрация PM2.5 × функция «доза-эффект» × население). Не измерение и не счётчик реального времени.": "An annual model estimate of excess mortality associated with air pollution, following WHO methodology (PM2.5 concentration × exposure-response function × population). It is not a measurement and not a real-time counter.",
-
   "Нефть": "Oil",
   "Природный газ": "Natural gas",
   "Кашаган": "Kashagan",
@@ -93,17 +85,14 @@
   "им. Филановского": "Filanovsky field",
   "Сардар-е Джангаль": "Sardar-e Jangal",
   "Данные Ирана и Туркменистана фактически закрыты — приведены оценки отраслевых обзоров, точность ниже.": "Iranian and Turkmen figures are effectively closed — the estimates shown come from industry reviews and are less precise.",
-
   "Волга": "Volga",
   "Урал": "Ural",
   "Кура": "Kura",
   "Терек": "Terek",
   "Эмба": "Emba",
-
   "Портал был недоступен из сети хакатона. Ряд восстановлен по опубликованным значениям альтиметрии и скоростям падения (опорные точки открыто перечислены в scripts/pipeline/build-datasets.ts). При доступности портала ряд заменяется реальным файлом.": "The portal was unreachable from the hackathon network. The series was reconstructed from published altimetry values and rates of decline (the anchor points are listed openly in scripts/pipeline/build-datasets.ts). When the portal is reachable, the series is replaced by the real file.",
   "Профили Ирана (2008) и Туркменистана (2012) устарели.": "The Iranian (2008) and Turkmen (2012) profiles are out of date.",
   "Испарение — расчётная величина замыкания баланса при наблюдаемом падении уровня, а не измерение.": "Evaporation is a calculated closure term for the balance at the observed rate of decline, not a measurement.",
-
   "Белуга": "Beluga sturgeon",
   "Русский осётр": "Russian sturgeon",
   "Севрюга": "Stellate sturgeon",
@@ -125,6 +114,7 @@
   "Оценки численности расходятся в четыре раза. Платформа показывает диапазон, а не одно число — это честнее и отражает реальное состояние знаний.": "Population estimates differ by a factor of four. The platform shows a range rather than a single number — that is the honest answer, and it reflects the real state of knowledge.",
   "Официальная статистика вылова не отражает реальность: незаконный вылов (IUU) оценивается в 4–10 раз выше законного. Современные методы оценки запаса не применяются.": "Official catch statistics do not reflect reality: illegal (IUU) fishing is estimated at 4–10 times the legal catch. Modern stock assessment methods are not applied.",
   "Сезонность построена по наблюдениям GBIF в бассейне Каспия.": "Seasonality is derived from GBIF observations in the Caspian basin.",
+  "NDVI × 100 (средний по прибрежной полосе 20 км)": "NDVI × 100 (mean over the 20 km coastal strip)",
   "Caspian Seals Center": "Caspian Seals Center",
   "Caspian Seals Research and Rehabilitation Center": "Caspian Seals Research and Rehabilitation Center",
   "Britannica": "Britannica",
@@ -134,5 +124,26 @@
   "IMMA Task Force": "IMMA Task Force",
   "Marine Mammal Protected Areas Task Force (IMMA)": "Marine Mammal Protected Areas Task Force (IMMA)",
   "Минприроды Дагестана": "Dagestan Ministry of Natural Resources",
-  "Министерство природных ресурсов Дагестана": "Dagestan Ministry of Natural Resources"
+  "Министерство природных ресурсов Дагестана": "Dagestan Ministry of Natural Resources",
+  "Институт океанологии РАН — оценки уровня Каспия": "Shirshov Institute of Oceanology RAS — Caspian level estimates",
+  "Публикации, цитирование": "Publications, cited",
+  "Институт океанологии им. П.П. Ширшова РАН": "P.P. Shirshov Institute of Oceanology, RAS",
+  "Open-Meteo (погода и ветер)": "Open-Meteo (weather and wind)",
+  "Natural Earth (базовая география)": "Natural Earth (base geography)",
+  "GRID-Arendal / Vital Caspian Graphics (водный баланс)": "GRID-Arendal / Vital Caspian Graphics (water balance)",
+  "FAO AQUASTAT (водозабор по странам)": "FAO AQUASTAT (water abstraction by country)",
+  "OpenStreetMap (промышленные объекты, порты)": "OpenStreetMap (industrial facilities, ports)",
+  "Публикации по хвостохранилищу Кошкар-Ата": "Publications on the Koshkar-Ata tailings pond",
+  "Публикации / СМИ": "Publications / media",
+  "Научные публикации, отчёты акимата Мангистауской области": "Scientific publications, reports of the Mangystau regional administration",
+  "NCOC — авиаучёты каспийского тюленя": "NCOC — aerial surveys of the Caspian seal",
+  "Опубликованные отчёты (PDF)": "Published reports (PDF)",
+  "CITES / FAO — осетровые": "CITES / FAO — sturgeon",
+  "Публикации": "Publications",
+  "GBIF (наблюдения птиц и тюленя)": "GBIF (bird and seal observations)",
+  "Отраслевые отчёты по запасам и добыче углеводородов": "Industry reports on hydrocarbon reserves and production",
+  "Публичные отчёты": "Public reports",
+  "Министерство энергетики РК, отраслевые обзоры": "Ministry of Energy of Kazakhstan, industry reviews",
+  "Собственная модель платформы (расчёт)": "This platform's own model (computed)",
+  "Caspian Watch — формулы на странице «Методика»": "Caspian Watch — formulas on the Methodology page"
 }

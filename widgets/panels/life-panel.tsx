@@ -17,6 +17,7 @@ import {
 import { Fish, Bird, Sprout, ShieldAlert } from "lucide-react";
 
 import { useLocale, useT } from "@/shared/lib/i18n/client";
+import { byLocale, formatNumber, pick, type Locale } from "@/shared/lib/i18n";
 import { AXIS_PROPS, CHART_INK, SERIES } from "@/shared/config/chart-palette";
 import { ChartFrame, chartTooltipStyle, fmt, fmtRange } from "@/shared/ui/chart-frame";
 import { MetricCard } from "@/shared/ui/metric-card";
@@ -27,8 +28,12 @@ import { PanelShell, PanelItem } from "./panel-shell";
 
 import wildlife from "@/data/wildlife.json";
 
-const MONTHS_KK = ["Қаң", "Ақп", "Нау", "Сәу", "Мам", "Мау", "Шіл", "Там", "Қыр", "Қаз", "Қар", "Жел"];
-const MONTHS_RU = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
+/** Three-letter month labels; only the first character is shown on the axis strip. */
+const MONTHS: Record<Locale, string[]> = {
+  kk: ["Қаң", "Ақп", "Нау", "Сәу", "Мам", "Мау", "Шіл", "Там", "Қыр", "Қаз", "Қар", "Жел"],
+  ru: ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
+  en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+};
 
 export function LifePanel() {
   const t = useT();
@@ -38,9 +43,16 @@ export function LifePanel() {
   const seal = wildlife.seal;
   const sturgeon = wildlife.sturgeon;
 
+  const unitTonnes = byLocale(locale, { kk: "т", ru: "т", en: "t" });
+  const labelReportedCatch = byLocale(locale, {
+    kk: "Ресми аулау",
+    ru: "Официальный вылов",
+    en: "Reported catch",
+  });
+
   /** Estimates disagree fourfold, so the chart shows every source as a range. */
   const estimateRanges = seal.estimates.map((e) => ({
-    name: locale === "ru" ? e.source_ru : e.source_kk,
+    name: pick(e, "source", locale),
     low: e.low,
     span: e.high - e.low,
     high: e.high,
@@ -55,9 +67,16 @@ export function LifePanel() {
     realHigh: r.tonnes * sturgeon.iuu_multiplier.max,
   }));
 
-  const months = locale === "ru" ? MONTHS_RU : MONTHS_KK;
+  const firstCatch = sturgeon.catch_series[0];
+  const firstCatchLabel = `${formatNumber(firstCatch.tonnes, locale)} ${byLocale(locale, {
+    kk: "т в",
+    ru: "т в",
+    en: "t in",
+  })} ${firstCatch.year}`;
+
+  const months = MONTHS[locale];
   const greening = wildlife.greening.regions.map((r) => ({
-    name: locale === "ru" ? r.name_ru : r.name_kk,
+    name: pick(r, "name", locale),
     first: r.series[0].value,
     last: r.series.at(-1)!.value,
     change: r.series.at(-1)!.value - r.series[0].value,
@@ -72,29 +91,38 @@ export function LifePanel() {
           unit="%"
           decimals={0}
           tone="bad"
-          delta={locale === "ru" ? "спад с начала XX века" : "XX ғасыр басынан азаю"}
+          delta={byLocale(locale, {
+            kk: "XX ғасыр басынан азаю",
+            ru: "спад с начала XX века",
+            en: "decline since the early 20th century",
+          })}
         />
         <MetricCard
           label={t.life.sturgeon}
           value={sturgeon.catch_series.at(-1)!.tonnes}
-          unit={locale === "ru" ? "т/год" : "т/жыл"}
+          unit={byLocale(locale, { kk: "т/жыл", ru: "т/год", en: "t/year" })}
           tone="bad"
-          delta={`${sturgeon.catch_series[0].tonnes.toLocaleString("ru-RU")} т в ${sturgeon.catch_series[0].year}`}
+          delta={firstCatchLabel}
         />
         <MetricCard
           label={t.life.birds}
           value={wildlife.birds.species.length}
           tone="neutral"
-          delta={locale === "ru" ? "ключевых видов в мониторинге" : "мониторингтегі негізгі түрлер"}
+          delta={byLocale(locale, {
+            kk: "мониторингтегі негізгі түрлер",
+            ru: "ключевых видов в мониторинге",
+            en: "key species monitored",
+          })}
         />
         <MetricCard
           label={t.life.greening}
           value={greening[0].last}
           unit="NDVI×100"
           tone="warn"
-          delta={`${greening[0].name}: ${greening[0].change > 0 ? "+" : ""}${greening[0].change} ${
-            locale === "ru" ? "с 2015" : "2015 жылдан"
-          }`}
+          delta={`${greening[0].name}: ${greening[0].change > 0 ? "+" : ""}${greening[0].change} ${byLocale(
+            locale,
+            { kk: "2015 жылдан", ru: "с 2015", en: "since 2015" }
+          )}`}
         />
       </PanelItem>
 
@@ -106,7 +134,7 @@ export function LifePanel() {
         <ChartFrame
           title={t.life.seal}
           subtitle={t.life.sealRange}
-          note={locale === "ru" ? seal.note_ru : seal.note_kk}
+          note={pick(seal, "note", locale)}
           sourceId="iucn_seal"
         >
           <ResponsiveContainer width="100%" height={175}>
@@ -132,7 +160,7 @@ export function LifePanel() {
               <Tooltip
                 {...tip}
                 formatter={fmtRange<(typeof estimateRanges)[number]>((row) =>
-                  `${row.low.toLocaleString("ru-RU")} – ${row.high.toLocaleString("ru-RU")}`
+                  `${formatNumber(row.low, locale)} – ${formatNumber(row.high, locale)}`
                 )}
               />
               {/* invisible offset bar puts the visible span at its true position */}
@@ -146,8 +174,12 @@ export function LifePanel() {
 
       <PanelItem>
         <ChartFrame
-          title={locale === "ru" ? "Авиаучёты тюленя" : "Итбалық әуе есептеуі"}
-          subtitle={locale === "ru" ? "особей" : "дана"}
+          title={byLocale(locale, {
+            kk: "Итбалық әуе есептеуі",
+            ru: "Авиаучёты тюленя",
+            en: "Seal aerial surveys",
+          })}
+          subtitle={byLocale(locale, { kk: "дана", ru: "особей", en: "individuals" })}
           sourceId="ncoc"
         >
           <ResponsiveContainer width="100%" height={140}>
@@ -159,7 +191,7 @@ export function LifePanel() {
                 width={44}
                 tickFormatter={(v: number) => `${Math.round(v / 1000)}k`}
               />
-              <Tooltip {...tip} formatter={fmt((v) => v.toLocaleString("ru-RU"))} />
+              <Tooltip {...tip} formatter={fmt((v) => formatNumber(v, locale))} />
               <Line type="monotone" dataKey="count" stroke={SERIES[0]} strokeWidth={2} dot={{ r: 3, fill: SERIES[0] }} />
             </LineChart>
           </ResponsiveContainer>
@@ -169,8 +201,12 @@ export function LifePanel() {
       <PanelItem>
         <ChartFrame
           title={t.life.sturgeon}
-          subtitle={locale === "ru" ? "вылов, тонн в год (лог. шкала)" : "аулау, жылына тонна (лог. шкала)"}
-          note={locale === "ru" ? sturgeon.note_ru : sturgeon.note_kk}
+          subtitle={byLocale(locale, {
+            kk: "аулау, жылына тонна (лог. шкала)",
+            ru: "вылов, тонн в год (лог. шкала)",
+            en: "catch, tonnes per year (log scale)",
+          })}
+          note={pick(sturgeon, "note", locale)}
           sourceId="cites_fao"
         >
           <ResponsiveContainer width="100%" height={180}>
@@ -190,13 +226,20 @@ export function LifePanel() {
                 width={48}
                 tickFormatter={(v: number) => (v >= 1000 ? `${v / 1000}k` : String(v))}
               />
-              <Tooltip {...tip} formatter={fmt((v) => `${Math.round(v).toLocaleString("ru-RU")} т`)} />
+              <Tooltip
+                {...tip}
+                formatter={fmt((v) => `${formatNumber(Math.round(v), locale)} ${unitTonnes}`)}
+              />
               <Area
                 type="monotone"
                 dataKey="realHigh"
                 stroke="none"
                 fill="url(#iuuBand)"
-                name={locale === "ru" ? "с учётом IUU (макс.)" : "IUU ескергенде (макс.)"}
+                name={byLocale(locale, {
+                  kk: "IUU ескергенде (макс.)",
+                  ru: "с учётом IUU (макс.)",
+                  en: "incl. IUU (max)",
+                })}
               />
               <Area
                 type="monotone"
@@ -205,18 +248,22 @@ export function LifePanel() {
                 strokeWidth={2}
                 fill="none"
                 dot={false}
-                name={locale === "ru" ? "Официальный вылов" : "Ресми аулау"}
+                name={labelReportedCatch}
               />
             </AreaChart>
           </ResponsiveContainer>
           <ul className="text-ink-2 mt-2 flex flex-wrap gap-x-4 text-[11px]">
             <li className="flex items-center gap-1.5">
               <span className="h-0.5 w-4 rounded" style={{ background: SERIES[1] }} />
-              {locale === "ru" ? "Официальный вылов" : "Ресми аулау"}
+              {labelReportedCatch}
             </li>
             <li className="flex items-center gap-1.5">
               <span className="h-2 w-4 rounded-sm" style={{ background: `${SERIES[2]}44` }} />
-              {locale === "ru" ? "Оценка с учётом IUU (×4–10)" : "IUU ескергендегі баға (×4–10)"}
+              {byLocale(locale, {
+                kk: "IUU ескергендегі баға (×4–10)",
+                ru: "Оценка с учётом IUU (×4–10)",
+                en: "Estimate incl. IUU (×4–10)",
+              })}
             </li>
           </ul>
         </ChartFrame>
@@ -236,9 +283,7 @@ export function LifePanel() {
                 arrive <= depart ? m >= arrive && m <= depart : m >= arrive || m <= depart;
               return (
                 <li key={sp.id}>
-                  <div className="text-ink-2 mb-1 text-[11px]">
-                    {locale === "ru" ? sp.name_ru : sp.name_kk}
-                  </div>
+                  <div className="text-ink-2 mb-1 text-[11px]">{pick(sp, "name", locale)}</div>
                   <div className="flex gap-0.5">
                     {months.map((m, i) => (
                       <span
@@ -269,7 +314,7 @@ export function LifePanel() {
       <PanelItem>
         <ChartFrame
           title={t.life.greening}
-          subtitle={wildlife.greening.unit}
+          subtitle={pick(wildlife.greening, "unit", locale)}
           sourceId="jrc_gsw"
         >
           <ResponsiveContainer width="100%" height={150}>

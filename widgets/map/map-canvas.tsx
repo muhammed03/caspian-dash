@@ -6,6 +6,7 @@ import { MapView, FlyToInterpolator, type PickingInfo, type MapViewState } from 
 
 import { useMapStore, type ModuleId } from "@/shared/store/map-store";
 import { useLocale } from "@/shared/lib/i18n/client";
+import { pick } from "@/shared/lib/i18n";
 import { buildLayers } from "./build-layers";
 import { useAirQuality, useCoastline, useDataset, useWind } from "./use-map-data";
 import { usePlume, isAvailable } from "@/entities/plume/use-plume";
@@ -89,7 +90,7 @@ export function MapCanvas({ module }: { module: ModuleId }) {
       .filter((c) => c.confidence === "high" || c.confidence === "medium")
       .map((c) => ({
         id: c.id,
-        name: locale === "ru" ? c.name_ru : c.name_kk,
+        name: pick(c, "name", locale),
         lat: c.lat,
         lon: c.lon,
         coastNormal: c.coastNormal,

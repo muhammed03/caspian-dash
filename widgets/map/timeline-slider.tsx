@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { Play, Pause } from "lucide-react";
 import { cn } from "@/shared/lib/cn";
 import { useLocale, useT } from "@/shared/lib/i18n/client";
+import { byLocale } from "@/shared/lib/i18n";
 import { COASTLINE_YEARS, useMapStore } from "@/shared/store/map-store";
 import coastlineIndex from "@/data/coastline-index.json";
 
@@ -66,13 +67,20 @@ export function TimelineSlider() {
             {entry && (
               <div className="hidden items-center gap-4 text-ink-2 text-[11px] sm:flex">
                 <span>
-                  {locale === "ru" ? "уровень" : "деңгей"}{" "}
-                  <span className="tabular text-ink font-medium">{entry.level_m.toFixed(2)} м</span>
+                  {byLocale(locale, { kk: "деңгей", ru: "уровень", en: "level" })}{" "}
+                  <span className="tabular text-ink font-medium">
+                    {entry.level_m.toFixed(2)} {byLocale(locale, { kk: "м", ru: "м", en: "m" })}
+                  </span>
                 </span>
                 <span>
-                  {locale === "ru" ? "берег ушёл на" : "жағалау шегінді"}{" "}
+                  {byLocale(locale, {
+                    kk: "жағалау шегінді",
+                    ru: "берег ушёл на",
+                    en: "shoreline retreat",
+                  })}{" "}
                   <span className="tabular text-ink font-medium">
-                    {Math.max(entry.max_retreat_m / 1000, 0).toFixed(1)} км
+                    {Math.max(entry.max_retreat_m / 1000, 0).toFixed(1)}{" "}
+                    {byLocale(locale, { kk: "км", ru: "км", en: "km" })}
                   </span>
                 </span>
               </div>

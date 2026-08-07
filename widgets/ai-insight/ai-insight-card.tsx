@@ -5,8 +5,10 @@ import { motion } from "motion/react";
 import { TrendingDown, TrendingUp, Minus, ChevronDown } from "lucide-react";
 import { cn } from "@/shared/lib/cn";
 import { useLocale, useT } from "@/shared/lib/i18n/client";
+import { byLocale, formatFixed, formatNumber, pick, type Locale } from "@/shared/lib/i18n";
 import { Label, Plain } from "@/shared/ui/primitives";
-import { computeAnalysis } from "@/entities/ai-insight/compute";
+import { computeAnalysis, type LabeledAnomaly } from "@/entities/ai-insight/compute";
+import { ANOMALY_LABELS, ANOMALY_UNITS } from "@/entities/ai-insight/labels";
 import type { InsightModule } from "@/entities/ai-insight/schema";
 import { NARRATIVES } from "./narratives";
 import type { RiskLevel } from "@/shared/lib/analyze";
@@ -17,6 +19,18 @@ const RISK_STYLE: Record<RiskLevel, string> = {
   high: "text-orange-700 border-orange-500/40",
   critical: "text-bad border-bad/40",
 };
+
+/**
+ * The engine emits keys; the reader's language is applied here. Metrics that
+ * name a place carry the dataset row along, so the region name is read in the
+ * same locale as the rest of the label.
+ */
+function anomalyLabel(a: LabeledAnomaly, locale: Locale): string {
+  const trio = ANOMALY_LABELS[a.metric];
+  if (!trio) return a.metric;
+  const text = byLocale(locale, trio);
+  return a.region ? text.replace("{region}", pick(a.region, "name", locale)) : text;
+}
 
 /** Reveals the summary as it is written, so the analysis reads as live. */
 function useTypewriter(text: string, speed = 12) {
@@ -44,8 +58,11 @@ export function AiInsightCard({ module }: { module: InsightModule }) {
   const [open, setOpen] = useState(false);
 
   const analysis = useMemo(() => computeAnalysis(module), [module]);
-  const narrative = NARRATIVES[module][locale === "ru" ? "ru" : "kk"];
+  const narrative = NARRATIVES[module][locale];
   const typed = useTypewriter(narrative.summary);
+
+  const forecastUnit = ANOMALY_UNITS[analysis.forecast.unit];
+  const unitLabel = forecastUnit ? byLocale(locale, forecastUnit) : analysis.forecast.unit;
 
   const TrendIcon =
     analysis.trend.direction === "down"
@@ -79,15 +96,17 @@ export function AiInsightCard({ module }: { module: InsightModule }) {
 
       <div className="rule-t mt-4 grid grid-cols-2 gap-6 pt-3">
         <div>
-          <Label>{locale === "ru" ? "Тренд" : "Тренд"}</Label>
+          <Label>{byLocale(locale, { kk: "Тренд", ru: "Тренд", en: "Trend" })}</Label>
           <div className="mt-1 flex items-center gap-1.5">
             <TrendIcon
               className={cn("size-3.5", analysis.trend.direction === "down" ? "text-bad" : "text-ink-2")}
             />
             <span className="tabular text-ink text-sm font-medium">
-              {Math.abs(analysis.trend.ratePercent).toFixed(2)}%
+              {formatFixed(Math.abs(analysis.trend.ratePercent), locale, 2)}%
             </span>
-            <span className="text-ink-3 text-[11px]">{locale === "ru" ? "в год" : "жылына"}</span>
+            <span className="text-ink-3 text-[11px]">
+              {byLocale(locale, { kk: "жылына", ru: "в год", en: "per year" })}
+            </span>
           </div>
           <div className="text-ink-3 mt-0.5 text-[11px]">{analysis.trend.period}</div>
         </div>
@@ -95,10 +114,10 @@ export function AiInsightCard({ module }: { module: InsightModule }) {
         <div>
           <Label>{t.water.forecast}</Label>
           <div className="tabular text-ink mt-1 text-sm font-medium">
-            {analysis.forecast.expectedValue.toLocaleString("ru-RU")}
+            {formatNumber(analysis.forecast.expectedValue, locale)}
           </div>
           <div className="text-ink-3 mt-0.5 line-clamp-1 text-[11px]">
-            {t.common.confidence[analysis.forecast.confidence]}
+            {unitLabel} · {t.common.confidence[analysis.forecast.confidence]}
           </div>
         </div>
       </div>
@@ -109,7 +128,11 @@ export function AiInsightCard({ module }: { module: InsightModule }) {
         aria-expanded={open}
         className="text-ink-2 hover:text-ink rule-t mt-3 flex w-full items-center justify-between pt-3 text-[12px] transition-colors"
       >
-        {locale === "ru" ? "Отклонения и рекомендации" : "Ауытқулар мен ұсыныстар"}
+        {byLocale(locale, {
+          kk: "Ауытқулар мен ұсыныстар",
+          ru: "Отклонения и рекомендации",
+          en: "Deviations and recommendations",
+        })}
         <ChevronDown className={cn("size-3.5 transition-transform duration-300", open && "rotate-180")} />
       </button>
 
@@ -123,19 +146,25 @@ export function AiInsightCard({ module }: { module: InsightModule }) {
           <table className="w-full text-[12px]">
             <thead>
               <tr className="text-ink-3 rule-b text-left">
-                <th className="pb-1.5 font-normal">{locale === "ru" ? "Показатель" : "Көрсеткіш"}</th>
+                <th className="pb-1.5 font-normal">
+                  {byLocale(locale, { kk: "Көрсеткіш", ru: "Показатель", en: "Indicator" })}
+                </th>
                 <th className="pb-1.5 text-right font-normal">
-                  {locale === "ru" ? "факт / норма" : "нақты / норма"}
+                  {byLocale(locale, {
+                    kk: "нақты / норма",
+                    ru: "факт / норма",
+                    en: "actual / baseline",
+                  })}
                 </th>
               </tr>
             </thead>
             <tbody>
               {analysis.anomalies.map((a) => (
                 <tr key={a.metric} className="border-rule border-b last:border-0">
-                  <td className="text-ink-2 py-2 pr-3">{a.metric}</td>
+                  <td className="text-ink-2 py-2 pr-3">{anomalyLabel(a, locale)}</td>
                   <td className="tabular py-2 text-right whitespace-nowrap">
-                    <span className="text-ink">{a.value.toLocaleString("ru-RU")}</span>
-                    <span className="text-ink-3"> / {a.norm.toLocaleString("ru-RU")}</span>
+                    <span className="text-ink">{formatNumber(a.value, locale)}</span>
+                    <span className="text-ink-3"> / {formatNumber(a.norm, locale)}</span>
                     <span
                       className={cn(
                         "ml-2 font-medium",
@@ -143,7 +172,7 @@ export function AiInsightCard({ module }: { module: InsightModule }) {
                       )}
                     >
                       {a.deviationPercent > 0 ? "+" : ""}
-                      {a.deviationPercent}%
+                      {formatNumber(a.deviationPercent, locale, { maximumFractionDigits: 1 })}%
                     </span>
                   </td>
                 </tr>

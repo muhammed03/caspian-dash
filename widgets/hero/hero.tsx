@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { ArrowDown, ArrowRight } from "lucide-react";
 
 import { useLocale, useT } from "@/shared/lib/i18n/client";
+import { byLocale } from "@/shared/lib/i18n";
 import { Button } from "@/shared/ui/button";
 import { AnimatedNumber } from "@/shared/ui/animated-number";
 import { Display, Label, Lede, MetaCell, MetaRow } from "@/shared/ui/primitives";
@@ -54,7 +55,11 @@ export function Hero() {
             transition={{ duration: 0.8, ease: EASE_FLUID, delay: 0.15 }}
           >
             <Label>
-              {locale === "ru" ? "Каспийское море · 1992 — 2035" : "Каспий теңізі · 1992 — 2035"}
+              {byLocale(locale, {
+                kk: "Каспий теңізі · 1992 — 2035",
+                ru: "Каспийское море · 1992 — 2035",
+                en: "Caspian Sea · 1992 — 2035",
+              })}
             </Label>
           </motion.div>
 
@@ -112,7 +117,9 @@ export function Hero() {
             <MetaCell label={t.home.metricLevel}>
               <span className="display text-3xl">
                 <AnimatedNumber value={current.level_m} decimals={2} />
-                <span className="text-ink-3 text-base font-normal"> м</span>
+                <span className="text-ink-3 text-base font-normal">
+                  {byLocale(locale, { kk: " м", ru: " м", en: " m" })}
+                </span>
               </span>
               <p className="text-ink-2 mt-1.5 text-[12px] leading-relaxed">{t.plain.levelMeans}</p>
             </MetaCell>
@@ -121,16 +128,24 @@ export function Hero() {
               <span className="display text-3xl">
                 <AnimatedNumber value={23} />
                 <span className="text-ink-3 text-base font-normal">
-                  {locale === "ru" ? " см/год" : " см/жыл"}
+                  {byLocale(locale, { kk: " см/жыл", ru: " см/год", en: " cm/year" })}
                 </span>
               </span>
               <p className="text-ink-2 mt-1.5 text-[12px] leading-relaxed">{t.plain.rateMeans}</p>
             </MetaCell>
 
-            <MetaCell label={locale === "ru" ? "Берег отступил" : "Жағалау шегінді"}>
+            <MetaCell
+              label={byLocale(locale, {
+                kk: "Жағалау шегінді",
+                ru: "Берег отступил",
+                en: "Shoreline retreat",
+              })}
+            >
               <span className="display text-3xl">
                 <AnimatedNumber value={retreat} decimals={1} />
-                <span className="text-ink-3 text-base font-normal"> км</span>
+                <span className="text-ink-3 text-base font-normal">
+                  {byLocale(locale, { kk: " км", ru: " км", en: " km" })}
+                </span>
               </span>
               <p className="text-ink-2 mt-1.5 text-[12px] leading-relaxed">{t.plain.retreatMeans}</p>
             </MetaCell>
@@ -145,9 +160,11 @@ export function Hero() {
             </motion.span>
             <Label>{t.common.scroll}</Label>
             <span className="text-ink-3 ml-auto hidden text-[11px] sm:block">
-              {locale === "ru"
-                ? `Тюленей стало меньше на ${wildlife.seal.decline_percent}% за век`
-                : `Итбалық ғасырда ${wildlife.seal.decline_percent}%-ға азайды`}
+              {byLocale(locale, {
+                kk: `Итбалық ғасырда ${wildlife.seal.decline_percent}%-ға азайды`,
+                ru: `Тюленей стало меньше на ${wildlife.seal.decline_percent}% за век`,
+                en: `Seal numbers fell ${wildlife.seal.decline_percent}% in a century`,
+              })}
             </span>
           </div>
         </motion.div>

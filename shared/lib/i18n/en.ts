@@ -55,10 +55,10 @@ export const en = {
       "The official catch volume. The real figure is several times higher, because poaching is not counted.",
   },
   nav: {
-    water: "Water and retreat",
+    water: "Water resources",
     pollution: "Pollution and air",
     life: "Flora and fauna",
-    resources: "Resources",
+    resources: "Mineral resources",
     index: "Eco-index",
   },
   home: {

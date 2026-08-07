@@ -15,6 +15,7 @@ import {
 import { Fuel, Flame, Hourglass } from "lucide-react";
 
 import { useLocale, useT } from "@/shared/lib/i18n/client";
+import { byLocale, pick } from "@/shared/lib/i18n";
 import { AXIS_PROPS, CHART_INK, SERIES } from "@/shared/config/chart-palette";
 import { ChartFrame, chartTooltipStyle, fmt } from "@/shared/ui/chart-frame";
 import { MetricCard } from "@/shared/ui/metric-card";
@@ -34,6 +35,13 @@ export function ResourcesPanel() {
   const oilYears = depletionYears(oil.value, oil.production_per_year);
   const gasYears = depletionYears(gas.value, gas.production_per_year);
 
+  /** Unit suffixes repeat across cards, axes and tooltips, so they live in one place. */
+  const unitBnBbl = byLocale(locale, { kk: "млрд барр.", ru: "млрд барр.", en: "bn bbl" });
+  const unitBnBoe = byLocale(locale, { kk: "млрд барр. м.э.", ru: "млрд барр. н.э.", en: "bn boe" });
+  const unitMt = byLocale(locale, { kk: "млн т", ru: "млн т", en: "Mt" });
+  const labelOil = byLocale(locale, { kk: "Мұнай", ru: "Нефть", en: "Oil" });
+  const labelGas = byLocale(locale, { kk: "Газ", ru: "Газ", en: "Gas" });
+
   const fieldsByCountry = Object.values(
     resources.fields.reduce<Record<string, { name: string; oil: number; gas: number }>>((acc, f) => {
       acc[f.country] ??= { name: f.country, oil: 0, gas: 0 };
@@ -47,7 +55,7 @@ export function ResourcesPanel() {
     .sort((a, b) => b.reserves_bbl - a.reserves_bbl)
     .slice(0, 6)
     .map((f) => ({
-      name: locale === "ru" ? f.name_ru : f.name_kk,
+      name: pick(f, "name", locale),
       value: f.reserves_bbl,
       kind: f.kind,
     }));
@@ -56,31 +64,39 @@ export function ResourcesPanel() {
     <PanelShell title={t.resources.title}>
       <PanelItem className="grid grid-cols-2 gap-3">
         <MetricCard
-          label={locale === "ru" ? "Запасы нефти" : "Мұнай қоры"}
+          label={byLocale(locale, { kk: "Мұнай қоры", ru: "Запасы нефти", en: "Oil reserves" })}
           value={oil.value}
-          unit={locale === "ru" ? "млрд барр." : "млрд барр."}
+          unit={unitBnBbl}
           tone="warn"
         />
         <MetricCard
-          label={locale === "ru" ? "Запасы газа" : "Газ қоры"}
+          label={byLocale(locale, { kk: "Газ қоры", ru: "Запасы газа", en: "Gas reserves" })}
           value={gas.value}
           decimals={1}
-          unit={locale === "ru" ? "трлн м³" : "трлн м³"}
+          unit={byLocale(locale, { kk: "трлн м³", ru: "трлн м³", en: "tn m³" })}
           tone="neutral"
         />
         <MetricCard
-          label={`${t.resources.depletion} — ${locale === "ru" ? "нефть" : "мұнай"}`}
+          label={`${t.resources.depletion} — ${byLocale(locale, { kk: "мұнай", ru: "нефть", en: "oil" })}`}
           value={Math.round(oilYears)}
-          unit={locale === "ru" ? "лет" : "жыл"}
+          unit={byLocale(locale, { kk: "жыл", ru: "лет", en: "years" })}
           tone={oilYears < 40 ? "bad" : "warn"}
-          delta={locale === "ru" ? "при текущем темпе" : "қазіргі қарқынмен"}
+          delta={byLocale(locale, {
+            kk: "қазіргі қарқынмен",
+            ru: "при текущем темпе",
+            en: "at the current rate",
+          })}
         />
         <MetricCard
-          label={`${t.resources.depletion} — ${locale === "ru" ? "газ" : "газ"}`}
+          label={`${t.resources.depletion} — ${byLocale(locale, { kk: "газ", ru: "газ", en: "gas" })}`}
           value={Math.round(gasYears)}
-          unit={locale === "ru" ? "лет" : "жыл"}
+          unit={byLocale(locale, { kk: "жыл", ru: "лет", en: "years" })}
           tone={gasYears < 40 ? "bad" : "warn"}
-          delta={locale === "ru" ? "при текущем темпе" : "қазіргі қарқынмен"}
+          delta={byLocale(locale, {
+            kk: "қазіргі қарқынмен",
+            ru: "при текущем темпе",
+            en: "at the current rate",
+          })}
         />
       </PanelItem>
 
@@ -91,7 +107,11 @@ export function ResourcesPanel() {
       <PanelItem>
         <ChartFrame
           title={t.resources.production}
-          subtitle={locale === "ru" ? "нефть, млн т/год" : "мұнай, млн т/жыл"}
+          subtitle={byLocale(locale, {
+            kk: "мұнай, млн т/жыл",
+            ru: "нефть, млн т/год",
+            en: "oil, Mt/year",
+          })}
           sourceId="industry_reports"
         >
           <ResponsiveContainer width="100%" height={155}>
@@ -99,7 +119,7 @@ export function ResourcesPanel() {
               <CartesianGrid stroke={CHART_INK.grid} vertical={false} />
               <XAxis dataKey="year" {...AXIS_PROPS} />
               <YAxis {...AXIS_PROPS} width={40} domain={["dataMin - 8", "dataMax + 8"]} />
-              <Tooltip {...tip} formatter={fmt((v) => `${v} млн т`)} />
+              <Tooltip {...tip} formatter={fmt((v) => `${v} ${unitMt}`)} />
               <Line type="monotone" dataKey="oil_mt" stroke={SERIES[2]} strokeWidth={2} dot={{ r: 3, fill: SERIES[2] }} />
             </LineChart>
           </ResponsiveContainer>
@@ -109,8 +129,12 @@ export function ResourcesPanel() {
       <PanelItem>
         <ChartFrame
           title={t.resources.fields}
-          subtitle={locale === "ru" ? "запасы, млрд барр. н.э." : "қоры, млрд барр. м.э."}
-          note={locale === "ru" ? resources.note_ru : resources.note_kk}
+          subtitle={byLocale(locale, {
+            kk: "қоры, млрд барр. м.э.",
+            ru: "запасы, млрд барр. н.э.",
+            en: "reserves, bn boe",
+          })}
+          note={pick(resources, "note", locale)}
           sourceId="industry_reports"
         >
           <ResponsiveContainer width="100%" height={175}>
@@ -118,7 +142,7 @@ export function ResourcesPanel() {
               <CartesianGrid stroke={CHART_INK.grid} horizontal={false} />
               <XAxis type="number" {...AXIS_PROPS} />
               <YAxis type="category" dataKey="name" {...AXIS_PROPS} width={112} tick={{ fill: CHART_INK.secondary, fontSize: 10 }} />
-              <Tooltip {...tip} formatter={fmt((v) => `${v} млрд барр.`)} />
+              <Tooltip {...tip} formatter={fmt((v) => `${v} ${unitBnBbl}`)} />
               <Bar dataKey="value" radius={[0, 4, 4, 0]}>
                 {topFields.map((f) => (
                   <Cell key={f.name} fill={f.kind === "gas" ? SERIES[5] : SERIES[2]} />
@@ -129,11 +153,11 @@ export function ResourcesPanel() {
           <ul className="text-ink-2 mt-2 flex gap-4 text-[11px]">
             <li className="flex items-center gap-1.5">
               <span className="size-2 rounded-sm" style={{ background: SERIES[2] }} />
-              {locale === "ru" ? "Нефть" : "Мұнай"}
+              {labelOil}
             </li>
             <li className="flex items-center gap-1.5">
               <span className="size-2 rounded-sm" style={{ background: SERIES[5] }} />
-              {locale === "ru" ? "Газ" : "Газ"}
+              {labelGas}
             </li>
           </ul>
         </ChartFrame>
@@ -141,8 +165,12 @@ export function ResourcesPanel() {
 
       <PanelItem>
         <ChartFrame
-          title={locale === "ru" ? "Запасы по странам" : "Ел бойынша қорлар"}
-          subtitle={locale === "ru" ? "млрд барр. н.э." : "млрд барр. м.э."}
+          title={byLocale(locale, {
+            kk: "Ел бойынша қорлар",
+            ru: "Запасы по странам",
+            en: "Reserves by country",
+          })}
+          subtitle={unitBnBoe}
           note={t.resources.depletionNote}
           sourceId="industry_reports"
         >
@@ -152,8 +180,8 @@ export function ResourcesPanel() {
               <XAxis dataKey="name" {...AXIS_PROPS} />
               <YAxis {...AXIS_PROPS} width={34} />
               <Tooltip {...tip} />
-              <Bar dataKey="oil" stackId="r" fill={SERIES[2]} radius={[0, 0, 3, 3]} name={locale === "ru" ? "Нефть" : "Мұнай"} />
-              <Bar dataKey="gas" stackId="r" fill={SERIES[5]} radius={[3, 3, 0, 0]} name={locale === "ru" ? "Газ" : "Газ"} />
+              <Bar dataKey="oil" stackId="r" fill={SERIES[2]} radius={[0, 0, 3, 3]} name={labelOil} />
+              <Bar dataKey="gas" stackId="r" fill={SERIES[5]} radius={[3, 3, 0, 0]} name={labelGas} />
             </BarChart>
           </ResponsiveContainer>
         </ChartFrame>

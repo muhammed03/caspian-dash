@@ -13,14 +13,15 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { createHash } from "node:crypto";
 import { insightSchema, INSIGHT_MODULES, type InsightModule } from "../../entities/ai-insight/schema";
+// Imported rather than redeclared: a locale added to the app must reach the
+// generator too, or the new language would silently be written in Russian.
+import { LOCALES, type Locale } from "../../shared/lib/i18n/locales";
 
 const DATA = join(process.cwd(), "data");
 const OUT = join(DATA, "ai");
 mkdirSync(OUT, { recursive: true });
 
 const MODEL = "claude-sonnet-4-6";
-const LOCALES = ["kk", "ru"] as const;
-
 function load<T>(name: string): T {
   return JSON.parse(readFileSync(join(DATA, name), "utf8"));
 }
@@ -44,8 +45,8 @@ function payloadFor(module: InsightModule): Record<string, unknown> {
         volume_km3_now: last.volume_km3,
         decline_rate_cm_per_year_since_2015: Number(rate.toFixed(1)),
         historic_minimum_threshold_m: -29,
-        rivers: load<{ rivers: { name_ru: string; current: number; historic_1930: number }[] }>("rivers.json").rivers.map((r) => ({
-          river: r.name_ru,
+        rivers: load<{ rivers: { name_en: string; current: number; historic_1930: number }[] }>("rivers.json").rivers.map((r) => ({
+          river: r.name_en,
           flow_now_km3: r.current,
           flow_1930s_km3: r.historic_1930,
         })),
@@ -66,7 +67,7 @@ function payloadFor(module: InsightModule): Record<string, unknown> {
         health_estimate: pollution.health,
         koshkar_ata: load("koshkar-ata.json"),
         top_emitters: factories.features
-          .map((f) => ({ name: f.properties.name_ru, emissions_t_per_year: f.properties.emissions_t }))
+          .map((f) => ({ name: f.properties.name_en, emissions_t_per_year: f.properties.emissions_t }))
           .sort((a, b) => Number(b.emissions_t_per_year) - Number(a.emissions_t_per_year))
           .slice(0, 5),
         note: "AQI is fetched live from Open-Meteo/CAMS at runtime and is not part of this payload.",
@@ -136,8 +137,14 @@ Hard rules:
 
 type ToolInput = Record<string, unknown>;
 
-async function generate(module: InsightModule, locale: (typeof LOCALES)[number], payload: unknown) {
-  const language = locale === "kk" ? "Kazakh (қазақша)" : "Russian (по-русски)";
+const LANGUAGE: Record<Locale, string> = {
+  kk: "Kazakh (қазақша)",
+  ru: "Russian (по-русски)",
+  en: "English",
+};
+
+async function generate(module: InsightModule, locale: Locale, payload: unknown) {
+  const language = LANGUAGE[locale];
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {

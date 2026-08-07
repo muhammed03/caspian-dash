@@ -6,6 +6,7 @@ import { ArrowRight, Play, Pause } from "lucide-react";
 
 import { cn } from "@/shared/lib/cn";
 import { useLocale, useT } from "@/shared/lib/i18n/client";
+import { byLocale } from "@/shared/lib/i18n";
 import { Display, Label, Lede, Plain, SectionMark } from "@/shared/ui/primitives";
 import { SourceBadge } from "@/shared/ui/source-badge";
 import { Button } from "@/shared/ui/button";
@@ -141,7 +142,9 @@ export function CoastlineScene() {
               <Label>{t.water.retreat}</Label>
               <div className="display tabular text-warn mt-1.5 text-4xl md:text-5xl">
                 {retreatKm.toFixed(1)}
-                <span className="text-ink-3 ml-1 text-base font-normal">км</span>
+                <span className="text-ink-3 ml-1 text-base font-normal">
+                  {byLocale(locale, { kk: "км", ru: "км", en: "km" })}
+                </span>
               </div>
             </div>
           </div>
@@ -183,11 +186,19 @@ export function CoastlineScene() {
           <figcaption className="rule-t bg-paper absolute inset-x-0 bottom-0 flex items-center justify-between px-4 py-2.5">
             <span className="text-ink-2 flex items-center gap-1.5 text-[11px]">
               <span className="size-2.5 rounded-[2px] bg-[#f0e2d6] ring-1 ring-[#c9c9c5]" />
-              {locale === "ru" ? "высохло с 1992" : "1992 жылдан құрғады"}
+              {byLocale(locale, {
+                kk: "1992 жылдан құрғады",
+                ru: "высохло с 1992",
+                en: "dry since 1992",
+              })}
             </span>
             <span className="text-ink flex items-center gap-1.5 text-[11px] font-medium">
               <span className="size-2.5 rounded-[2px] bg-[#cfe2f8] ring-1 ring-[#1d6fd0]" />
-              {locale === "ru" ? `вода в ${year}` : `${year} жылғы су`}
+              {byLocale(locale, {
+                kk: `${year} жылғы су`,
+                ru: `вода в ${year}`,
+                en: `water in ${year}`,
+              })}
             </span>
           </figcaption>
         </figure>

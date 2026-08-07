@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { useLocale, useT } from "@/shared/lib/i18n/client";
+import { byLocale } from "@/shared/lib/i18n";
 import { Label } from "@/shared/ui/primitives";
 import sourcesFile from "@/data/sources.json";
 
@@ -41,7 +42,7 @@ export function SiteFooter() {
         </nav>
 
         <div>
-          <Label>{locale === "ru" ? "Проект" : "Жоба"}</Label>
+          <Label>{byLocale(locale, { kk: "Жоба", ru: "Проект", en: "Project" })}</Label>
           <ul className="mt-3 space-y-1.5">
             <li>
               <Link href="/methodology" className="text-ink-2 hover:text-ink text-[13px] transition-colors">
@@ -65,9 +66,11 @@ export function SiteFooter() {
         <div>
           <Label>{t.common.sources}</Label>
           <p className="text-ink-2 mt-3 text-[13px] leading-relaxed">
-            {locale === "ru"
-              ? `${sourcesFile.sources.length} источников, ${realCount} из них — реальные машиночитаемые данные.`
-              : `${sourcesFile.sources.length} дереккөз, оның ${realCount}-і — нақты машиналық оқылатын дерек.`}
+            {byLocale(locale, {
+              kk: `${sourcesFile.sources.length} дереккөз, оның ${realCount}-і — нақты машиналық оқылатын дерек.`,
+              ru: `${sourcesFile.sources.length} источников, ${realCount} из них — реальные машиночитаемые данные.`,
+              en: `${sourcesFile.sources.length} sources, ${realCount} of them real machine-readable data.`,
+            })}
           </p>
           <p className="text-ink-3 mt-1.5 text-[11px]">
             {t.common.updated}: {sourcesFile.last_checked}

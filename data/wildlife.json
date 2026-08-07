@@ -244,7 +244,9 @@
   "greening": {
     "status": "semi",
     "source_id": "jrc_gsw",
-    "unit": "NDVI × 100 (средний по прибрежной полосе 20 км)",
+    "unit_kk": "NDVI × 100 (20 км жағалау жолағы бойынша орташа)",
+    "unit_ru": "NDVI × 100 (средний по прибрежной полосе 20 км)",
+    "unit_en": "NDVI × 100 (mean over the 20 km coastal strip)",
     "regions": [
       {
         "id": "mangystau",

@@ -19,7 +19,7 @@ import {
 } from "@/shared/config/map-icons";
 import { HeatmapLayer } from "@deck.gl/aggregation-layers";
 import type { Layer, PickingInfo } from "@deck.gl/core";
-import type { Locale } from "@/shared/lib/i18n";
+import { byLocale, pick, type Locale } from "@/shared/lib/i18n";
 import type { AirReading, WindPoint } from "./use-map-data";
 import type { PlumeFacility, PlumeFrame } from "@/entities/plume/use-plume";
 
@@ -55,7 +55,13 @@ type BuildArgs = {
   cities?: GeoJSON.FeatureCollection;
   countries?: GeoJSON.FeatureCollection;
   factories?: GeoJSON.FeatureCollection;
-  koshkar?: { coordinates: [number, number]; name_kk: string; name_ru: string; waste_mt: number };
+  koshkar?: {
+    coordinates: [number, number];
+    name_kk: string;
+    name_ru: string;
+    name_en: string;
+    waste_mt: number;
+  };
   air?: AirReading[];
   wind?: WindPoint[];
   wildlife?: {
@@ -64,17 +70,36 @@ type BuildArgs = {
       kind: string;
       name_kk: string;
       name_ru: string;
+      name_en: string;
       coords: [number, number];
       population: number;
       threat: string;
     }[];
   };
   resources?: {
-    fields: { id: string; name_kk: string; name_ru: string; coords: [number, number]; kind: string; reserves_bbl: number }[];
+    fields: {
+      id: string;
+      name_kk: string;
+      name_ru: string;
+      name_en: string;
+      coords: [number, number];
+      kind: string;
+      reserves_bbl: number;
+    }[];
   };
-  availability?: { countries: { iso3: string; name_kk: string; name_ru: string; score: number }[] };
+  availability?: {
+    countries: { iso3: string; name_kk: string; name_ru: string; name_en: string; score: number }[];
+  };
   rivers?: {
-    rivers: { id: string; name_kk: string; name_ru: string; current: number; historic_1930: number; share_percent: number }[];
+    rivers: {
+      id: string;
+      name_kk: string;
+      name_ru: string;
+      name_en: string;
+      current: number;
+      historic_1930: number;
+      share_percent: number;
+    }[];
   };
   /** Dispersion cones for the hour currently being shown. */
   plume?: { facility: PlumeFacility; frame: PlumeFrame; detected: boolean }[];
@@ -133,8 +158,7 @@ const RASTER_BASEMAPS: Record<
 
 export function buildLayers(args: BuildArgs): Layer[] {
   const { active, locale, year, onHover, onClick } = args;
-  const nameOf = (o: Record<string, unknown>) =>
-    String((locale === "ru" ? o.name_ru : o.name_kk) ?? o.name_en ?? "");
+  const nameOf = (o: Record<string, unknown>) => pick(o, "name", locale);
   const layers: Layer[] = [];
   const mode: BasemapMode = args.basemap ?? "default";
   const raster = mode !== "default" ? RASTER_BASEMAPS[mode] : null;
@@ -398,7 +422,11 @@ export function buildLayers(args: BuildArgs): Layer[] {
         data: labels,
         getPosition: (d) => d.position,
         getText: (d) =>
-          `${locale === "ru" ? d.river.name_ru : d.river.name_kk}  ${d.river.current} км³/год`,
+          `${pick(d.river, "name", locale)}  ${d.river.current} ${byLocale(locale, {
+            kk: "км³/год",
+            ru: "км³/год",
+            en: "km³/year",
+          })}`,
         getSize: 11,
         sizeUnits: "pixels",
         getColor: [...CYAN, 255] as [number, number, number, number],

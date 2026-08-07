@@ -1,4 +1,12 @@
-import { anomaly, confidenceFrom, escalate, riskFromDeviation, trendOf, type Analysis } from "@/shared/lib/analyze";
+import {
+  anomaly,
+  confidenceFrom,
+  escalate,
+  riskFromDeviation,
+  trendOf,
+  type Analysis,
+  type Anomaly,
+} from "@/shared/lib/analyze";
 import { linearFit } from "@/shared/lib/forecast";
 import type { InsightModule } from "./schema";
 
@@ -15,10 +23,27 @@ type LevelRow = { year: number; level_m: number; area_km2: number; volume_km3: n
 const LEVELS = seaLevel.series as LevelRow[];
 
 /**
+ * An anomaly whose `metric` is a key into ANOMALY_LABELS, not display text.
+ *
+ * `region` is set only for the metrics whose label names a place: the engine
+ * hands over the raw dataset row so the caller can read the name in the
+ * reader's language with `pick(region, "name", locale)`. Reaching for
+ * `name_ru` here is what made this file Russian-only in the first place.
+ */
+export type LabeledAnomaly = Anomaly & { region?: Record<string, unknown> };
+
+/** Same as `Analysis`, but every string it carries is a key, not a sentence. */
+export type LabeledAnalysis = Omit<Analysis, "anomalies"> & { anomalies: LabeledAnomaly[] };
+
+/**
  * Runs the deterministic analysis for one dashboard. No network, no key, same
  * answer every run — this is what the "AI analysis" card is built on.
+ *
+ * The engine produces numbers and keys only. Metric names and forecast units
+ * are resolved against entities/ai-insight/labels.ts at render time, so the
+ * same computation serves all three locales.
  */
-export function computeAnalysis(module: InsightModule): Analysis {
+export function computeAnalysis(module: InsightModule): LabeledAnalysis {
   switch (module) {
     case "water": {
       const recent = LEVELS.filter((r) => r.year >= 2015);
@@ -33,14 +58,14 @@ export function computeAnalysis(module: InsightModule): Analysis {
       const baselineCm = baseline.slope * 100;
 
       const anomalies = [
-        anomaly("Скорость падения уровня, см/год", rateCm, baselineCm),
+        anomaly("waterLevelRate", rateCm, baselineCm),
         anomaly(
-          "Уровень моря, м БС",
+          "seaLevel",
           LEVELS.at(-1)!.level_m,
           -29 // historic minimum used as the reference threshold
         ),
         anomaly(
-          "Сток Волги, км³/год",
+          "volgaFlow",
           rivers.rivers[0].current,
           rivers.rivers[0].historic_1930
         ),
@@ -59,7 +84,7 @@ export function computeAnalysis(module: InsightModule): Analysis {
         forecast: {
           horizonYears: 10,
           expectedValue: Number(expected.toFixed(2)),
-          unit: "м БС",
+          unit: "mBS",
           confidence: confidenceFrom(fit.r2, ["semi", "semi"]),
         },
         dataStatus: ["semi", "semi"],
@@ -74,9 +99,9 @@ export function computeAnalysis(module: InsightModule): Analysis {
       const worstRegion = pollution.purity_index.reduce((a, b) => (a.value < b.value ? a : b));
       const anomalies = [
         // 70 = the index value the platform treats as "acceptable" (see /methodology)
-        anomaly("Индекс чистоты воды (среднее), %", meanPurity, 70),
-        anomaly(`Индекс чистоты воды — ${worstRegion.name_ru}, %`, worstRegion.value, 70),
-        anomaly("Доля нефтепродуктов в структуре загрязнения, %", oilShare, 20),
+        anomaly("waterPurityMean", meanPurity, 70),
+        { ...anomaly("waterPurityWorstRegion", worstRegion.value, 70), region: worstRegion },
+        anomaly("oilShare", oilShare, 20),
       ];
       const risk = anomalies.reduce(
         (acc, a) => escalate(acc, riskFromDeviation(a.deviationPercent)),
@@ -90,7 +115,7 @@ export function computeAnalysis(module: InsightModule): Analysis {
         forecast: {
           horizonYears: 5,
           expectedValue: pollution.health.annual_estimate,
-          unit: "случаев/год (модельная оценка ВОЗ)",
+          unit: "casesPerYearWho",
           confidence: "low",
         },
         dataStatus: ["semi", "real"],
@@ -104,13 +129,13 @@ export function computeAnalysis(module: InsightModule): Analysis {
       const fit = linearFit(aerial.map((r) => ({ x: r.year, y: r.value })));
 
       const anomalies = [
-        anomaly("Вылов осетровых, т/год", catches.at(-1)!.value, catches[0].value),
+        anomaly("sturgeonCatch", catches.at(-1)!.value, catches[0].value),
         anomaly(
-          "Популяция тюленя (авиаучёт)",
+          "sealPopulation",
           aerial.at(-1)!.value,
           wildlife.seal.historic_1900
         ),
-        anomaly("NDVI побережья Мангистау", 8, 12),
+        anomaly("mangystauNdvi", 8, 12),
       ];
       const risk = anomalies.reduce(
         (acc, a) => escalate(acc, riskFromDeviation(a.deviationPercent)),
@@ -124,7 +149,7 @@ export function computeAnalysis(module: InsightModule): Analysis {
         forecast: {
           horizonYears: 10,
           expectedValue: Math.max(Math.round(fit.predict(2035)), 0),
-          unit: "особей (линейная экстраполяция авиаучётов)",
+          unit: "sealIndividuals",
           confidence: confidenceFrom(fit.r2, ["semi", "semi"]),
         },
         dataStatus: ["semi", "semi"],
@@ -139,10 +164,10 @@ export function computeAnalysis(module: InsightModule): Analysis {
       const oilYears = oil.value / oil.production_per_year;
 
       const anomalies = [
-        anomaly("Добыча нефти, млн т/год", production.at(-1)!.value, production[0].value),
+        anomaly("oilProduction", production.at(-1)!.value, production[0].value),
         // 50 years of supply is the industry benchmark for a healthy R/P ratio
-        anomaly("Срок исчерпания нефти, лет", oilYears, 50),
-        anomaly("Срок исчерпания газа, лет", gas.value / gas.production_per_year, 50),
+        anomaly("oilDepletionYears", oilYears, 50),
+        anomaly("gasDepletionYears", gas.value / gas.production_per_year, 50),
       ];
       const risk = anomalies.reduce(
         (acc, a) => escalate(acc, riskFromDeviation(a.deviationPercent)),
@@ -156,7 +181,7 @@ export function computeAnalysis(module: InsightModule): Analysis {
         forecast: {
           horizonYears: Math.round(oilYears),
           expectedValue: Number(oilYears.toFixed(1)),
-          unit: "лет при текущем темпе добычи",
+          unit: "yearsAtCurrentRate",
           confidence: "low",
         },
         dataStatus: ["semi"],
@@ -171,12 +196,12 @@ export function computeAnalysis(module: InsightModule): Analysis {
 
       const land = landIndices.summary;
       const anomalies = [
-        anomaly("Площадь акватории, км²", LEVELS.at(-1)!.area_km2, LEVELS[0].area_km2),
-        anomaly("Индекс чистоты воды, %", meanPurity, 70),
+        anomaly("seaArea", LEVELS.at(-1)!.area_km2, LEVELS[0].area_km2),
+        anomaly("waterPurityIndex", meanPurity, 70),
         // 70 is the platform's "acceptable" mark on its own 0-100 scale
-        anomaly("Влажность верхнего слоя почвы, балл", land.soil, 70),
-        anomaly("Пожарная опасность (Нестеров), балл", land.fire, 70),
-        anomaly("Открытость экологических данных, %", meanAvailability, 70),
+        anomaly("topsoilMoisture", land.soil, 70),
+        anomaly("fireDanger", land.fire, 70),
+        anomaly("dataOpenness", meanAvailability, 70),
       ];
       const risk = anomalies.reduce(
         (acc, a) => escalate(acc, riskFromDeviation(a.deviationPercent)),
@@ -190,7 +215,7 @@ export function computeAnalysis(module: InsightModule): Analysis {
         forecast: {
           horizonYears: 10,
           expectedValue: ecoIndexScore(),
-          unit: "баллов сводного индекса",
+          unit: "indexPoints",
           confidence: "low",
         },
         dataStatus: ["semi", "semi", "real"],

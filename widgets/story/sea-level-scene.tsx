@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Area, AreaChart, ResponsiveContainer, YAxis, ReferenceLine } from "recharts";
 
 import { useLocale, useT } from "@/shared/lib/i18n/client";
+import { byLocale, formatFixed, formatNumber } from "@/shared/lib/i18n";
 import { Display, Label, Lede, Plain, SectionMark } from "@/shared/ui/primitives";
 import { SERIES, CHART_INK } from "@/shared/config/chart-palette";
 import { SourceBadge } from "@/shared/ui/source-badge";
@@ -60,23 +61,38 @@ export function SeaLevelScene() {
           <Display className="mt-6 max-w-[12ch]">{t.home.sectionSeaTitle}</Display>
           <Lede className="mt-5">{t.home.sectionSeaBody}</Lede>
 
-          <div className="mt-10 grid grid-cols-3 gap-6">
+          {/* Two columns on a phone: three display numbers plus their units do
+              not fit across 375px, and the third was being clipped. */}
+          <div className="mt-10 grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-3">
             <div>
               <Label>{t.common.year}</Label>
               <div className="display tabular mt-1.5 text-4xl md:text-5xl">{row.year}</div>
             </div>
             <div>
               <Label>{t.home.metricLevel}</Label>
-              <div className="display tabular text-bad mt-1.5 text-4xl md:text-5xl">
-                {row.level_m.toFixed(2)}
-                <span className="text-ink-3 ml-1 text-base font-normal">м</span>
+              <div className="display tabular text-bad mt-1.5 text-4xl whitespace-nowrap md:text-5xl">
+                {formatFixed(row.level_m, locale, 2)}
+                {/* tracking-normal: `display` sets letter-spacing in em against
+                    the parent's size, and the computed value is inherited whole
+                    by this much smaller unit. */}
+                <span className="text-ink-3 ml-1 text-base font-normal tracking-normal">
+                  {byLocale(locale, { kk: "м", ru: "м", en: "m" })}
+                </span>
               </div>
             </div>
             <div>
-              <Label>{locale === "ru" ? "Потеряно акватории" : "Жоғалған айдын"}</Label>
-              <div className="display tabular text-warn mt-1.5 text-3xl md:text-4xl">
-                {areaLost > 0 ? `−${areaLost.toLocaleString("ru-RU")}` : "0"}
-                <span className="text-ink-3 ml-1 text-sm font-normal">км²</span>
+              <Label>
+                {byLocale(locale, {
+                  kk: "Жоғалған айдын",
+                  ru: "Потеряно акватории",
+                  en: "Water area lost",
+                })}
+              </Label>
+              <div className="display tabular text-warn mt-1.5 text-3xl whitespace-nowrap md:text-4xl">
+                {areaLost > 0 ? `−${formatNumber(areaLost, locale)}` : "0"}
+                <span className="text-ink-3 ml-1 text-sm font-normal tracking-normal">
+                  {byLocale(locale, { kk: "км²", ru: "км²", en: "km²" })}
+                </span>
               </div>
             </div>
           </div>
@@ -111,7 +127,11 @@ export function SeaLevelScene() {
                   stroke={CHART_INK.muted}
                   strokeDasharray="3 3"
                   label={{
-                    value: locale === "ru" ? "исторический минимум" : "тарихи минимум",
+                    value: byLocale(locale, {
+                      kk: "тарихи минимум",
+                      ru: "исторический минимум",
+                      en: "historic low",
+                    }),
                     fill: CHART_INK.muted,
                     fontSize: 10,
                     position: "insideBottomLeft",

@@ -5,6 +5,7 @@ import { Layers, Check, ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { cn } from "@/shared/lib/cn";
 import { useLocale, useT } from "@/shared/lib/i18n/client";
+import { byLocale, pick, type Trio } from "@/shared/lib/i18n";
 import { layersForModule } from "@/shared/config/layers";
 import { useMapStore, type ModuleId } from "@/shared/store/map-store";
 import { EASE_FLUID } from "@/shared/lib/motion";
@@ -72,9 +73,7 @@ export function LayerManager({ module }: { module: ModuleId }) {
                       >
                         {on && <Check className="size-2.5" strokeWidth={3.5} />}
                       </span>
-                      <span className="leading-snug">
-                        {locale === "ru" ? layer.label_ru : layer.label_kk}
-                      </span>
+                      <span className="leading-snug">{pick(layer, "label", locale)}</span>
                     </button>
 
                     {/* The drift layer has three horizons and shows exactly
@@ -92,7 +91,7 @@ export function LayerManager({ module }: { module: ModuleId }) {
                               className="size-2 shrink-0 rounded-full"
                               style={{ background: item.color }}
                             />
-                            {locale === "ru" ? item.label_ru : item.label_kk}
+                            {pick(item, "label", locale)}
                           </li>
                         ))}
                       </ul>
@@ -108,10 +107,10 @@ export function LayerManager({ module }: { module: ModuleId }) {
   );
 }
 
-const HORIZONS = [
-  { minutes: 30 as const, kk: "+30 мин", ru: "через 30 мин" },
-  { minutes: 60 as const, kk: "+1 сағат", ru: "через 1 час" },
-  { minutes: 180 as const, kk: "+3 сағат", ru: "через 3 часа" },
+const HORIZONS: { minutes: 30 | 60 | 180; label: Trio }[] = [
+  { minutes: 30, label: { kk: "+30 мин", ru: "через 30 мин", en: "+30 min" } },
+  { minutes: 60, label: { kk: "+1 сағат", ru: "через 1 час", en: "+1 h" } },
+  { minutes: 180, label: { kk: "+3 сағат", ru: "через 3 часа", en: "+3 h" } },
 ];
 
 /** Single-choice horizon for the forecast spread zone. */
@@ -143,7 +142,7 @@ function DriftHorizonPicker() {
             >
               {active && <span className="bg-ink size-1.5 rounded-full" />}
             </span>
-            {locale === "ru" ? h.ru : h.kk}
+            {byLocale(locale, h.label)}
           </button>
         );
       })}

@@ -7,6 +7,7 @@ import { motion } from "motion/react";
 import { Droplets, Factory, Bird, Fuel, Gauge, PanelRightClose, PanelRightOpen, Map as MapIcon, Satellite, Mountain } from "lucide-react";
 import { cn } from "@/shared/lib/cn";
 import { useLocale, useT } from "@/shared/lib/i18n/client";
+import { byLocale, type Trio } from "@/shared/lib/i18n";
 import { defaultLayersFor } from "@/shared/config/layers";
 import { useMapStore, type ModuleId } from "@/shared/store/map-store";
 import { LayerManager } from "./layer-manager";
@@ -134,10 +135,10 @@ export function MapShell({ module, panel }: { module: ModuleId; panel: React.Rea
   );
 }
 
-const BASEMAPS = [
-  { id: "default" as const, icon: MapIcon, kk: "Әдепкі", ru: "Обычная" },
-  { id: "satellite" as const, icon: Satellite, kk: "Спутник", ru: "Спутник" },
-  { id: "terrain" as const, icon: Mountain, kk: "Бедер", ru: "Рельеф" },
+const BASEMAPS: { id: "default" | "satellite" | "terrain"; icon: typeof MapIcon; label: Trio }[] = [
+  { id: "default", icon: MapIcon, label: { kk: "Әдепкі", ru: "Обычная", en: "Default" } },
+  { id: "satellite", icon: Satellite, label: { kk: "Спутник", ru: "Спутник", en: "Satellite" } },
+  { id: "terrain", icon: Mountain, label: { kk: "Бедер", ru: "Рельеф", en: "Terrain" } },
 ];
 
 /**
@@ -152,7 +153,7 @@ function BasemapSwitch() {
   return (
     <div className="pointer-events-auto absolute top-3 right-3 z-20 md:top-4 md:right-4">
       <div className="border-rule bg-paper flex overflow-hidden rounded-md border">
-        {BASEMAPS.map(({ id, icon: Icon, kk, ru }) => {
+        {BASEMAPS.map(({ id, icon: Icon, label }) => {
           const active = basemap === id;
           return (
             <button
@@ -160,14 +161,22 @@ function BasemapSwitch() {
               type="button"
               onClick={() => setBasemap(id)}
               aria-pressed={active}
-              title={id === "default" ? undefined : locale === "ru" ? "Нужен интернет" : "Интернет қажет"}
+              title={
+                id === "default"
+                  ? undefined
+                  : byLocale(locale, {
+                      kk: "Интернет қажет",
+                      ru: "Нужен интернет",
+                      en: "Needs internet",
+                    })
+              }
               className={cn(
                 "flex items-center gap-1.5 px-2.5 py-1.5 text-[11.5px] transition-colors",
                 active ? "bg-ink text-paper" : "text-ink-2 hover:bg-tint hover:text-ink"
               )}
             >
               <Icon className="size-3.5" strokeWidth={1.5} />
-              <span className="hidden sm:inline">{locale === "ru" ? ru : kk}</span>
+              <span className="hidden sm:inline">{byLocale(locale, label)}</span>
             </button>
           );
         })}

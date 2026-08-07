@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 import { useLocale, useT } from "@/shared/lib/i18n/client";
+import { byLocale, pick, type Locale } from "@/shared/lib/i18n";
 import {
   Display,
   Label,
@@ -53,9 +54,7 @@ export function PollutionSection() {
               {pollution.structure.map((s, i) => (
                 <li key={s.id}>
                   <div className="mb-2 flex items-baseline justify-between gap-4">
-                    <span className="text-ink text-[15px]">
-                      {locale === "ru" ? s.name_ru : s.name_kk}
-                    </span>
+                    <span className="text-ink text-[15px]">{pick(s, "name", locale)}</span>
                     <span className="tabular text-ink text-sm font-semibold">{s.percent}%</span>
                   </div>
                   <div className="bg-tint h-1.5 w-full overflow-hidden rounded-full">
@@ -81,15 +80,26 @@ export function PollutionSection() {
             <Label>{t.pollution.koshkarAta}</Label>
             <div className="display text-bad mt-3 flex items-baseline gap-2 text-6xl md:text-7xl">
               <AnimatedNumber value={koshkar.waste_mt} />
-              <span className="text-ink-3 text-lg font-normal">
-                {locale === "ru" ? "млн т" : "млн т"}
+              {/* tracking-normal: `display` sets letter-spacing in em against a
+                  72px parent, and the computed −2.5px would be inherited whole
+                  by this 18px unit and crush the letters together. */}
+              <span className="text-ink-3 text-lg font-normal tracking-normal">
+                {byLocale(locale, { kk: "млн т", ru: "млн т", en: "million t" })}
               </span>
             </div>
             <Plain className="mt-4">
-              {locale === "ru" ? koshkar.facts_ru[1] : koshkar.facts_kk[1]}
+              {byLocale(locale, {
+                kk: koshkar.facts_kk[1],
+                ru: koshkar.facts_ru[1],
+                en: koshkar.facts_en[1],
+              })}
             </Plain>
             <Plain className="mt-2">
-              {locale === "ru" ? koshkar.facts_ru[2] : koshkar.facts_kk[2]}
+              {byLocale(locale, {
+                kk: koshkar.facts_kk[2],
+                ru: koshkar.facts_ru[2],
+                en: koshkar.facts_en[2],
+              })}
             </Plain>
             <div className="mt-6">
               <SourceBadge sourceId="koshkar_pub" />
@@ -110,16 +120,21 @@ export function LifeSection() {
     {
       value: wildlife.seal.decline_percent,
       suffix: "%",
-      title: locale === "ru" ? "тюленей потеряно" : "итбалық жоғалды",
+      title: byLocale(locale, {
+        kk: "итбалық жоғалды",
+        ru: "тюленей потеряно",
+        en: "of seals lost",
+      }),
       plain: t.plain.sealMeans,
     },
     {
       value: sturgeon.at(-1)!.tonnes,
-      suffix: locale === "ru" ? " т" : " т",
-      title:
-        locale === "ru"
-          ? `вылов осетровых в ${sturgeon.at(-1)!.year}`
-          : `${sturgeon.at(-1)!.year} жылғы бекіре аулауы`,
+      suffix: byLocale(locale, { kk: " т", ru: " т", en: " t" }),
+      title: byLocale(locale, {
+        kk: `${sturgeon.at(-1)!.year} жылғы бекіре аулауы`,
+        ru: `вылов осетровых в ${sturgeon.at(-1)!.year}`,
+        en: `sturgeon catch in ${sturgeon.at(-1)!.year}`,
+      }),
       plain: t.plain.sturgeonMeans,
     },
   ];
@@ -144,7 +159,9 @@ export function LifeSection() {
             <div key={s.title} className="rule-t pt-6">
               <div className="display text-bad flex items-baseline text-7xl md:text-8xl">
                 <AnimatedNumber value={s.value} />
-                <span className="text-ink-3 text-2xl font-normal">{s.suffix}</span>
+                <span className="text-ink-3 ml-2 text-2xl font-normal tracking-normal">
+                  {s.suffix}
+                </span>
               </div>
               <div className="text-ink mt-3 text-lg">{s.title}</div>
               <Plain className="mt-2">{s.plain}</Plain>
@@ -164,7 +181,9 @@ export function AiSummarySection() {
   const t = useT();
   const locale = useLocale();
   const analysis = computeAnalysis("index");
-  const narrative = NARRATIVES.index[locale === "ru" ? "ru" : "kk"];
+  // Keyed, not branched: locales without their own narrative yet fall back to Kazakh.
+  const narratives: Partial<Record<Locale, { summary: string }>> = NARRATIVES.index;
+  const narrative = narratives[locale] ?? NARRATIVES.index.kk;
 
   return (
     <section className="rule-t py-28 md:py-40">
@@ -179,14 +198,23 @@ export function AiSummarySection() {
           <RevealItem>
             <div className="rule-t text-ink-2 mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 pt-5 text-[13px]">
               <span>
-                {locale === "ru" ? "Уровень риска" : "Тәуекел деңгейі"}:{" "}
+                {byLocale(locale, {
+                  kk: "Тәуекел деңгейі",
+                  ru: "Уровень риска",
+                  en: "Risk level",
+                })}
+                :{" "}
                 <span className="text-bad font-medium">{t.common.riskLevel[analysis.risk]}</span>
               </span>
               <Link
                 href="/methodology"
                 className="hover:text-ink underline decoration-neutral-300 underline-offset-4 transition-colors"
               >
-                {locale === "ru" ? "Как это посчитано" : "Бұл қалай есептелген"}
+                {byLocale(locale, {
+                  kk: "Бұл қалай есептелген",
+                  ru: "Как это посчитано",
+                  en: "How this is calculated",
+                })}
               </Link>
             </div>
           </RevealItem>

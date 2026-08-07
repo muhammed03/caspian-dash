@@ -3,20 +3,36 @@
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/shared/lib/cn";
 import { useLocale, useT } from "@/shared/lib/i18n/client";
+import { pick, pickOrNull } from "@/shared/lib/i18n";
 import sourcesFile from "@/data/sources.json";
 
 export type SourceStatus = "real" | "semi" | "mock";
 
+/**
+ * Names, licences and attributions are localized where they carry prose;
+ * purely nominal ones (brand names, SPDX-style licences) stay as a bare field
+ * and `pick` falls through to it.
+ */
 type Source = {
   id: string;
-  name: string;
+  name?: string;
+  name_kk?: string;
+  name_ru?: string;
+  name_en?: string;
   url: string;
-  license: string;
-  attribution: string;
+  license?: string;
+  license_kk?: string;
+  license_ru?: string;
+  license_en?: string;
+  attribution?: string;
+  attribution_kk?: string;
+  attribution_ru?: string;
+  attribution_en?: string;
   status: string;
   coverage_years?: string;
   note_kk?: string;
   note_ru?: string;
+  note_en?: string;
   last_checked: string;
 };
 
@@ -50,7 +66,7 @@ export function SourceBadge({
   const source = getSource(sourceId);
   const resolved = (status ?? (source?.status as SourceStatus) ?? "semi") as SourceStatus;
   const label = resolved === "real" ? t.common.real : resolved === "mock" ? t.common.mock : t.common.semi;
-  const note = locale === "ru" ? source?.note_ru : source?.note_kk;
+  const note = pickOrNull(source, "note", locale);
 
   return (
     <div className={cn("text-[11px] leading-snug", className)}>
@@ -67,7 +83,7 @@ export function SourceBadge({
             rel="noreferrer noopener"
             className="text-ink-2 hover:text-ink inline-flex items-center gap-0.5 underline decoration-neutral-300 underline-offset-2 transition-colors hover:decoration-current"
           >
-            {source.name}
+            {pick(source, "name", locale)}
             <ArrowUpRight className="size-3" />
           </a>
         ) : (

@@ -1,4 +1,5 @@
 import type { InsightModule } from "@/entities/ai-insight/schema";
+import type { Locale } from "@/shared/lib/i18n";
 
 /**
  * Human-readable wording for each dashboard's analysis.
@@ -15,7 +16,11 @@ import type { InsightModule } from "@/entities/ai-insight/schema";
  */
 type Narrative = { summary: string; recommendations: string[]; dataQuality: string };
 
-export const NARRATIVES: Record<InsightModule, { kk: Narrative; ru: Narrative }> = {
+/**
+ * Keyed by locale rather than branched, so adding a language is a compile
+ * error here until the text exists — never a silent fallback to Russian.
+ */
+export const NARRATIVES: Record<InsightModule, Record<Locale, Narrative>> = {
   water: {
     kk: {
       summary:
@@ -40,6 +45,18 @@ export const NARRATIVES: Record<InsightModule, { kk: Narrative; ru: Narrative }>
       ],
       dataQuality:
         "Ряд уровня восстановлен по опубликованным значениям альтиметрии и скоростям падения (SEMI). Береговая линия — расчётная модель через уклон дна, а не спутниковое наблюдение. Оба допущения описаны на странице «Методика».",
+    },
+    en: {
+      summary:
+        "Since 2015 the level has been falling several times faster than in the preceding period; in 2025 it dropped below its historic minimum. On the flat north-eastern sector that means kilometres of exposed seabed.",
+      recommendations: [
+        "Replan the water intakes and shipping channels of the ports of Aktau and Kuryk for the new depths",
+        "Prepare a plan to stabilise the exposed seabed as a source of salt-dust storms (so the Aral scenario is not repeated)",
+        "Raise the decline in Volga and Ural flow into joint monitoring by the Caspian littoral states",
+        "Re-measure the shoreline from satellite imagery every year and verify the model against it",
+      ],
+      dataQuality:
+        "The level series is reconstructed from published altimetry values and rates of decline (SEMI). The shoreline is a calculated model based on the slope of the seabed, not a satellite observation. Both assumptions are described on the Methodology page.",
     },
   },
 
@@ -68,6 +85,18 @@ export const NARRATIVES: Record<InsightModule, { kk: Narrative; ru: Narrative }>
       dataQuality:
         "Качество воздуха — реальные данные Open-Meteo/CAMS в реальном времени (REAL); при отсутствии сети показывается последний сохранённый замер. Объёмы выбросов и индекс чистоты — публикации и модель платформы (SEMI). Показатель здоровья — годовая модельная оценка по методике ВОЗ, а не измерение.",
     },
+    en: {
+      summary:
+        "The water purity index is below the accepted threshold in every sector, worst of all in the Absheron sector. Oil products dominate the structure of pollution. The Koshkar-Ata tailings pond holds 105 million tonnes of waste 5 km from Aktau.",
+      recommendations: [
+        "Put dust rising from the surface of Koshkar-Ata under permanent monitoring and publish a remediation timetable",
+        "Release PRTR reporting for the major emission sources in a machine-readable format",
+        "Increase the number of ground-based air quality stations in Aktau and Atyrau",
+        "Use the wind model to warn residential areas in advance of the hours when an emission plume drifts over them",
+      ],
+      dataQuality:
+        "Air quality is real-time data from Open-Meteo/CAMS (REAL); with no connection the last saved measurement is shown. Emission volumes and the purity index come from publications and the platform's own model (SEMI). The health figure is an annual model estimate following WHO methodology, not a measurement.",
+    },
   },
 
   life: {
@@ -95,6 +124,18 @@ export const NARRATIVES: Record<InsightModule, { kk: Narrative; ru: Narrative }>
       dataQuality:
         "Источники по численности тюленя противоречивы (от 70 до 300 тысяч) — платформа показывает диапазон, а не одно число. Официальная статистика вылова не учитывает незаконный промысел и занижает реальную нагрузку на запас (SEMI).",
     },
+    en: {
+      summary:
+        "The sturgeon catch has fallen practically to zero since 1977, and the Caspian seal population is more than 90% below its level at the start of the century. Both species hold international protected status.",
+      recommendations: [
+        "Move to a single methodology for counting seals — current estimates differ by a factor of four",
+        "Launch a programme to restore the spawning grounds at the mouths of the Ural and the Volga",
+        "Add satellite monitoring of vessel movement to counter IUU fishing",
+        "Adopt a protocol for publicly disclosing the causes of mass mortality events",
+      ],
+      dataQuality:
+        "Sources on seal numbers contradict one another (from 70,000 to 300,000) — the platform shows a range rather than a single figure. Official catch statistics do not account for illegal fishing and understate the real pressure on the stock (SEMI).",
+    },
   },
 
   resources: {
@@ -120,6 +161,17 @@ export const NARRATIVES: Record<InsightModule, { kk: Narrative; ru: Narrative }>
       dataQuality:
         "Запасы и объёмы добычи взяты из отраслевых отчётов (SEMI). Данные Ирана и Туркменистана фактически закрыты — цифры по ним оценочные. Прогноз не учитывает ни новые месторождения, ни смену технологий.",
     },
+    en: {
+      summary:
+        "Production has grown over the past decade, and at the current rate oil reserves will last roughly half a century. Data for Iran and Turkmenistan is closed, so the accuracy of the overall estimate is limited.",
+      recommendations: [
+        "Publish annual production and remaining reserves by field in an open format",
+        "Set the deadlines for reporting accidental spills at offshore platforms in regulation",
+        "Extend the depletion calculation to a version that accounts for new fields coming on stream",
+      ],
+      dataQuality:
+        "Reserves and production volumes are taken from industry reports (SEMI). Data for Iran and Turkmenistan is effectively closed — the figures for them are estimates. The projection accounts for neither new fields nor changes in technology.",
+    },
   },
 
   index: {
@@ -144,6 +196,17 @@ export const NARRATIVES: Record<InsightModule, { kk: Narrative; ru: Narrative }>
       ],
       dataQuality:
         "Индекс — собственная модель платформы, а не официальный показатель. Формула и веса полностью приведены на странице «Методика», любой может пересчитать результат.",
+    },
+    en: {
+      summary:
+        "The composite index is calculated as a weighted sum of five components. The smallest contribution comes from biodiversity and data openness: for the Caspian, the information itself is missing.",
+      recommendations: [
+        "Agree a single open environmental data standard for the Caspian littoral states",
+        "Establish satellite sources as the primary monitoring instrument — they do not depend on any country's permission",
+        "Recompute the index components every year and publish the change openly",
+      ],
+      dataQuality:
+        "The index is the platform's own model, not an official indicator. Its formula and weights are set out in full on the Methodology page, and anyone can recompute the result.",
     },
   },
 };

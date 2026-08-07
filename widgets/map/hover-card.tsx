@@ -2,12 +2,11 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useLocale, useT } from "@/shared/lib/i18n/client";
+import { byLocale, formatNumber, pick, type Locale } from "@/shared/lib/i18n";
 import { useMapStore } from "@/shared/store/map-store";
 
-function fmt(n: unknown, digits = 0) {
-  const v = Number(n);
-  if (!Number.isFinite(v)) return "—";
-  return v.toLocaleString("ru-RU", { maximumFractionDigits: digits });
+function fmt(n: unknown, locale: Locale, digits = 0) {
+  return formatNumber(Number(n), locale, { maximumFractionDigits: digits });
 }
 
 /** Follows the cursor over any picked feature; content depends on layer kind. */
@@ -16,8 +15,11 @@ export function HoverCard() {
   const locale = useLocale();
   const t = useT();
 
-  const name = (p: Record<string, unknown>) =>
-    String((locale === "ru" ? p.name_ru : p.name_kk) ?? p.name_en ?? "");
+  const name = (p: Record<string, unknown>) => pick(p, "name", locale);
+
+  const unitKm3Year = byLocale(locale, { kk: "км³/жыл", ru: "км³/год", en: "km³/year" });
+  const unitMs = byLocale(locale, { kk: "м/с", ru: "м/с", en: "m/s" });
+  const unitKm = byLocale(locale, { kk: "км", ru: "км", en: "km" });
 
   return (
     <AnimatePresence>
@@ -38,17 +40,18 @@ export function HoverCard() {
 
           {hover.kind === "factory" && (
             <div className="text-ink-2 mt-1 text-xs">
-              {t.pollution.emissions}: <span className="tabular text-warn">{fmt(hover.payload.emissions_t)}</span>
+              {t.pollution.emissions}:{" "}
+              <span className="tabular text-warn">{fmt(hover.payload.emissions_t, locale)}</span>
             </div>
           )}
 
           {hover.kind === "air" && (
             <div className="text-ink-2 mt-1 space-y-0.5 text-xs">
               <div>
-                EAQI: <span className="tabular text-ink">{fmt(hover.payload.eaqi)}</span>
+                EAQI: <span className="tabular text-ink">{fmt(hover.payload.eaqi, locale)}</span>
               </div>
               <div>
-                PM2.5: <span className="tabular text-ink">{fmt(hover.payload.pm2_5, 1)}</span> µg/m³
+                PM2.5: <span className="tabular text-ink">{fmt(hover.payload.pm2_5, locale, 1)}</span> µg/m³
               </div>
             </div>
           )}
@@ -57,7 +60,8 @@ export function HoverCard() {
             <div className="text-ink-2 mt-1 space-y-0.5 text-xs">
               {Number(hover.payload.population) > 0 && (
                 <div>
-                  {t.map.population}: <span className="tabular text-ink">{fmt(hover.payload.population)}</span>
+                  {t.map.population}:{" "}
+                  <span className="tabular text-ink">{fmt(hover.payload.population, locale)}</span>
                 </div>
               )}
               <div>
@@ -69,31 +73,33 @@ export function HoverCard() {
 
           {hover.kind === "field" && (
             <div className="text-ink-2 mt-1 text-xs">
-              {t.resources.reserves}: <span className="tabular text-ink">{fmt(hover.payload.reserves_bbl, 1)}</span>{" "}
-              {locale === "ru" ? "млрд барр." : "млрд барр."}
+              {t.resources.reserves}:{" "}
+              <span className="tabular text-ink">{fmt(hover.payload.reserves_bbl, locale, 1)}</span>{" "}
+              {byLocale(locale, { kk: "млрд барр.", ru: "млрд барр.", en: "bn bbl" })}
             </div>
           )}
 
           {hover.kind === "koshkar" && (
             <div className="text-ink-2 mt-1 text-xs">
-              <span className="text-bad tabular">{fmt(hover.payload.waste_mt)}</span>{" "}
-              {locale === "ru" ? "млн т отходов" : "млн т қалдық"}
+              <span className="text-bad tabular">{fmt(hover.payload.waste_mt, locale)}</span>{" "}
+              {byLocale(locale, { kk: "млн т қалдық", ru: "млн т отходов", en: "Mt of waste" })}
             </div>
           )}
 
           {hover.kind === "river" && (
             <div className="text-ink-2 mt-1 space-y-0.5 text-xs">
               <div>
-                {locale === "ru" ? "Сток сейчас" : "Қазіргі ағын"}:{" "}
-                <span className="tabular text-ink">{fmt(hover.payload.current, 1)}</span> км³/год
+                {byLocale(locale, { kk: "Қазіргі ағын", ru: "Сток сейчас", en: "Flow now" })}:{" "}
+                <span className="tabular text-ink">{fmt(hover.payload.current, locale, 1)}</span> {unitKm3Year}
               </div>
               <div>
-                {locale === "ru" ? "Было в 1930-х" : "1930 жылдары"}:{" "}
-                <span className="tabular text-ink-2">{fmt(hover.payload.historic_1930, 1)}</span> км³/год
+                {byLocale(locale, { kk: "1930 жылдары", ru: "Было в 1930-х", en: "In the 1930s" })}:{" "}
+                <span className="tabular text-ink-2">{fmt(hover.payload.historic_1930, locale, 1)}</span>{" "}
+                {unitKm3Year}
               </div>
               <div className="text-warn">
-                {locale === "ru" ? "Доля притока" : "Құйылым үлесі"}:{" "}
-                <span className="tabular">{fmt(hover.payload.share_percent)}%</span>
+                {byLocale(locale, { kk: "Құйылым үлесі", ru: "Доля притока", en: "Share of inflow" })}:{" "}
+                <span className="tabular">{fmt(hover.payload.share_percent, locale)}%</span>
               </div>
             </div>
           )}
@@ -104,22 +110,29 @@ export function HoverCard() {
             return (
               <div className="text-ink-2 mt-1 space-y-0.5 text-xs">
                 <div>
-                  {String(frame?.hour ?? "")} ·{" "}
-                  {String(locale === "ru" ? frame?.fromLabel_ru : frame?.fromLabel_kk)}{" "}
-                  <span className="tabular text-ink">{fmt(frame?.speedMs, 1)}</span> м/с
+                  {String(frame?.hour ?? "")} · {pick(frame, "fromLabel", locale)}{" "}
+                  <span className="tabular text-ink">{fmt(frame?.speedMs, locale, 1)}</span> {unitMs}
                 </div>
                 <div>
-                  {locale === "ru" ? "Класс" : "Класс"}{" "}
+                  {byLocale(locale, { kk: "Класс", ru: "Класс", en: "Class" })}{" "}
                   <span className="tabular text-ink">{String(frame?.stability ?? "")}</span> ·{" "}
-                  <span className="tabular text-ink">{fmt(frame?.lengthKm, 1)}</span> км
+                  <span className="tabular text-ink">{fmt(frame?.lengthKm, locale, 1)}</span> {unitKm}
                 </div>
                 {Boolean(facility?.approx) && (
                   <div className="text-warn">
-                    {locale === "ru" ? "координата приблизительная" : "координата болжамды"}
+                    {byLocale(locale, {
+                      kk: "координата болжамды",
+                      ru: "координата приблизительная",
+                      en: "approximate coordinates",
+                    })}
                   </div>
                 )}
                 <div className="text-ink-3">
-                  {locale === "ru" ? "вероятная зона переноса" : "ықтимал таралу аймағы"}
+                  {byLocale(locale, {
+                    kk: "ықтимал таралу аймағы",
+                    ru: "вероятная зона переноса",
+                    en: "likely dispersion area",
+                  })}
                 </div>
               </div>
             );
@@ -127,7 +140,8 @@ export function HoverCard() {
 
           {hover.kind === "availability" && (
             <div className="text-ink-2 mt-1 text-xs">
-              {t.index.dataAvailability}: <span className="tabular text-ink">{fmt(hover.payload.score)}</span> / 100
+              {t.index.dataAvailability}:{" "}
+              <span className="tabular text-ink">{fmt(hover.payload.score, locale)}</span> / 100
             </div>
           )}
         </motion.div>
