@@ -213,7 +213,8 @@ export const en = {
     achievementUnlocked: "Unlocked",
     discoveries: "Discoveries",
     discoveryFound: "New discovery",
-    explorerHint: "Tap a marker on the map to claim the discovery.",
+    explorerHint:
+      "Every discovery is a real feature on one of the map modules. Reveal it here, then open it on the map.",
     simulatorTitle: "Scenarios",
     simulatorIntro:
       "See what happens as the level changes. This is the platform's shoreline model, not a satellite observation.",
