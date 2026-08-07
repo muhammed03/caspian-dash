@@ -14,6 +14,7 @@ export function SiteHeader() {
   const links = [
     { href: "/", label: t.common.home, match: (p: string) => p === "/" },
     { href: "/map/water", label: t.common.map, match: (p: string) => p.startsWith("/map") },
+    { href: "/academy/journey", label: t.academy.title, match: (p: string) => p.startsWith("/academy") },
     { href: "/methodology", label: t.common.methodology, match: (p: string) => p.startsWith("/methodology") },
   ];
 

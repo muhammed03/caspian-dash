@@ -6,6 +6,7 @@ import { LocaleProvider } from "@/shared/lib/i18n/client";
 import type { Locale } from "@/shared/lib/i18n";
 import { SmoothScroll } from "@/shared/ui/smooth-scroll";
 import { SiteHeader } from "@/widgets/site-header/site-header";
+import { LearningProvider } from "@/entities/learning/store";
 
 export function Providers({
   locale = "kk",
@@ -30,9 +31,11 @@ export function Providers({
   return (
     <QueryClientProvider client={client}>
       <LocaleProvider locale={locale}>
-        <SmoothScroll />
-        <SiteHeader />
-        {children}
+        <LearningProvider>
+          <SmoothScroll />
+          <SiteHeader />
+          {children}
+        </LearningProvider>
       </LocaleProvider>
     </QueryClientProvider>
   );
